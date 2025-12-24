@@ -1,13 +1,12 @@
-import { NextAuthOptions } from "next-auth"
-import { getServerSession as getServerSessionNextAuth } from "next-auth"
+import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { getServerSession as getServerSessionNextAuth } from "next-auth/next"
 import { prisma } from "./prisma"
 import bcrypt from "bcryptjs"
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as any,
-  trustHost: true,
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -74,7 +73,7 @@ export const authOptions: NextAuthOptions = {
   },
 }
 
-// Helper function para obter sessão no servidor
+// Helper function para obter sessão no servidor (NextAuth v4)
 export async function getServerSession() {
   return await getServerSessionNextAuth(authOptions)
 }
