@@ -1,9 +1,9 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route'
+import { getServerSession } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { Card } from '@/components/ui/Card'
 
 export default async function HomePage() {
-  const session = await auth()
+  const session = await getServerSession()
 
   if (!session) {
     redirect('/login')

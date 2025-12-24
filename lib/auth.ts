@@ -1,4 +1,5 @@
 import { NextAuthOptions } from "next-auth"
+import { getServerSession as getServerSessionNextAuth } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "./prisma"
@@ -71,5 +72,10 @@ export const authOptions: NextAuthOptions = {
       // Limpar sessão ao fazer logout
     },
   },
+}
+
+// Helper function para obter sessão no servidor
+export async function getServerSession() {
+  return await getServerSessionNextAuth(authOptions)
 }
 
