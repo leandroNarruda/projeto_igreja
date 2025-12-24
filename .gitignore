@@ -36,6 +36,5 @@ yarn-error.log*
 next-env.d.ts
 
 # prisma
-# Mantém migrations para produção
-# /prisma/migrations
+/prisma/migrations
 
