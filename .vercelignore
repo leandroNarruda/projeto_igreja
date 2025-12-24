@@ -1,0 +1,6 @@
+# Arquivos que não devem ser enviados para Vercel
+.env
+.env.local
+node_modules
+.next
+
