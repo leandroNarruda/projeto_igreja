@@ -57,7 +57,7 @@ export const Select: React.FC<SelectProps> = ({
     }
   }, [isOpen])
 
-  const selectedOption = options.find((opt) => opt.value === value)
+  const selectedOption = options.find(opt => opt.value === value)
   const displayValue = selectedOption ? selectedOption.label : placeholder
 
   const handleSelect = (optionValue: string) => {
@@ -78,7 +78,11 @@ export const Select: React.FC<SelectProps> = ({
           {label}
         </label>
       )}
-      <div className="relative" ref={selectRef} style={{ zIndex: isOpen ? 50 : 'auto' }}>
+      <div
+        className="relative"
+        ref={selectRef}
+        style={{ zIndex: isOpen ? 50 : 'auto' }}
+      >
         <button
           type="button"
           onClick={() => !disabled && setIsOpen(!isOpen)}
@@ -120,7 +124,7 @@ export const Select: React.FC<SelectProps> = ({
               zIndex: 9999,
             }}
           >
-            {options.map((option) => (
+            {options.map(option => (
               <button
                 key={option.value}
                 type="button"

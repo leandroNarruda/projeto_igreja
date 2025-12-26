@@ -12,9 +12,7 @@ export default async function EventosPage() {
     <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Eventos
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Eventos</h1>
           <p className="text-gray-600 mb-6">
             Aqui você encontrará todos os eventos da igreja.
           </p>
@@ -34,4 +32,3 @@ export default async function EventosPage() {
     </div>
   )
 }
-

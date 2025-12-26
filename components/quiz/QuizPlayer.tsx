@@ -47,7 +47,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
     }
 
     const timer = setInterval(() => {
-      setTempoRestante((prev) => {
+      setTempoRestante(prev => {
         if (prev <= 1) {
           if (!respondida) {
             setRespondida(true)
@@ -83,14 +83,16 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
     porcentagemTempo > 50
       ? 'bg-green-500'
       : porcentagemTempo > 25
-      ? 'bg-yellow-500'
-      : 'bg-red-500'
+        ? 'bg-yellow-500'
+        : 'bg-red-500'
 
   return (
     <Card className="max-w-3xl mx-auto">
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-semibold text-gray-700">Tempo restante</h3>
+          <h3 className="text-lg font-semibold text-gray-700">
+            Tempo restante
+          </h3>
           <span
             className={`text-2xl font-bold ${
               tempoRestante <= 10 ? 'text-red-600' : 'text-gray-900'
@@ -113,7 +115,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
         </h2>
 
         <div className="space-y-3">
-          {alternativas.map((alt) => (
+          {alternativas.map(alt => (
             <label
               key={alt.letra}
               className={`
@@ -146,4 +148,3 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
     </Card>
   )
 }
-

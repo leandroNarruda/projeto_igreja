@@ -9,10 +9,7 @@ export async function GET() {
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     // Buscar quiz ativo
@@ -40,7 +37,8 @@ export async function GET() {
 
     const perguntasRespondidas = respostasUsuario.length
     const totalPerguntas = quizAtivo.perguntas.length
-    const jaRespondeu = perguntasRespondidas === totalPerguntas && totalPerguntas > 0
+    const jaRespondeu =
+      perguntasRespondidas === totalPerguntas && totalPerguntas > 0
 
     let resultado = null
     if (jaRespondeu) {
@@ -56,7 +54,7 @@ export async function GET() {
       })
 
       let acertos = 0
-      respostasCorretas.forEach((resposta) => {
+      respostasCorretas.forEach(resposta => {
         if (
           resposta.alternativaEscolhida &&
           resposta.alternativaEscolhida === resposta.pergunta.respostaCorreta
@@ -66,7 +64,8 @@ export async function GET() {
       })
 
       const erros = totalPerguntas - acertos
-      const porcentagem = totalPerguntas > 0 ? Math.round((acertos / totalPerguntas) * 100) : 0
+      const porcentagem =
+        totalPerguntas > 0 ? Math.round((acertos / totalPerguntas) * 100) : 0
 
       resultado = {
         total: totalPerguntas,
@@ -95,4 +94,3 @@ export async function GET() {
     )
   }
 }
-

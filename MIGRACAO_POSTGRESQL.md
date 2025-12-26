@@ -12,6 +12,7 @@ Este guia explica como migrar o projeto de SQLite para PostgreSQL.
 ### 1. Escolher um Banco de Dados PostgreSQL
 
 #### Opção A: PostgreSQL Local (Docker)
+
 ```bash
 docker run --name postgres-igreja \
   -e POSTGRES_PASSWORD=senha123 \
@@ -21,17 +22,20 @@ docker run --name postgres-igreja \
 ```
 
 #### Opção B: Vercel Postgres
+
 1. Acesse [Vercel Dashboard](https://vercel.com/dashboard)
 2. Vá em "Storage" → "Create Database" → "Postgres"
 3. Copie a connection string
 
 #### Opção C: Supabase (Gratuito)
+
 1. Acesse [Supabase](https://supabase.com)
 2. Crie um novo projeto
 3. Vá em "Settings" → "Database"
 4. Copie a connection string (URI)
 
 #### Opção D: Neon (Gratuito)
+
 1. Acesse [Neon](https://neon.tech)
 2. Crie um novo projeto
 3. Copie a connection string
@@ -47,21 +51,25 @@ DATABASE_URL="postgresql://usuario:senha@host:5432/nome_banco?schema=public"
 **Exemplos:**
 
 **Local (Docker):**
+
 ```env
 DATABASE_URL="postgresql://postgres:senha123@localhost:5432/projeto_igreja?schema=public"
 ```
 
 **Vercel Postgres:**
+
 ```env
 DATABASE_URL="postgresql://default:senha@xxxxx.vercel-storage.com:5432/verceldb?sslmode=require"
 ```
 
 **Supabase:**
+
 ```env
 DATABASE_URL="postgresql://postgres:senha@db.xxxxx.supabase.co:5432/postgres"
 ```
 
 **Neon:**
+
 ```env
 DATABASE_URL="postgresql://usuario:senha@ep-xxxxx.us-east-2.aws.neon.tech/database?sslmode=require"
 ```
@@ -122,6 +130,7 @@ No dashboard da Vercel, adicione:
 ### 3. Deploy
 
 O Vercel automaticamente:
+
 1. Roda `postinstall` (que executa `prisma generate`)
 2. Roda `build` (que gera o Prisma e faz build do Next.js)
 
@@ -141,15 +150,18 @@ vercel exec prisma migrate deploy
 ## ⚠️ Diferenças SQLite vs PostgreSQL
 
 ### Tipos de Dados
+
 - SQLite: `TEXT`, `INTEGER`, `REAL`, `BLOB`
 - PostgreSQL: `VARCHAR`, `INTEGER`, `DECIMAL`, `BYTEA`, etc.
 
 ### Funcionalidades
+
 - PostgreSQL suporta mais tipos de dados
 - PostgreSQL tem melhor performance para múltiplos usuários
 - PostgreSQL suporta transações mais complexas
 
 ### Limitações Removidas
+
 - ✅ Sem limite de tamanho de string
 - ✅ Melhor suporte a índices
 - ✅ Suporte a JSON nativo
@@ -158,15 +170,18 @@ vercel exec prisma migrate deploy
 ## 🔍 Troubleshooting
 
 ### Erro: "relation does not exist"
+
 - Certifique-se de que as migrations foram executadas
 - Verifique se a `DATABASE_URL` está correta
 
 ### Erro: "connection refused"
+
 - Verifique se o PostgreSQL está rodando
 - Verifique se a porta está correta (5432)
 - Verifique firewall/security groups
 
 ### Erro: "password authentication failed"
+
 - Verifique usuário e senha no `DATABASE_URL`
 - Verifique permissões do usuário no PostgreSQL
 
@@ -176,4 +191,3 @@ vercel exec prisma migrate deploy
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - [Supabase Docs](https://supabase.com/docs)
 - [Neon Docs](https://neon.tech/docs)
-

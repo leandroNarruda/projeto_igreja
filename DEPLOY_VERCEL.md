@@ -198,4 +198,3 @@ A Vercel automaticamente fará um novo deploy!
 - [Documentação Vercel](https://vercel.com/docs)
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - [Next.js na Vercel](https://vercel.com/docs/frameworks/nextjs)
-

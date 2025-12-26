@@ -10,10 +10,7 @@ export async function POST(request: Request) {
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const isUserAdmin = await isAdmin()
@@ -28,10 +25,7 @@ export async function POST(request: Request) {
     const { tema } = body
 
     if (!tema || tema.trim() === '') {
-      return NextResponse.json(
-        { error: 'Tema é obrigatório' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Tema é obrigatório' }, { status: 400 })
     }
 
     const quiz = await prisma.quiz.create({
@@ -47,10 +41,7 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     console.error('Erro ao criar quiz:', error)
-    return NextResponse.json(
-      { error: 'Erro ao criar quiz' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erro ao criar quiz' }, { status: 500 })
   }
 }
 
@@ -59,16 +50,15 @@ export async function GET() {
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const isUserAdmin = await isAdmin()
     if (!isUserAdmin) {
       return NextResponse.json(
-        { error: 'Acesso negado. Apenas administradores podem listar quizzes.' },
+        {
+          error: 'Acesso negado. Apenas administradores podem listar quizzes.',
+        },
         { status: 403 }
       )
     }
@@ -95,4 +85,3 @@ export async function GET() {
     )
   }
 }
-

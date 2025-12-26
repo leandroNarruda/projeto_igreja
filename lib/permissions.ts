@@ -1,9 +1,9 @@
-import { getServerSession } from "./auth"
+import { getServerSession } from './auth'
 
 export enum Role {
-  USER = "USER",
-  ADMIN = "ADMIN",
-  MODERATOR = "MODERATOR",
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
 }
 
 export async function getCurrentUserRole() {
@@ -25,4 +25,3 @@ export async function hasAnyRole(roles: Role[]) {
   const role = await getCurrentUserRole()
   return roles.includes(role as Role)
 }
-

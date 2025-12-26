@@ -13,16 +13,15 @@ export async function POST(
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const isUserAdmin = await isAdmin()
     if (!isUserAdmin) {
       return NextResponse.json(
-        { error: 'Acesso negado. Apenas administradores podem criar perguntas.' },
+        {
+          error: 'Acesso negado. Apenas administradores podem criar perguntas.',
+        },
         { status: 403 }
       )
     }
@@ -125,10 +124,7 @@ export async function GET(
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const quizId = params.id
@@ -167,12 +163,12 @@ export async function GET(
     })
 
     const perguntasRespondidasIds = new Set(
-      respostasUsuario.map((r) => r.perguntaId)
+      respostasUsuario.map(r => r.perguntaId)
     )
 
     // Filtrar perguntas não respondidas
     const perguntasNaoRespondidas = todasPerguntas.filter(
-      (p) => !perguntasRespondidasIds.has(p.id)
+      p => !perguntasRespondidasIds.has(p.id)
     )
 
     // Embaralhar aleatoriamente

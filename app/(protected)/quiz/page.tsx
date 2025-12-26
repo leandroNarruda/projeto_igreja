@@ -31,7 +31,9 @@ export default function QuizPage() {
       const response = await fetch('/api/quiz')
       if (!response.ok) {
         if (response.status === 403) {
-          alert('Acesso negado. Apenas administradores podem acessar esta página.')
+          alert(
+            'Acesso negado. Apenas administradores podem acessar esta página.'
+          )
           router.push('/home')
           return
         }
@@ -50,7 +52,6 @@ export default function QuizPage() {
   useEffect(() => {
     buscarQuizzes()
   }, [buscarQuizzes])
-
 
   const handleCriarQuiz = async (tema: string) => {
     try {
@@ -275,10 +276,7 @@ export default function QuizPage() {
         <div className="mb-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
           {!mostrarFormQuiz && (
-            <Button
-              variant="primary"
-              onClick={() => setMostrarFormQuiz(true)}
-            >
+            <Button variant="primary" onClick={() => setMostrarFormQuiz(true)}>
               + Novo
             </Button>
           )}
@@ -304,4 +302,3 @@ export default function QuizPage() {
     </div>
   )
 }
-

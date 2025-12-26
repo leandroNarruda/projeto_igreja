@@ -67,7 +67,7 @@ export const RegisterForm = () => {
           label="Nome"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           required
           placeholder="Seu nome"
         />
@@ -75,7 +75,7 @@ export const RegisterForm = () => {
           label="Email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           required
           placeholder="seu@email.com"
         />
@@ -83,7 +83,7 @@ export const RegisterForm = () => {
           label="Senha"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           required
           placeholder="••••••••"
         />
@@ -91,7 +91,7 @@ export const RegisterForm = () => {
           label="Confirmar Senha"
           type="password"
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={e => setConfirmPassword(e.target.value)}
           required
           placeholder="••••••••"
         />
@@ -113,4 +113,3 @@ export const RegisterForm = () => {
     </Card>
   )
 }
-

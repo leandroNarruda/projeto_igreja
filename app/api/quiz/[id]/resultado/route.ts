@@ -12,10 +12,7 @@ export async function GET(
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const quizId = params.id
@@ -47,7 +44,7 @@ export async function GET(
 
     // Calcular acertos
     let acertos = 0
-    respostasUsuario.forEach((resposta) => {
+    respostasUsuario.forEach(resposta => {
       if (
         resposta.alternativaEscolhida &&
         resposta.alternativaEscolhida === resposta.pergunta.respostaCorreta
@@ -74,4 +71,3 @@ export async function GET(
     )
   }
 }
-

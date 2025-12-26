@@ -41,6 +41,7 @@ DATABASE_URL="postgresql://usuario:senha@localhost:5432/projeto_igreja?schema=pu
 ```
 
 **Nota:** Para desenvolvimento local, você pode usar Docker:
+
 ```bash
 docker run --name postgres-igreja \
   -e POSTGRES_PASSWORD=senha123 \
@@ -99,10 +100,12 @@ projeto_igreja/
 ## 🔐 Rotas
 
 ### Rotas Públicas (Não Autenticadas)
+
 - `/login` - Página de login
 - `/cadastro` - Página de registro
 
 ### Rotas Protegidas (Autenticadas)
+
 - `/home` - Página inicial após login
 
 ## 🛠️ Scripts Disponíveis
@@ -138,11 +141,13 @@ projeto_igreja/
 Para fazer deploy, consulte o arquivo [MIGRACAO_POSTGRESQL.md](./MIGRACAO_POSTGRESQL.md) para instruções detalhadas.
 
 ### Opções de Deploy Recomendadas:
+
 - **Vercel** (recomendado) - Integração nativa com Next.js
 - **Railway** - Suporta PostgreSQL nativamente
 - **Render** - Deploy simples com PostgreSQL
 
 ### Banco de Dados em Produção:
+
 - **Vercel Postgres** - Integrado com Vercel
 - **Supabase** - PostgreSQL gratuito
 - **Neon** - PostgreSQL serverless
@@ -151,4 +156,3 @@ Para fazer deploy, consulte o arquivo [MIGRACAO_POSTGRESQL.md](./MIGRACAO_POSTGR
 ## 📄 Licença
 
 Este projeto é privado.
-

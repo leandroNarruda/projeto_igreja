@@ -70,7 +70,6 @@ export default function ResponderQuizPage() {
     buscarQuizAtivo()
   }, [buscarQuizAtivo])
 
-
   const iniciarQuiz = async () => {
     if (!quizAtivo) return
 
@@ -213,4 +212,3 @@ export default function ResponderQuizPage() {
     </div>
   )
 }
-

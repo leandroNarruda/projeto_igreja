@@ -11,29 +11,36 @@ Quando você tenta criar um usuário, o Prisma tenta inserir dados na tabela `Us
 ### Opção 1: Via Vercel CLI (Recomendado)
 
 1. **Instalar Vercel CLI** (se ainda não tiver):
+
    ```bash
    npm i -g vercel
    ```
 
 2. **Fazer login na Vercel**:
+
    ```bash
    vercel login
    ```
 
 3. **Conectar ao projeto**:
+
    ```bash
    cd /Users/inteli/Documents/projeto_igreja
    vercel link
    ```
+
    - Escolha o projeto correto quando perguntado
 
 4. **Puxar variáveis de ambiente**:
+
    ```bash
    vercel env pull .env.local
    ```
+
    Isso cria um arquivo `.env.local` com as variáveis da Vercel.
 
 5. **Rodar migrations**:
+
    ```bash
    npx prisma migrate deploy
    ```
@@ -93,9 +100,11 @@ Após rodar as migrations, você pode verificar:
    - Use a connection string direta (não a `PRISMA_DATABASE_URL`)
 
 2. **Verifique se as migrations estão no Git**:
+
    ```bash
    git ls-files prisma/migrations
    ```
+
    Deve listar os arquivos de migration
 
 3. **Verifique os logs**:
@@ -114,4 +123,3 @@ npx prisma db pull
 # Abrir Prisma Studio (para visualizar dados)
 npx prisma studio
 ```
-

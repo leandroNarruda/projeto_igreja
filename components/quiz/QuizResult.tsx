@@ -63,8 +63,8 @@ export const QuizResult: React.FC<QuizResultProps> = ({
               porcentagem >= 80
                 ? 'bg-green-600'
                 : porcentagem >= 60
-                ? 'bg-yellow-600'
-                : 'bg-red-600'
+                  ? 'bg-yellow-600'
+                  : 'bg-red-600'
             }`}
             style={{ width: `${porcentagem}%` }}
           />
@@ -73,4 +73,3 @@ export const QuizResult: React.FC<QuizResultProps> = ({
     </Card>
   )
 }
-

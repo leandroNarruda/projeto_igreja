@@ -43,7 +43,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
           <Input
             label="Tema do Quiz"
             value={tema}
-            onChange={(e) => setTema(e.target.value)}
+            onChange={e => setTema(e.target.value)}
             placeholder="Ex: Conhecimentos Bíblicos"
             error={error}
             disabled={loading}
@@ -63,4 +63,3 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
     </Card>
   )
 }
-

@@ -9,10 +9,7 @@ export async function POST(request: Request) {
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -80,11 +77,11 @@ export async function POST(request: Request) {
     })
 
     const perguntasRespondidasIds = new Set(
-      respostasUsuario.map((r) => r.perguntaId)
+      respostasUsuario.map(r => r.perguntaId)
     )
 
     const perguntasNaoRespondidas = todasPerguntas.filter(
-      (p) => !perguntasRespondidasIds.has(p.id)
+      p => !perguntasRespondidasIds.has(p.id)
     )
 
     // Embaralhar aleatoriamente
@@ -122,7 +119,7 @@ export async function POST(request: Request) {
     })
 
     let acertos = 0
-    respostasCorretas.forEach((resposta) => {
+    respostasCorretas.forEach(resposta => {
       if (
         resposta.alternativaEscolhida &&
         resposta.alternativaEscolhida === resposta.pergunta.respostaCorreta
@@ -154,4 +151,3 @@ export async function POST(request: Request) {
     )
   }
 }
-

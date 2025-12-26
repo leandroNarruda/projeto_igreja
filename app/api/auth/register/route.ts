@@ -32,7 +32,7 @@ export async function POST(request: Request) {
         name,
         email,
         password: hashedPassword,
-        role: "USER",
+        role: 'USER',
       },
     })
 
@@ -48,4 +48,3 @@ export async function POST(request: Request) {
     )
   }
 }
-

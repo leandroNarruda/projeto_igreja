@@ -18,9 +18,7 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
   return (
     <Card className="max-w-2xl mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          Quiz: {tema}
-        </h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Quiz: {tema}</h2>
         <p className="text-gray-600">
           {totalPerguntas} {totalPerguntas === 1 ? 'pergunta' : 'perguntas'}
         </p>
@@ -46,15 +44,11 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
           </li>
           <li className="flex items-start">
             <span className="mr-2">🎲</span>
-            <span>
-              As perguntas aparecerão de forma aleatória
-            </span>
+            <span>As perguntas aparecerão de forma aleatória</span>
           </li>
           <li className="flex items-start">
             <span className="mr-2">🚫</span>
-            <span>
-              Não será possível voltar para perguntas anteriores
-            </span>
+            <span>Não será possível voltar para perguntas anteriores</span>
           </li>
           <li className="flex items-start">
             <span className="mr-2">✅</span>
@@ -65,9 +59,7 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
           </li>
           <li className="flex items-start">
             <span className="mr-2">🎯</span>
-            <span>
-              Ao final, você verá seu resultado com acertos e erros
-            </span>
+            <span>Ao final, você verá seu resultado com acertos e erros</span>
           </li>
         </ul>
       </div>
@@ -84,4 +76,3 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
     </Card>
   )
 }
-

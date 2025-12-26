@@ -1,9 +1,9 @@
-import { useSession } from "next-auth/react"
+import { useSession } from 'next-auth/react'
 
 export enum Role {
-  USER = "USER",
-  ADMIN = "ADMIN",
-  MODERATOR = "MODERATOR",
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
 }
 
 export function usePermissions() {
@@ -21,4 +21,3 @@ export function usePermissions() {
     hasAnyRole,
   }
 }
-

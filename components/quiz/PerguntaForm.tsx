@@ -100,7 +100,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Input
             label="Enunciado da Pergunta"
             value={formData.enunciado}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, enunciado: e.target.value })
             }
             placeholder="Digite a pergunta aqui..."
@@ -112,7 +112,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Input
             label="Alternativa A"
             value={formData.alternativaA}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, alternativaA: e.target.value })
             }
             placeholder="Alternativa A"
@@ -121,7 +121,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Input
             label="Alternativa B"
             value={formData.alternativaB}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, alternativaB: e.target.value })
             }
             placeholder="Alternativa B"
@@ -130,7 +130,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Input
             label="Alternativa C"
             value={formData.alternativaC}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, alternativaC: e.target.value })
             }
             placeholder="Alternativa C"
@@ -139,7 +139,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Input
             label="Alternativa D"
             value={formData.alternativaD}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, alternativaD: e.target.value })
             }
             placeholder="Alternativa D"
@@ -148,7 +148,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Input
             label="Alternativa E"
             value={formData.alternativaE}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, alternativaE: e.target.value })
             }
             placeholder="Alternativa E"
@@ -160,7 +160,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           <Select
             label="Resposta Correta"
             value={formData.respostaCorreta}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({ ...formData, respostaCorreta: e.target.value })
             }
             options={[
@@ -181,7 +181,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
             type="number"
             min="1"
             value={formData.tempoSegundos}
-            onChange={(e) =>
+            onChange={e =>
               setFormData({
                 ...formData,
                 tempoSegundos: parseInt(e.target.value) || 30,
@@ -191,9 +191,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
           />
         </div>
 
-        {error && (
-          <div className="mb-4 text-sm text-red-600">{error}</div>
-        )}
+        {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
 
         <div className="flex gap-2">
           <Button type="submit" variant="primary" disabled={loading}>
@@ -209,4 +207,3 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
     </Card>
   )
 }
-

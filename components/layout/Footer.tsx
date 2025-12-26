@@ -47,7 +47,7 @@ export const Footer = () => {
     <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
       <div className="max-w-7xl mx-auto">
         <nav className="flex justify-around items-center h-16">
-          {navigationItems.map((item) => {
+          {navigationItems.map(item => {
             const Icon = item.icon
             const isActive = pathname === item.path
 
@@ -59,9 +59,10 @@ export const Footer = () => {
                   relative flex flex-col items-center justify-center
                   flex-1 h-full
                   transition-all duration-200
-                  ${isActive
-                    ? 'text-blue-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                  ${
+                    isActive
+                      ? 'text-blue-600'
+                      : 'text-gray-600 hover:text-gray-900'
                   }
                 `}
                 aria-label={item.label}
@@ -70,7 +71,9 @@ export const Footer = () => {
                   size={24}
                   className={isActive ? 'text-blue-600' : 'text-gray-600'}
                 />
-                <span className={`text-xs mt-1 font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}>
+                <span
+                  className={`text-xs mt-1 font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}
+                >
                   {item.label}
                 </span>
                 {isActive && (
@@ -84,4 +87,3 @@ export const Footer = () => {
     </footer>
   )
 }
-

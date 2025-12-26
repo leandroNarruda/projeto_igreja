@@ -41,13 +41,15 @@ export const LoginForm = () => {
 
   return (
     <Card className="w-full max-w-md bg-white/30 backdrop-blur-sm">
-      <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">Login</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">
+        Login
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           required
           placeholder="seu@email.com"
         />
@@ -55,7 +57,7 @@ export const LoginForm = () => {
           label="Senha"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           required
           placeholder="••••••••"
         />
@@ -70,11 +72,13 @@ export const LoginForm = () => {
       </form>
       <p className="mt-4 text-center text-sm text-gray-800">
         Não tem uma conta?{' '}
-        <a href="/cadastro" className="text-blue-700 hover:text-blue-800 hover:underline font-medium">
+        <a
+          href="/cadastro"
+          className="text-blue-700 hover:text-blue-800 hover:underline font-medium"
+        >
           Cadastre-se
         </a>
       </p>
     </Card>
   )
 }
-

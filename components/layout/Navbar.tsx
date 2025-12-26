@@ -14,7 +14,7 @@ export const Navbar = () => {
     try {
       await signOut({
         redirect: false,
-        callbackUrl: '/login'
+        callbackUrl: '/login',
       })
       router.push('/login')
       router.refresh()
@@ -30,7 +30,6 @@ export const Navbar = () => {
     return null
   }
 
-
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,18 +44,17 @@ export const Navbar = () => {
               priority
             />
           </div>
-            <span className="text-gray-700">
-              Olá, {session.user?.name.split(' ')[0] || session.user?.email}
-            </span>
-            <IconButton
-              icon={LogOut}
-              variant="minimal"
-              onClick={handleLogout}
-              aria-label="Sair"
-            />
+          <span className="text-gray-700">
+            Olá, {session.user?.name.split(' ')[0] || session.user?.email}
+          </span>
+          <IconButton
+            icon={LogOut}
+            variant="minimal"
+            onClick={handleLogout}
+            aria-label="Sair"
+          />
         </div>
       </div>
     </nav>
   )
 }
-

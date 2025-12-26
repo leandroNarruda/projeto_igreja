@@ -13,16 +13,16 @@ export async function PUT(
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const isUserAdmin = await isAdmin()
     if (!isUserAdmin) {
       return NextResponse.json(
-        { error: 'Acesso negado. Apenas administradores podem atualizar quizzes.' },
+        {
+          error:
+            'Acesso negado. Apenas administradores podem atualizar quizzes.',
+        },
         { status: 403 }
       )
     }
@@ -85,16 +85,15 @@ export async function DELETE(
     const session = await getServerSession()
 
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const isUserAdmin = await isAdmin()
     if (!isUserAdmin) {
       return NextResponse.json(
-        { error: 'Acesso negado. Apenas administradores podem deletar quizzes.' },
+        {
+          error: 'Acesso negado. Apenas administradores podem deletar quizzes.',
+        },
         { status: 403 }
       )
     }
@@ -110,10 +109,6 @@ export async function DELETE(
     })
   } catch (error) {
     console.error('Erro ao deletar quiz:', error)
-    return NextResponse.json(
-      { error: 'Erro ao deletar quiz' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erro ao deletar quiz' }, { status: 500 })
   }
 }
-
