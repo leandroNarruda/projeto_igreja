@@ -34,9 +34,17 @@ export async function middleware(request: NextRequest) {
       secret: process.env.NEXTAUTH_SECRET,
     })
 
+    // Log para debug em produção
+    console.log('[Middleware] Verificando acesso a:', request.nextUrl.pathname)
+    console.log('[Middleware] Token role:', token?.role)
+    console.log('[Middleware] É admin?', token?.role === 'ADMIN')
+
     if (token?.role !== 'ADMIN') {
+      console.log('[Middleware] Redirecionando para /home (não é admin)')
       return NextResponse.redirect(new URL('/home', request.url))
     }
+
+    console.log('[Middleware] Acesso permitido')
   }
 
   // Proteger rota de responder quiz (requer autenticação)

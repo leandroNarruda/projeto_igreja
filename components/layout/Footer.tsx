@@ -40,6 +40,9 @@ export const Footer = () => {
   ]
 
   const handleNavigation = (path: string) => {
+    console.log('Footer - Navegando para:', path)
+    console.log('Footer - isAdmin:', isAdmin)
+    console.log('Footer - Session role:', session?.user?.role)
     router.push(path)
   }
 
