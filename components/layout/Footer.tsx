@@ -43,7 +43,22 @@ export const Footer = () => {
     console.log('Footer - Navegando para:', path)
     console.log('Footer - isAdmin:', isAdmin)
     console.log('Footer - Session role:', session?.user?.role)
-    router.push(path)
+    console.log('Footer - Pathname atual:', pathname)
+
+    // Tentar navegação com router
+    try {
+      router.push(path)
+      router.refresh()
+    } catch (error) {
+      console.error('Footer - Erro ao navegar com router:', error)
+      // Fallback: usar window.location
+      window.location.href = path
+    }
+
+    // Log após tentar navegar
+    setTimeout(() => {
+      console.log('Footer - Pathname após navegação:', window.location.pathname)
+    }, 100)
   }
 
   return (
@@ -57,7 +72,12 @@ export const Footer = () => {
             return (
               <button
                 key={item.path}
-                onClick={() => handleNavigation(item.path)}
+                onClick={e => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  console.log('Footer - Botão clicado:', item.label, item.path)
+                  handleNavigation(item.path)
+                }}
                 className={`
                   relative flex flex-col items-center justify-center
                   flex-1 h-full
@@ -69,6 +89,7 @@ export const Footer = () => {
                   }
                 `}
                 aria-label={item.label}
+                type="button"
               >
                 <Icon
                   size={24}

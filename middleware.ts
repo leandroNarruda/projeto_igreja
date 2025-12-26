@@ -36,15 +36,23 @@ export async function middleware(request: NextRequest) {
 
     // Log para debug em produção
     console.log('[Middleware] Verificando acesso a:', request.nextUrl.pathname)
+    console.log('[Middleware] Token completo:', JSON.stringify(token, null, 2))
     console.log('[Middleware] Token role:', token?.role)
+    console.log('[Middleware] Token role type:', typeof token?.role)
     console.log('[Middleware] É admin?', token?.role === 'ADMIN')
+    console.log('[Middleware] Comparação:', `"${token?.role}" === "ADMIN"`)
 
-    if (token?.role !== 'ADMIN') {
+    // Verificação mais flexível
+    const userRole = token?.role?.toString().toUpperCase()
+    const isAdmin = userRole === 'ADMIN'
+
+    if (!isAdmin) {
       console.log('[Middleware] Redirecionando para /home (não é admin)')
+      console.log('[Middleware] Role recebido:', userRole)
       return NextResponse.redirect(new URL('/home', request.url))
     }
 
-    console.log('[Middleware] Acesso permitido')
+    console.log('[Middleware] Acesso permitido - usuário é admin')
   }
 
   // Proteger rota de responder quiz (requer autenticação)

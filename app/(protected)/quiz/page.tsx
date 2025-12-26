@@ -28,6 +28,7 @@ export default function QuizPage() {
 
   useEffect(() => {
     console.log('QuizPage - Componente montado')
+    console.log('QuizPage - URL atual:', window.location.href)
   }, [])
 
   const buscarQuizzes = useCallback(async () => {
