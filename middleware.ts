@@ -17,6 +17,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Permitir acesso à página de debug sem verificação
+  if (request.nextUrl.pathname.startsWith('/debug')) {
+    return NextResponse.next()
+  }
+
   // Rotas que requerem permissão de admin
   if (
     request.nextUrl.pathname.startsWith('/admin') ||
@@ -79,5 +84,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/home/:path*', '/admin/:path*', '/quiz/:path*'],
+  matcher: ['/home/:path*', '/admin/:path*', '/quiz/:path*', '/debug/:path*'],
 }
