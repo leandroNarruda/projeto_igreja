@@ -40,31 +40,7 @@ export const Footer = () => {
   ]
 
   const handleNavigation = (path: string) => {
-    console.log('Footer - Navegando para:', path)
-    console.log('Footer - isAdmin:', isAdmin)
-    console.log('Footer - Session role:', session?.user?.role)
-    console.log('Footer - Pathname atual:', pathname)
-
-    // Se for /quiz e o router.push não funcionar, usar window.location diretamente
-    if (path === '/quiz') {
-      console.log('Footer - Usando window.location.href para /quiz')
-      window.location.href = path
-      return
-    }
-
-    // Para outras rotas, usar router normalmente
-    try {
-      router.push(path)
-      router.refresh()
-    } catch (error) {
-      console.error('Footer - Erro ao navegar com router:', error)
-      window.location.href = path
-    }
-
-    // Log após tentar navegar
-    setTimeout(() => {
-      console.log('Footer - Pathname após navegação:', window.location.pathname)
-    }, 100)
+    router.push(path)
   }
 
   return (
@@ -81,7 +57,6 @@ export const Footer = () => {
                 onClick={e => {
                   e.preventDefault()
                   e.stopPropagation()
-                  console.log('Footer - Botão clicado:', item.label, item.path)
                   handleNavigation(item.path)
                 }}
                 className={`
