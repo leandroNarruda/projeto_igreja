@@ -45,13 +45,19 @@ export const Footer = () => {
     console.log('Footer - Session role:', session?.user?.role)
     console.log('Footer - Pathname atual:', pathname)
 
-    // Tentar navegação com router
+    // Se for /quiz e o router.push não funcionar, usar window.location diretamente
+    if (path === '/quiz') {
+      console.log('Footer - Usando window.location.href para /quiz')
+      window.location.href = path
+      return
+    }
+
+    // Para outras rotas, usar router normalmente
     try {
       router.push(path)
       router.refresh()
     } catch (error) {
       console.error('Footer - Erro ao navegar com router:', error)
-      // Fallback: usar window.location
       window.location.href = path
     }
 

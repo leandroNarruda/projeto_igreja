@@ -54,17 +54,32 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // Quando o usuário faz login, atualizar o token
       if (user) {
         token.id = user.id
         token.role = user.role
+      }
+      // Se o token não tiver role, buscar do banco (para atualizar tokens antigos)
+      if (!token.role && token.id) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { role: true },
+          })
+          if (dbUser) {
+            token.role = dbUser.role
+          }
+        } catch (error) {
+          console.error('Erro ao buscar role do usuário:', error)
+        }
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        session.user.role = token.role as string
+        session.user.role = (token.role as string) || 'USER'
       }
       return session
     },

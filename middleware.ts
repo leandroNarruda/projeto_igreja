@@ -29,6 +29,12 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
 
+    // Verificar se NEXTAUTH_SECRET está configurado
+    if (!process.env.NEXTAUTH_SECRET) {
+      console.error('[Middleware] NEXTAUTH_SECRET não está configurado!')
+      return NextResponse.redirect(new URL('/home', request.url))
+    }
+
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
@@ -36,6 +42,7 @@ export async function middleware(request: NextRequest) {
 
     // Log para debug em produção
     console.log('[Middleware] Verificando acesso a:', request.nextUrl.pathname)
+    console.log('[Middleware] Token existe?', !!token)
     console.log('[Middleware] Token completo:', JSON.stringify(token, null, 2))
     console.log('[Middleware] Token role:', token?.role)
     console.log('[Middleware] Token role type:', typeof token?.role)
@@ -46,13 +53,17 @@ export async function middleware(request: NextRequest) {
     const userRole = token?.role?.toString().toUpperCase()
     const isAdmin = userRole === 'ADMIN'
 
+    console.log('[Middleware] userRole após toUpperCase:', userRole)
+    console.log('[Middleware] isAdmin calculado:', isAdmin)
+
     if (!isAdmin) {
-      console.log('[Middleware] Redirecionando para /home (não é admin)')
+      console.log('[Middleware] ❌ Redirecionando para /home (não é admin)')
       console.log('[Middleware] Role recebido:', userRole)
+      console.log('[Middleware] Token completo para debug:', token)
       return NextResponse.redirect(new URL('/home', request.url))
     }
 
-    console.log('[Middleware] Acesso permitido - usuário é admin')
+    console.log('[Middleware] ✅ Acesso permitido - usuário é admin')
   }
 
   // Proteger rota de responder quiz (requer autenticação)
