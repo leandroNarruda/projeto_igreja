@@ -26,25 +26,39 @@ export default function QuizPage() {
   const [quizSelecionado, setQuizSelecionado] = useState<string | null>(null)
   const [perguntas, setPerguntas] = useState<any[]>([])
 
+  useEffect(() => {
+    console.log('QuizPage - Componente montado')
+    console.log('QuizPage - URL atual:', window.location.href)
+  }, [])
+
   const buscarQuizzes = useCallback(async () => {
     try {
+      console.log('QuizPage - Buscando quizzes...')
       const response = await fetch('/api/quiz')
+      console.log('QuizPage - Response status:', response.status)
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('QuizPage - Erro na resposta:', errorData)
+
         if (response.status === 403) {
+          console.error('QuizPage - Acesso negado (403)')
           alert(
             'Acesso negado. Apenas administradores podem acessar esta página.'
           )
           router.push('/home')
           return
         }
-        throw new Error('Erro ao buscar quizzes')
+        throw new Error(`Erro ao buscar quizzes: ${response.status}`)
       }
       const data = await response.json()
+      console.log('QuizPage - Quizzes recebidos:', data)
       setQuizzes(data.quizzes || [])
     } catch (error) {
-      console.error('Erro ao buscar quizzes:', error)
-      alert('Erro ao carregar quizzes')
+      console.error('QuizPage - Erro ao buscar quizzes:', error)
+      alert(
+        `Erro ao carregar quizzes: ${error instanceof Error ? error.message : 'Erro desconhecido'}`
+      )
     } finally {
       setLoading(false)
     }

@@ -9,11 +9,28 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession()
 
-    // Tentar obter token do middleware
-    const token = await getToken({
+    // Tentar obter token do middleware - testar diferentes formas
+    let token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     })
+
+    // Se null, tentar com cookie name explícito
+    if (!token) {
+      const cookieName = request.cookies.get('next-auth.session-token')
+        ? 'next-auth.session-token'
+        : '__Secure-next-auth.session-token'
+
+      token = await getToken({
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET,
+        cookieName,
+      })
+    }
+
+    // Log detalhado do cookie
+    const allCookies = request.cookies.getAll()
+    const nextAuthCookies = allCookies.filter(c => c.name.includes('next-auth'))
 
     // Verificar cookies
     const sessionToken =
@@ -34,6 +51,11 @@ export async function GET(request: NextRequest) {
       cookies: {
         hasSessionToken: !!sessionToken,
         sessionTokenLength: sessionToken?.length || 0,
+        allNextAuthCookies: nextAuthCookies.map(c => ({
+          name: c.name,
+          value: c.value.substring(0, 50) + '...',
+          length: c.value.length,
+        })),
       },
       env: {
         hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
