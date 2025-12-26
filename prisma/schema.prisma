@@ -10,16 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String
-  email         String    @unique
+  email         String          @unique
   password      String
+  role          Role            @default(USER)
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   accounts      Account[]
   sessions      Session[]
+  respostas     RespostaUsuario[]
 }
 
 model Account {
@@ -55,5 +63,51 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Quiz {
+  id        String      @id @default(cuid())
+  tema      String
+  ativo     Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  perguntas Pergunta[]
+  respostas RespostaUsuario[]
+
+  @@index([ativo])
+}
+
+model Pergunta {
+  id              String            @id @default(cuid())
+  quizId          String
+  enunciado       String
+  alternativaA    String
+  alternativaB    String
+  alternativaC    String
+  alternativaD    String
+  alternativaE    String
+  respostaCorreta String            // "A", "B", "C", "D" ou "E"
+  tempoSegundos   Int
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  quiz            Quiz              @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  respostas       RespostaUsuario[]
+
+  @@index([quizId])
+}
+
+model RespostaUsuario {
+  id                  String    @id @default(cuid())
+  userId              String
+  quizId              String
+  perguntaId          String
+  alternativaEscolhida String?  // "A", "B", "C", "D", "E" ou null
+  createdAt           DateTime  @default(now())
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz                Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  pergunta         Pergunta   @relation(fields: [perguntaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId, perguntaId])
+  @@index([userId, quizId])
 }
 

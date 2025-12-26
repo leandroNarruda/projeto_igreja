@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+build
+dist
+*.lock
+.env*
+prisma/dev.db
+prisma/dev.db-journal
+public
+
+
