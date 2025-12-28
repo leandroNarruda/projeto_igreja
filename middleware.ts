@@ -8,6 +8,16 @@ export async function middleware(request: NextRequest) {
     request.cookies.get('next-auth.session-token')?.value ||
     request.cookies.get('__Secure-next-auth.session-token')?.value
 
+  // Redirecionar usuários logados que tentam acessar páginas de autenticação
+  if (
+    request.nextUrl.pathname.startsWith('/login') ||
+    request.nextUrl.pathname.startsWith('/cadastro')
+  ) {
+    if (sessionToken) {
+      return NextResponse.redirect(new URL('/home', request.url))
+    }
+  }
+
   // Rotas protegidas que requerem autenticação
   if (request.nextUrl.pathname.startsWith('/home')) {
     if (!sessionToken) {
@@ -96,5 +106,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/home/:path*', '/admin/:path*', '/quiz/:path*'],
+  matcher: [
+    '/home/:path*',
+    '/admin/:path*',
+    '/quiz/:path*',
+    '/login',
+    '/cadastro',
+  ],
 }

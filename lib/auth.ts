@@ -49,22 +49,13 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
-          // Garantir que id seja sempre number (compatibilidade com migração)
-          const userId =
-            typeof user.id === 'string' ? parseInt(user.id, 10) : user.id
-
-          if (isNaN(userId)) {
-            console.error('[AUTH] ID inválido:', user.id, typeof user.id)
-            return null
-          }
-
           console.log('[AUTH] Login bem-sucedido:', {
-            userId,
+            userId: user.id,
             email: user.email,
           })
 
           return {
-            id: userId, // Retornar como number conforme tipo User
+            id: user.id, // Sempre number do Prisma
             email: user.email,
             name: user.name,
             role: user.role,
@@ -87,13 +78,7 @@ export const authOptions: NextAuthOptions = {
       try {
         // Quando o usuário faz login, atualizar o token
         if (user) {
-          const userId =
-            typeof user.id === 'string' ? parseInt(user.id, 10) : user.id
-          if (isNaN(userId)) {
-            console.error('[AUTH] JWT: ID inválido do user:', user.id)
-            return token
-          }
-          token.id = userId
+          token.id = user.id as number // Sempre number do tipo User
           token.role = user.role
           console.log('[AUTH] JWT: Token atualizado:', {
             id: token.id,
@@ -103,10 +88,8 @@ export const authOptions: NextAuthOptions = {
         // Se o token não tiver role, buscar do banco (para atualizar tokens antigos)
         if (!token.role && token.id) {
           try {
-            const userId =
-              typeof token.id === 'string' ? parseInt(token.id, 10) : token.id
             const dbUser = await prisma.user.findUnique({
-              where: { id: userId },
+              where: { id: token.id }, // Sempre number
               select: { role: true },
             })
             if (dbUser) {
@@ -125,18 +108,12 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       try {
         if (session.user && token.id) {
-          const userId =
-            typeof token.id === 'string' ? parseInt(token.id, 10) : token.id
-          if (!isNaN(userId)) {
-            session.user.id = userId
-            session.user.role = (token.role as string) || 'USER'
-            console.log('[AUTH] Session: Sessão criada:', {
-              id: session.user.id,
-              role: session.user.role,
-            })
-          } else {
-            console.error('[AUTH] Session: ID inválido no token:', token.id)
-          }
+          session.user.id = token.id // Sempre number
+          session.user.role = (token.role as string) || 'USER'
+          console.log('[AUTH] Session: Sessão criada:', {
+            id: session.user.id,
+            role: session.user.role,
+          })
         }
         return session
       } catch (error) {

@@ -4,8 +4,8 @@
 
 @baseUrl = http://localhost:3000
 @sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..tsEfOv0WWC7mRZ-a.ZW5e3Sef-zGw1HXLvijsZzQha-hWLR3vuC9w59cJB7gEXRbNJvdI1Tg1xQ0cYzv49Lp0pib7x1I0r-ATSPKr78E_IyFQmqYGzn8LigO_jO5X67-UWjhwbQhDn8CyoRXLGkPr7VyHRRC6P31zvztvJDKZNR_JuRMfM0FoxK3o-tC8kyiAMXSBsh2X2AVo42LumQBnhzS5QLwIr1r1k9NH167Tn3HrhEEHbEJ1j2-u6TcTZPMzkFFHzC-IUS2_mYC4ukS1sBopixJOywxgXF7U093bRRDS_SxTbM7qRmiQaw.bAi0KLUIlvN4S5CD4zgyLg
-@quizId = SEU_QUIZ_ID_AQUI
-@userId = SEU_USER_ID_AQUI
+@quizId = 1
+@userId = 1
 
 ### ============================================
 ### AUTENTICAÇÃO
@@ -92,34 +92,144 @@ Cookie: next-auth.session-token={{sessionToken}}
 
 [
   {
-    "enunciado": "Qual é a capital do Brasil?",
-    "alternativaA": "São Paulo",
-    "alternativaB": "Rio de Janeiro",
-    "alternativaC": "Brasília",
-    "alternativaD": "Belo Horizonte",
-    "alternativaE": "Salvador",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Quantos estados tem o Brasil?",
-    "alternativaA": "25",
-    "alternativaB": "26",
-    "alternativaC": "27",
-    "alternativaD": "28",
-    "alternativaE": "29",
+    "enunciado": "De acordo com o texto de Sábado, o que Paulo e Silas faziam à meia-noite enquanto estavam presos em Filipos?",
+    "alternativaA": "Planejavam uma fuga estratégica",
+    "alternativaB": "Oravam e cantavam louvores a Deus",
+    "alternativaC": "Escreviam cartas para a igreja de Roma",
+    "alternativaD": "Pregavam silenciosamente para o carcereiro",
+    "alternativaE": "Dormiam profundamente apesar do tronco",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Em que ano o Brasil foi descoberto?",
-    "alternativaA": "1498",
-    "alternativaB": "1499",
-    "alternativaC": "1500",
-    "alternativaD": "1501",
-    "alternativaE": "1502",
+    "enunciado": "No relato do pastor adventista preso (Sábado), quais atividades ele realizou na cela ao ser identificado como pastor?",
+    "alternativaA": "Apenas orações individuais e jejuns",
+    "alternativaB": "Escrita de livros e alfabetização de presos",
+    "alternativaC": "Pregação, distribuição de literatura, batismos e Ceia do Senhor",
+    "alternativaD": "Debates teológicos com os guardas romanos",
+    "alternativaE": "Organização de um coral e aulas de grego",
     "respostaCorreta": "C",
-    "tempoSegundos": 45
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Segundo o estudo de Domingo, em que período aproximado a maioria dos estudiosos acredita que as 'Cartas da Prisão' foram escritas?",
+    "alternativaA": "Entre 45 a 50 d.C.",
+    "alternativaB": "Por volta dos anos 60 a 62 d.C.",
+    "alternativaC": "Exatamente no ano 70 d.C.",
+    "alternativaD": "Entre 33 a 35 d.C.",
+    "alternativaE": "No final do primeiro século, em 95 d.C.",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Ao mencionar a 'guarda pretoriana' em Filipenses 1:13, a que Paulo estava se referindo especificamente em Roma?",
+    "alternativaA": "A um local físico de julgamento",
+    "alternativaB": "À residência oficial de Pôncio Pilatos",
+    "alternativaC": "A um grupo de soldados de elite (cerca de 14 mil pessoas)",
+    "alternativaD": "Aos muros que cercavam a cidade de Cesareia",
+    "alternativaE": "Ao conselho de anciãos judeus em Roma",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Na lição de Segunda-feira, a quem Paulo estava acorrentado durante sua prisão domiciliar em Roma?",
+    "alternativaA": "A Lucas, o médico amado",
+    "alternativaB": "A um prisioneiro comum de guerra",
+    "alternativaC": "A um soldado romano de elite",
+    "alternativaD": "A Epafrodito e Timóteo",
+    "alternativaE": "Ao seu assistente literário",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Qual líder cristão do 2º século descreveu os soldados que guardavam os prisioneiros como 'feras selvagens'?",
+    "alternativaA": "Policarpo de Esmirna",
+    "alternativaB": "Inácio de Antioquia",
+    "alternativaC": "Clemente de Roma",
+    "alternativaD": "Justino o Mártir",
+    "alternativaE": "Tertuliano de Cartago",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "De acordo com o texto de Terça-feira, qual era a ocupação de Lídia, a primeira convertida em Filipos?",
+    "alternativaA": "Fabricante de tendas",
+    "alternativaB": "Vendedora de púrpura",
+    "alternativaC": "Carcereira do império",
+    "alternativaD": "Serva na casa de César",
+    "alternativaE": "Escrava liberta",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "O que significava para a cidade de Filipos possuir o status de 'Ius Italicum'?",
+    "alternativaA": "A proibição do uso da língua grega",
+    "alternativaB": "A obrigação de pagar impostos dobrados a Roma",
+    "alternativaC": "Mesmos direitos de quem nascia na Itália e isenção de impostos pessoais",
+    "alternativaD": "O direito de eleger o próprio imperador",
+    "alternativaE": "A exclusividade no comércio de seda no Oriente",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Segundo o estudo de Quarta-feira, quem foi o morador local responsável por levar o evangelho a Colossos?",
+    "alternativaA": "Onésimo",
+    "alternativaB": "Filemom",
+    "alternativaC": "Epafras",
+    "alternativaD": "Timóteo",
+    "alternativaE": "Tíquico",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Com base nos achados mencionados no texto, qual era a população judaica estimada na região da Frígia (onde ficava Colossos)?",
+    "alternativaA": "Cerca de mil judeus",
+    "alternativaB": "Aproximadamente cinco mil judeus",
+    "alternativaC": "Cerca de dez mil judeus",
+    "alternativaD": "Mais de cinquenta mil judeus",
+    "alternativaE": "Menos de cem judeus",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Na lição de Quinta-feira, o que Paulo quer dizer ao chamar os cristãos de 'santos'?",
+    "alternativaA": "Pessoas que já morreram e foram canonizadas",
+    "alternativaB": "Pessoas que nunca cometeram pecados",
+    "alternativaC": "Indivíduos separados pelo batismo para ser o povo especial de Deus",
+    "alternativaD": "Líderes que alcançaram a perfeição absoluta",
+    "alternativaE": "Membros que pertenciam apenas à igreja de Jerusalém",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Quem escreveu na 'Review and Herald' em 1853 que a ordem divina do Novo Testamento é suficiente para organizar a igreja?",
+    "alternativaA": "Ellen G. White",
+    "alternativaB": "Tiago White",
+    "alternativaC": "J. N. Andrews",
+    "alternativaD": "Joseph Bates",
+    "alternativaE": "Guilherme Miller",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "No texto de Sexta-feira, como é medida a verdadeira e elevada natureza da missão e o valor da vida de uma pessoa?",
+    "alternativaA": "Pela quantidade de pessoas convertidas",
+    "alternativaB": "Pelo número de livros escritos na prisão",
+    "alternativaC": "Pela vida que foi entregue para salvá-lo (Cristo)",
+    "alternativaD": "Pela ausência de sofrimento e perseguição",
+    "alternativaE": "Pela posição de liderança ocupada na igreja",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Conforme o resumo da semana, qual é o fundamento da alegria de Paulo mesmo em circunstâncias terríveis?",
+    "alternativaA": "A expectativa de ser solto em breve",
+    "alternativaB": "O apoio financeiro recebido de Lídia",
+    "alternativaC": "Estar 'no Senhor' e focar na cruz de Cristo",
+    "alternativaD": "A derrota política do império romano",
+    "alternativaE": "O fato de não estar sozinho na cela",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
   }
 ]
 
