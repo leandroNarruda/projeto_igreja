@@ -36,7 +36,7 @@ export const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center h-12">
             <Image
-              src="/images/logos/logo_1.png"
+              src="/images/logos/logo_192.png"
               alt="Logo"
               width={120}
               height={48}

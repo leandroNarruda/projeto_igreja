@@ -2,7 +2,15 @@ const CACHE_NAME = 'projeto-igreja-v1';
 const VERSION_URL = '/version.json';
 const STATIC_ASSETS = [
   '/',
-  '/images/logos/logo_1.png',
+  '/images/logos/logo_72.png',
+  '/images/logos/logo_96.png',
+  '/images/logos/logo_128.png',
+  '/images/logos/logo_144.png',
+  '/images/logos/logo_152.png',
+  '/images/logos/logo_192.png',
+  '/images/logos/logo_384.png',
+  '/images/logos/logo_512.png',
+  '/images/logos/logo_1024.png',
   '/images/backgrounds/background_1.jpeg',
   '/manifest.json'
 ];
