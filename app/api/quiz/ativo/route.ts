@@ -27,51 +27,27 @@ export async function GET() {
       )
     }
 
-    // Verificar se usuário já respondeu todas as perguntas deste quiz
-    const respostasUsuario = await prisma.respostaUsuario.findMany({
+    // Verificar se usuário já respondeu este quiz
+    const resultadoQuiz = await prisma.resultadoQuiz.findUnique({
       where: {
-        userId: session.user.id,
-        quizId: quizAtivo.id,
-      },
-    })
-
-    const perguntasRespondidas = respostasUsuario.length
-    const totalPerguntas = quizAtivo.perguntas.length
-    const jaRespondeu =
-      perguntasRespondidas === totalPerguntas && totalPerguntas > 0
-
-    let resultado = null
-    if (jaRespondeu) {
-      // Calcular resultado
-      const respostasCorretas = await prisma.respostaUsuario.findMany({
-        where: {
+        userId_quizId: {
           userId: session.user.id,
           quizId: quizAtivo.id,
         },
-        include: {
-          pergunta: true,
-        },
-      })
+      },
+    })
 
-      let acertos = 0
-      respostasCorretas.forEach(resposta => {
-        if (
-          resposta.alternativaEscolhida &&
-          resposta.alternativaEscolhida === resposta.pergunta.respostaCorreta
-        ) {
-          acertos++
-        }
-      })
+    const jaRespondeu = !!resultadoQuiz
+    const totalPerguntas = quizAtivo.perguntas.length
 
-      const erros = totalPerguntas - acertos
-      const porcentagem =
-        totalPerguntas > 0 ? Math.round((acertos / totalPerguntas) * 100) : 0
-
+    let resultado = null
+    if (jaRespondeu && resultadoQuiz) {
       resultado = {
-        total: totalPerguntas,
-        acertos,
-        erros,
-        porcentagem,
+        total: resultadoQuiz.total,
+        acertos: resultadoQuiz.acertos,
+        erros: resultadoQuiz.erros,
+        nulos: resultadoQuiz.nulos,
+        porcentagem: resultadoQuiz.porcentagem,
       }
     }
 
@@ -81,15 +57,30 @@ export async function GET() {
         tema: quizAtivo.tema,
         ativo: quizAtivo.ativo,
         totalPerguntas,
-        perguntasRespondidas,
       },
       jaRespondeu,
       resultado,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao buscar quiz ativo:', error)
+
+    // Se o erro for relacionado ao Prisma Client não ter o modelo ResultadoQuiz
+    if (error?.message?.includes('resultadoQuiz') || error?.code === 'P2001') {
+      return NextResponse.json(
+        {
+          error:
+            'Prisma Client precisa ser regenerado. Execute: npx prisma generate',
+          detalhes: error.message,
+        },
+        { status: 500 }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Erro ao buscar quiz ativo' },
+      {
+        error: 'Erro ao buscar quiz ativo',
+        detalhes: error?.message || 'Erro desconhecido',
+      },
       { status: 500 }
     )
   }

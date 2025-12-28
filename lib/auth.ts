@@ -110,10 +110,6 @@ export const authOptions: NextAuthOptions = {
         if (session.user && token.id) {
           session.user.id = token.id // Sempre number
           session.user.role = (token.role as string) || 'USER'
-          console.log('[AUTH] Session: Sessão criada:', {
-            id: session.user.id,
-            role: session.user.role,
-          })
         }
         return session
       } catch (error) {

@@ -210,63 +210,73 @@ export async function GET(
       return NextResponse.json({ perguntas })
     }
 
-    // Para todos os usuários (incluindo admin respondendo quiz), retorna próxima pergunta não respondida aleatória
+    // Verificar se o usuário já tem resultado para este quiz
+    const resultadoExistente = await prisma.resultadoQuiz.findUnique({
+      where: {
+        userId_quizId: {
+          userId: session.user.id,
+          quizId,
+        },
+      },
+    })
+
+    if (resultadoExistente) {
+      return NextResponse.json(
+        { error: 'Você já respondeu este quiz' },
+        { status: 400 }
+      )
+    }
+
+    // Buscar todas as perguntas do quiz
     const todasPerguntas = await prisma.pergunta.findMany({
       where: { quizId },
     })
 
-    // Buscar perguntas já respondidas pelo usuário
-    const respostasUsuario = await prisma.respostaUsuario.findMany({
-      where: {
-        userId: session.user.id,
-        quizId,
-      },
-      select: {
-        perguntaId: true,
-      },
-    })
-
-    const perguntasRespondidasIds = new Set(
-      respostasUsuario.map(r => r.perguntaId)
-    )
-
-    // Filtrar perguntas não respondidas
-    const perguntasNaoRespondidas = todasPerguntas.filter(
-      p => !perguntasRespondidasIds.has(p.id)
-    )
-
-    // Embaralhar aleatoriamente
-    const perguntasAleatorias = perguntasNaoRespondidas.sort(
-      () => Math.random() - 0.5
-    )
-
-    // Retornar apenas a primeira pergunta não respondida (aleatória)
-    const proximaPergunta = perguntasAleatorias[0] || null
-
-    if (!proximaPergunta) {
+    if (todasPerguntas.length === 0) {
       return NextResponse.json(
-        { pergunta: null, fimDoQuiz: true },
-        { status: 200 }
+        { error: 'Quiz não possui perguntas' },
+        { status: 400 }
       )
     }
 
+    // Embaralhar aleatoriamente
+    const perguntasEmbaralhadas = [...todasPerguntas].sort(
+      () => Math.random() - 0.5
+    )
+
+    // Retornar todas as perguntas embaralhadas (sem respostaCorreta)
     return NextResponse.json({
-      pergunta: {
-        id: proximaPergunta.id,
-        enunciado: proximaPergunta.enunciado,
-        alternativaA: proximaPergunta.alternativaA,
-        alternativaB: proximaPergunta.alternativaB,
-        alternativaC: proximaPergunta.alternativaC,
-        alternativaD: proximaPergunta.alternativaD,
-        alternativaE: proximaPergunta.alternativaE,
-        tempoSegundos: proximaPergunta.tempoSegundos,
-      },
-      fimDoQuiz: false,
+      perguntas: perguntasEmbaralhadas.map(p => ({
+        id: p.id,
+        enunciado: p.enunciado,
+        alternativaA: p.alternativaA,
+        alternativaB: p.alternativaB,
+        alternativaC: p.alternativaC,
+        alternativaD: p.alternativaD,
+        alternativaE: p.alternativaE,
+        tempoSegundos: p.tempoSegundos,
+      })),
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao listar perguntas:', error)
+
+    // Se o erro for relacionado ao Prisma Client não ter o modelo ResultadoQuiz
+    if (error?.message?.includes('resultadoQuiz') || error?.code === 'P2001') {
+      return NextResponse.json(
+        {
+          error:
+            'Prisma Client precisa ser regenerado. Execute: npx prisma generate',
+          detalhes: error.message,
+        },
+        { status: 500 }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Erro ao listar perguntas' },
+      {
+        error: 'Erro ao listar perguntas',
+        detalhes: error?.message || 'Erro desconhecido',
+      },
       { status: 500 }
     )
   }

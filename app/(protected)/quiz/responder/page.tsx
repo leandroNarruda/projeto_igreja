@@ -28,11 +28,15 @@ export default function ResponderQuizPage() {
   const [quizAtivo, setQuizAtivo] = useState<QuizAtivo | null>(null)
   const [loading, setLoading] = useState(true)
   const [mostrarInstrucoes, setMostrarInstrucoes] = useState(true)
-  const [perguntaAtual, setPerguntaAtual] = useState<Pergunta | null>(null)
+  const [todasPerguntas, setTodasPerguntas] = useState<Pergunta[]>([])
+  const [indicePerguntaAtual, setIndicePerguntaAtual] = useState(0)
+  const [respostas, setRespostas] = useState<Record<number, string | null>>({})
+  const [enviando, setEnviando] = useState(false)
   const [resultado, setResultado] = useState<{
     total: number
     acertos: number
     erros: number
+    nulos: number
     porcentagem: number
   } | null>(null)
 
@@ -73,33 +77,84 @@ export default function ResponderQuizPage() {
   const iniciarQuiz = async () => {
     if (!quizAtivo) return
 
-    setMostrarInstrucoes(false)
-    await buscarProximaPergunta()
-  }
-
-  const buscarProximaPergunta = async () => {
-    if (!quizAtivo) return
-
     try {
+      setLoading(true)
       const response = await fetch(`/api/quiz/${quizAtivo.id}/perguntas`)
       const data = await response.json()
 
-      if (data.fimDoQuiz || !data.pergunta) {
-        // Buscar resultado
-        await buscarResultado()
+      if (data.error) {
+        alert(data.error)
+        router.push('/home')
+        return
+      }
+
+      if (data.perguntas && data.perguntas.length > 0) {
+        setTodasPerguntas(data.perguntas)
+        setIndicePerguntaAtual(0)
+        setRespostas({})
+        setMostrarInstrucoes(false)
       } else {
-        setPerguntaAtual(data.pergunta)
+        alert('Não há perguntas disponíveis')
+        router.push('/home')
       }
     } catch (error) {
-      console.error('Erro ao buscar pergunta:', error)
-      alert('Erro ao carregar pergunta')
+      console.error('Erro ao buscar perguntas:', error)
+      alert('Erro ao carregar perguntas')
+      router.push('/home')
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleResposta = async (alternativa: string | null) => {
-    if (!quizAtivo || !perguntaAtual) return
+  const handleResposta = (alternativa: string | null) => {
+    const perguntaAtual = todasPerguntas[indicePerguntaAtual]
+    if (!perguntaAtual) return
+
+    // Salvar resposta no estado
+    setRespostas(prev => ({
+      ...prev,
+      [perguntaAtual.id]: alternativa,
+    }))
+
+    // Avançar para próxima pergunta ou finalizar
+    if (indicePerguntaAtual < todasPerguntas.length - 1) {
+      setIndicePerguntaAtual(prev => prev + 1)
+    } else {
+      // Última pergunta, finalizar quiz
+      finalizarQuiz(alternativa)
+    }
+  }
+
+  const finalizarQuiz = async (ultimaResposta: string | null) => {
+    if (!quizAtivo) return
+
+    // Garantir que a última resposta está salva
+    const perguntaAtual = todasPerguntas[indicePerguntaAtual]
+    if (perguntaAtual) {
+      setRespostas(prev => ({
+        ...prev,
+        [perguntaAtual.id]: ultimaResposta,
+      }))
+    }
+
+    // Aguardar um pouco para garantir que o estado foi atualizado
+    setTimeout(async () => {
+      await enviarTodasRespostas()
+    }, 100)
+  }
+
+  const enviarTodasRespostas = async () => {
+    if (!quizAtivo) return
 
     try {
+      setEnviando(true)
+
+      // Preparar array de respostas
+      const respostasArray = todasPerguntas.map(pergunta => ({
+        perguntaId: pergunta.id,
+        alternativaEscolhida: respostas[pergunta.id] || null,
+      }))
+
       const response = await fetch('/api/quiz/resposta', {
         method: 'POST',
         headers: {
@@ -107,39 +162,25 @@ export default function ResponderQuizPage() {
         },
         body: JSON.stringify({
           quizId: quizAtivo.id,
-          perguntaId: perguntaAtual.id,
-          alternativaEscolhida: alternativa,
+          respostas: respostasArray,
         }),
       })
 
       const data = await response.json()
 
-      if (data.fimDoQuiz && data.resultado) {
+      if (data.error) {
+        alert(data.error)
+        return
+      }
+
+      if (data.resultado) {
         setResultado(data.resultado)
-        setPerguntaAtual(null)
-      } else if (data.proximaPergunta) {
-        setPerguntaAtual(data.proximaPergunta)
-      } else {
-        // Se não há próxima pergunta na resposta, buscar manualmente
-        setTimeout(() => {
-          buscarProximaPergunta()
-        }, 1000)
       }
     } catch (error) {
-      console.error('Erro ao enviar resposta:', error)
-      alert('Erro ao enviar resposta')
-    }
-  }
-
-  const buscarResultado = async () => {
-    if (!quizAtivo) return
-
-    try {
-      const response = await fetch(`/api/quiz/${quizAtivo.id}/resultado`)
-      const data = await response.json()
-      setResultado(data)
-    } catch (error) {
-      console.error('Erro ao buscar resultado:', error)
+      console.error('Erro ao enviar respostas:', error)
+      alert('Erro ao enviar respostas')
+    } finally {
+      setEnviando(false)
     }
   }
 
@@ -192,7 +233,16 @@ export default function ResponderQuizPage() {
     )
   }
 
+  const perguntaAtual = todasPerguntas[indicePerguntaAtual]
+
   if (!perguntaAtual) {
+    if (enviando) {
+      return (
+        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
+          <div className="text-gray-600">Enviando respostas...</div>
+        </div>
+      )
+    }
     return (
       <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Carregando pergunta...</div>
@@ -200,9 +250,27 @@ export default function ResponderQuizPage() {
     )
   }
 
+  const progresso = ((indicePerguntaAtual + 1) / todasPerguntas.length) * 100
+
   return (
     <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
       <div className="w-full px-4">
+        <div className="max-w-3xl mx-auto mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-gray-600">
+              Pergunta {indicePerguntaAtual + 1} de {todasPerguntas.length}
+            </span>
+            <span className="text-sm text-gray-600">
+              {Math.round(progresso)}%
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progresso}%` }}
+            />
+          </div>
+        </div>
         <QuizPlayer
           quizId={quizAtivo.id}
           pergunta={perguntaAtual}

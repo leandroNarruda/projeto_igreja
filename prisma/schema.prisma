@@ -28,6 +28,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   respostas     RespostaUsuario[]
+  resultados    ResultadoQuiz[]
 }
 
 model Account {
@@ -66,13 +67,14 @@ model VerificationToken {
 }
 
 model Quiz {
-  id        Int         @id @default(autoincrement())
+  id        Int             @id @default(autoincrement())
   tema      String
-  ativo     Boolean     @default(false)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  ativo     Boolean         @default(false)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
   perguntas Pergunta[]
   respostas RespostaUsuario[]
+  resultados ResultadoQuiz[]
 
   @@index([ativo])
 }
@@ -109,5 +111,23 @@ model RespostaUsuario {
 
   @@unique([userId, quizId, perguntaId])
   @@index([userId, quizId])
+}
+
+model ResultadoQuiz {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  quizId      Int
+  acertos     Int
+  erros       Int
+  nulos       Int
+  total       Int
+  porcentagem Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId])
+  @@index([quizId, acertos])
 }
 

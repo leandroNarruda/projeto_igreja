@@ -1,4 +1,4 @@
-const CACHE_NAME = 'projeto-igreja-v1';
+const CACHE_NAME = 'projeto-igreja-v2';
 const VERSION_URL = '/version.json';
 const STATIC_ASSETS = [
   '/',
@@ -29,11 +29,13 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     Promise.all([
-      // Limpa caches antigos
+      // Limpa TODOS os caches antigos (incluindo o atual se o nome mudou)
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
+            // Deleta todos os caches que não correspondem ao nome atual
             if (cacheName !== CACHE_NAME) {
+              console.log('Deletando cache antigo:', cacheName);
               return caches.delete(cacheName);
             }
           })
@@ -52,14 +54,21 @@ self.addEventListener('activate', (event) => {
 
 // Estratégia: Network First, fallback para Cache
 self.addEventListener('fetch', (event) => {
+  // Ignora requisições que não são GET
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Se a requisição for bem-sucedida, atualiza o cache
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone);
-        });
+        // Só cacheia respostas bem-sucedidas (status 200-299)
+        if (response.ok) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
         return response;
       })
       .catch(() => {

@@ -13,140 +13,168 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { quizId, perguntaId, alternativaEscolhida } = body
+    const { quizId, respostas } = body
 
-    if (!quizId || !perguntaId) {
+    if (!quizId || !respostas || !Array.isArray(respostas)) {
       return NextResponse.json(
-        { error: 'quizId e perguntaId são obrigatórios' },
+        { error: 'quizId e respostas (array) são obrigatórios' },
         { status: 400 }
       )
     }
 
-    // Verificar se já respondeu esta pergunta específica
-    const respostaExistente = await prisma.respostaUsuario.findUnique({
+    // Verificar se o usuário já tem resultado para este quiz
+    const resultadoExistente = await prisma.resultadoQuiz.findUnique({
       where: {
-        userId_quizId_perguntaId: {
+        userId_quizId: {
           userId: session.user.id,
           quizId,
-          perguntaId,
         },
       },
     })
 
-    if (respostaExistente) {
+    if (resultadoExistente) {
       return NextResponse.json(
-        { error: 'Pergunta já foi respondida' },
+        { error: 'Você já respondeu este quiz' },
         { status: 400 }
       )
     }
 
-    // Validar alternativa escolhida (se fornecida)
-    if (
-      alternativaEscolhida &&
-      !['A', 'B', 'C', 'D', 'E'].includes(alternativaEscolhida)
-    ) {
-      return NextResponse.json(
-        { error: 'Alternativa inválida' },
-        { status: 400 }
-      )
-    }
-
-    // Salvar resposta
-    await prisma.respostaUsuario.create({
-      data: {
-        userId: session.user.id,
-        quizId,
-        perguntaId,
-        alternativaEscolhida: alternativaEscolhida || null,
-      },
-    })
-
-    // Buscar próxima pergunta aleatória não respondida
+    // Buscar todas as perguntas do quiz para validação
     const todasPerguntas = await prisma.pergunta.findMany({
       where: { quizId },
     })
 
-    const respostasUsuario = await prisma.respostaUsuario.findMany({
-      where: {
-        userId: session.user.id,
-        quizId,
-      },
-      select: {
-        perguntaId: true,
-      },
-    })
-
-    const perguntasRespondidasIds = new Set(
-      respostasUsuario.map(r => r.perguntaId)
-    )
-
-    const perguntasNaoRespondidas = todasPerguntas.filter(
-      p => !perguntasRespondidasIds.has(p.id)
-    )
-
-    // Embaralhar aleatoriamente
-    const perguntasAleatorias = perguntasNaoRespondidas.sort(
-      () => Math.random() - 0.5
-    )
-
-    const proximaPergunta = perguntasAleatorias[0] || null
-
-    if (proximaPergunta) {
-      return NextResponse.json({
-        proximaPergunta: {
-          id: proximaPergunta.id,
-          enunciado: proximaPergunta.enunciado,
-          alternativaA: proximaPergunta.alternativaA,
-          alternativaB: proximaPergunta.alternativaB,
-          alternativaC: proximaPergunta.alternativaC,
-          alternativaD: proximaPergunta.alternativaD,
-          alternativaE: proximaPergunta.alternativaE,
-          tempoSegundos: proximaPergunta.tempoSegundos,
-        },
-        fimDoQuiz: false,
-      })
+    if (todasPerguntas.length === 0) {
+      return NextResponse.json(
+        { error: 'Quiz não possui perguntas' },
+        { status: 400 }
+      )
     }
 
-    // Se não há mais perguntas, calcular resultado
-    const respostasCorretas = await prisma.respostaUsuario.findMany({
-      where: {
-        userId: session.user.id,
-        quizId,
-      },
-      include: {
-        pergunta: true,
-      },
-    })
+    // Validar que todas as perguntas foram respondidas
+    const perguntasIds = new Set(todasPerguntas.map(p => p.id))
+    const respostasIds = new Set(respostas.map((r: any) => r.perguntaId))
 
-    let acertos = 0
-    respostasCorretas.forEach(resposta => {
+    if (perguntasIds.size !== respostasIds.size) {
+      return NextResponse.json(
+        { error: 'Todas as perguntas devem ser respondidas' },
+        { status: 400 }
+      )
+    }
+
+    // Validar alternativas escolhidas
+    for (const resposta of respostas) {
+      if (!resposta.perguntaId) {
+        return NextResponse.json(
+          { error: 'perguntaId é obrigatório em cada resposta' },
+          { status: 400 }
+        )
+      }
+
       if (
         resposta.alternativaEscolhida &&
-        resposta.alternativaEscolhida === resposta.pergunta.respostaCorreta
+        !['A', 'B', 'C', 'D', 'E'].includes(resposta.alternativaEscolhida)
       ) {
-        acertos++
+        return NextResponse.json(
+          { error: 'Alternativa inválida' },
+          { status: 400 }
+        )
+      }
+
+      if (!perguntasIds.has(resposta.perguntaId)) {
+        return NextResponse.json(
+          { error: 'Pergunta não pertence a este quiz' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Buscar todas as perguntas com suas respostas corretas para cálculo
+    const perguntasMap = new Map(todasPerguntas.map(p => [p.id, p]))
+
+    // Calcular acertos, erros e nulos
+    let acertos = 0
+    let erros = 0
+    let nulos = 0
+
+    // Salvar todas as respostas e calcular resultado em uma transação
+    const resultado = await prisma.$transaction(async tx => {
+      // Salvar todas as respostas
+      await Promise.all(
+        respostas.map((resposta: any) =>
+          tx.respostaUsuario.create({
+            data: {
+              userId: session.user.id,
+              quizId,
+              perguntaId: resposta.perguntaId,
+              alternativaEscolhida: resposta.alternativaEscolhida || null,
+            },
+          })
+        )
+      )
+
+      // Calcular resultado
+      for (const resposta of respostas) {
+        const pergunta = perguntasMap.get(resposta.perguntaId)
+        if (!pergunta) continue
+
+        if (!resposta.alternativaEscolhida) {
+          nulos++
+        } else if (resposta.alternativaEscolhida === pergunta.respostaCorreta) {
+          acertos++
+        } else {
+          erros++
+        }
+      }
+
+      const total = todasPerguntas.length
+      const porcentagem = total > 0 ? Math.round((acertos / total) * 100) : 0
+
+      // Criar registro de resultado
+      const resultadoQuiz = await tx.resultadoQuiz.create({
+        data: {
+          userId: session.user.id,
+          quizId,
+          acertos,
+          erros,
+          nulos,
+          total,
+          porcentagem,
+        },
+      })
+
+      return {
+        total,
+        acertos,
+        erros,
+        nulos,
+        porcentagem,
       }
     })
 
-    const totalPerguntas = todasPerguntas.length
-    const erros = totalPerguntas - acertos
-    const porcentagem =
-      totalPerguntas > 0 ? Math.round((acertos / totalPerguntas) * 100) : 0
-
     return NextResponse.json({
-      proximaPergunta: null,
-      fimDoQuiz: true,
-      resultado: {
-        total: totalPerguntas,
-        acertos,
-        erros,
-        porcentagem,
-      },
+      resultado,
     })
-  } catch (error) {
-    console.error('Erro ao salvar resposta:', error)
+  } catch (error: any) {
+    console.error('Erro ao salvar respostas:', error)
+
+    // Se o erro for relacionado ao Prisma Client não ter o modelo ResultadoQuiz
+    if (error?.message?.includes('resultadoQuiz') || error?.code === 'P2001') {
+      return NextResponse.json(
+        {
+          error:
+            'Prisma Client precisa ser regenerado. Execute: npx prisma generate',
+          detalhes: error.message,
+        },
+        { status: 500 }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Erro ao salvar resposta' },
+      {
+        error: 'Erro ao salvar respostas',
+        detalhes: error?.message || 'Erro desconhecido',
+      },
       { status: 500 }
     )
   }
