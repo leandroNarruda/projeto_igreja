@@ -5,7 +5,6 @@ import './globals.css'
 import { SessionProvider } from '@/components/providers/SessionProvider'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -66,7 +65,6 @@ export default function RootLayout({
           <Navbar />
           <main className="pb-16">{children}</main>
           <Footer />
-          <InstallPrompt />
         </SessionProvider>
         <Script src="/sw-register.js" strategy="afterInteractive" />
       </body>
