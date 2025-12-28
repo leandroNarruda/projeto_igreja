@@ -1,0 +1,284 @@
+### Variáveis de Ambiente
+### Configure estas variáveis antes de usar as requisições
+### Para obter o sessionToken: faça login no navegador, abra DevTools > Application > Cookies > copie o valor de "next-auth.session-token"
+
+@baseUrl = http://localhost:3000
+@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..tsEfOv0WWC7mRZ-a.ZW5e3Sef-zGw1HXLvijsZzQha-hWLR3vuC9w59cJB7gEXRbNJvdI1Tg1xQ0cYzv49Lp0pib7x1I0r-ATSPKr78E_IyFQmqYGzn8LigO_jO5X67-UWjhwbQhDn8CyoRXLGkPr7VyHRRC6P31zvztvJDKZNR_JuRMfM0FoxK3o-tC8kyiAMXSBsh2X2AVo42LumQBnhzS5QLwIr1r1k9NH167Tn3HrhEEHbEJ1j2-u6TcTZPMzkFFHzC-IUS2_mYC4ukS1sBopixJOywxgXF7U093bRRDS_SxTbM7qRmiQaw.bAi0KLUIlvN4S5CD4zgyLg
+@quizId = SEU_QUIZ_ID_AQUI
+@userId = SEU_USER_ID_AQUI
+
+### ============================================
+### AUTENTICAÇÃO
+### ============================================
+
+### Criar novo usuário (não requer autenticação)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "senha123"
+}
+
+### ============================================
+### QUIZ - CRUD
+### ============================================
+
+### Criar novo quiz (requer ADMIN)
+POST {{baseUrl}}/api/quiz
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "tema": "História do Brasil"
+}
+
+### Listar todos os quizzes (requer ADMIN)
+GET {{baseUrl}}/api/quiz
+Cookie: next-auth.session-token={{sessionToken}}
+
+### Atualizar quiz (requer ADMIN)
+### Pode atualizar tema e/ou status ativo
+### Se ativar um quiz, todos os outros serão desativados automaticamente
+PUT {{baseUrl}}/api/quiz/{{quizId}}
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "tema": "História do Brasil - Atualizado",
+  "ativo": true
+}
+
+### Deletar quiz (requer ADMIN)
+DELETE {{baseUrl}}/api/quiz/{{quizId}}
+Cookie: next-auth.session-token={{sessionToken}}
+
+### ============================================
+### QUIZ ATIVO
+### ============================================
+
+### Buscar quiz ativo (requer autenticação)
+### Retorna o quiz ativo, se o usuário já respondeu e o resultado (se já respondeu tudo)
+GET {{baseUrl}}/api/quiz/ativo
+Cookie: next-auth.session-token={{sessionToken}}
+
+### ============================================
+### PERGUNTAS
+### ============================================
+
+### Criar uma única pergunta (requer ADMIN)
+POST {{baseUrl}}/api/quiz/{{quizId}}/perguntas
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "enunciado": "Qual é a capital do Brasil?",
+  "alternativaA": "São Paulo",
+  "alternativaB": "Rio de Janeiro",
+  "alternativaC": "Brasília",
+  "alternativaD": "Belo Horizonte",
+  "alternativaE": "Salvador",
+  "respostaCorreta": "C",
+  "tempoSegundos": 30
+}
+
+### Criar múltiplas perguntas de uma vez (requer ADMIN)
+### Envie um array de perguntas - todas serão criadas em uma transação
+### Se qualquer pergunta for inválida, nenhuma será criada (rollback)
+POST {{baseUrl}}/api/quiz/{{quizId}}/perguntas
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+[
+  {
+    "enunciado": "Qual é a capital do Brasil?",
+    "alternativaA": "São Paulo",
+    "alternativaB": "Rio de Janeiro",
+    "alternativaC": "Brasília",
+    "alternativaD": "Belo Horizonte",
+    "alternativaE": "Salvador",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Quantos estados tem o Brasil?",
+    "alternativaA": "25",
+    "alternativaB": "26",
+    "alternativaC": "27",
+    "alternativaD": "28",
+    "alternativaE": "29",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Em que ano o Brasil foi descoberto?",
+    "alternativaA": "1498",
+    "alternativaB": "1499",
+    "alternativaC": "1500",
+    "alternativaD": "1501",
+    "alternativaE": "1502",
+    "respostaCorreta": "C",
+    "tempoSegundos": 45
+  }
+]
+
+### Buscar próxima pergunta não respondida (requer autenticação)
+### Retorna uma pergunta aleatória que o usuário ainda não respondeu
+GET {{baseUrl}}/api/quiz/{{quizId}}/perguntas
+Cookie: next-auth.session-token={{sessionToken}}
+
+### Listar todas as perguntas de um quiz (requer ADMIN)
+### Use o query parameter ?admin=true para listar todas as perguntas ordenadas
+GET {{baseUrl}}/api/quiz/{{quizId}}/perguntas?admin=true
+Cookie: next-auth.session-token={{sessionToken}}
+
+### ============================================
+### RESPOSTAS E RESULTADOS
+### ============================================
+
+### Salvar resposta de uma pergunta (requer autenticação)
+### Retorna a próxima pergunta não respondida ou o resultado final se terminou
+POST {{baseUrl}}/api/quiz/resposta
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "quizId": "{{quizId}}",
+  "perguntaId": "ID_DA_PERGUNTA_AQUI",
+  "alternativaEscolhida": "C"
+}
+
+### Salvar resposta sem alternativa (tempo esgotado)
+### Se o tempo acabar, pode enviar null ou omitir alternativaEscolhida
+POST {{baseUrl}}/api/quiz/resposta
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "quizId": "{{quizId}}",
+  "perguntaId": "ID_DA_PERGUNTA_AQUI",
+  "alternativaEscolhida": null
+}
+
+### Obter resultado do quiz (requer autenticação)
+### Retorna total de perguntas, acertos, erros e porcentagem
+GET {{baseUrl}}/api/quiz/{{quizId}}/resultado
+Cookie: next-auth.session-token={{sessionToken}}
+
+### ============================================
+### EXEMPLOS DE INSERÇÃO EM MASSA
+### ============================================
+
+### Exemplo: Criar quiz completo com múltiplas perguntas
+### 1. Primeiro, crie o quiz
+POST {{baseUrl}}/api/quiz
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "tema": "Geografia do Brasil"
+}
+
+### 2. Copie o ID do quiz retornado e substitua {{quizId}} abaixo
+### 3. Crie todas as perguntas de uma vez
+POST {{baseUrl}}/api/quiz/{{quizId}}/perguntas
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+[
+  {
+    "enunciado": "Qual é o maior estado do Brasil em área?",
+    "alternativaA": "Amazonas",
+    "alternativaB": "Pará",
+    "alternativaC": "Mato Grosso",
+    "alternativaD": "Minas Gerais",
+    "alternativaE": "Bahia",
+    "respostaCorreta": "A",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Qual é a maior cidade do Brasil em população?",
+    "alternativaA": "Rio de Janeiro",
+    "alternativaB": "São Paulo",
+    "alternativaC": "Brasília",
+    "alternativaD": "Salvador",
+    "alternativaE": "Fortaleza",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Quantos países fazem fronteira com o Brasil?",
+    "alternativaA": "8",
+    "alternativaB": "9",
+    "alternativaC": "10",
+    "alternativaD": "11",
+    "alternativaE": "12",
+    "respostaCorreta": "C",
+    "tempoSegundos": 45
+  },
+  {
+    "enunciado": "Qual é o ponto mais alto do Brasil?",
+    "alternativaA": "Pico da Neblina",
+    "alternativaB": "Pico da Bandeira",
+    "alternativaC": "Pedra da Mina",
+    "alternativaD": "Pico do Calçado",
+    "alternativaE": "Monte Roraima",
+    "respostaCorreta": "A",
+    "tempoSegundos": 40
+  },
+  {
+    "enunciado": "Qual é o maior rio do Brasil?",
+    "alternativaA": "Rio São Francisco",
+    "alternativaB": "Rio Paraná",
+    "alternativaC": "Rio Amazonas",
+    "alternativaD": "Rio Tocantins",
+    "alternativaE": "Rio Madeira",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  }
+]
+
+### 4. Ative o quiz para que os usuários possam respondê-lo
+PUT {{baseUrl}}/api/quiz/{{quizId}}
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "ativo": true
+}
+
+### ============================================
+### NOTAS IMPORTANTES
+### ============================================
+###
+### 1. AUTENTICAÇÃO:
+###    - A maioria das rotas requer autenticação via cookie de sessão
+###    - Para obter o token: faça login no navegador, abra DevTools > Application > Cookies
+###    - Copie o valor de "next-auth.session-token" (ou "__Secure-next-auth.session-token" em HTTPS)
+###    - Cole no header Cookie: next-auth.session-token=SEU_TOKEN
+###
+### 2. PERMISSÕES:
+###    - Rotas de criação/edição/deleção de quiz: requerem role ADMIN
+###    - Rotas de criação de perguntas: requerem role ADMIN
+###    - Rotas de resposta: qualquer usuário autenticado
+###
+### 3. VALIDAÇÕES:
+###    - Enunciado: obrigatório, não pode ser vazio
+###    - Alternativas: todas as 5 (A, B, C, D, E) são obrigatórias
+###    - Resposta correta: deve ser "A", "B", "C", "D" ou "E"
+###    - Tempo em segundos: deve ser maior que 0
+###
+### 4. TRANSACTION:
+###    - Ao criar múltiplas perguntas, todas são criadas em uma transação
+###    - Se qualquer pergunta for inválida, nenhuma será criada (rollback completo)
+###
+### 5. QUIZ ATIVO:
+###    - Apenas um quiz pode estar ativo por vez
+###    - Ao ativar um quiz, todos os outros são desativados automaticamente
+###
+### 6. RESPOSTAS:
+###    - Cada usuário só pode responder cada pergunta uma vez
+###    - Se o tempo acabar, pode enviar alternativaEscolhida como null
+###    - Após responder, retorna próxima pergunta ou resultado final
+

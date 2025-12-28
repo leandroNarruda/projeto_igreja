@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 
 interface Quiz {
-  id: string
+  id: number
   tema: string
   ativo: boolean
   createdAt: string
@@ -23,7 +23,7 @@ export default function QuizPage() {
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [loading, setLoading] = useState(true)
   const [mostrarFormQuiz, setMostrarFormQuiz] = useState(false)
-  const [quizSelecionado, setQuizSelecionado] = useState<string | null>(null)
+  const [quizSelecionado, setQuizSelecionado] = useState<number | null>(null)
   const [perguntas, setPerguntas] = useState<any[]>([])
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function QuizPage() {
     }
   }
 
-  const handleAtivar = async (id: string) => {
+  const handleAtivar = async (id: number) => {
     try {
       const response = await fetch(`/api/quiz/${id}`, {
         method: 'PUT',
@@ -111,7 +111,7 @@ export default function QuizPage() {
     }
   }
 
-  const handleDesativar = async (id: string) => {
+  const handleDesativar = async (id: number) => {
     try {
       const response = await fetch(`/api/quiz/${id}`, {
         method: 'PUT',
@@ -132,7 +132,7 @@ export default function QuizPage() {
     }
   }
 
-  const handleDeletar = async (id: string) => {
+  const handleDeletar = async (id: number) => {
     if (!confirm('Tem certeza que deseja deletar este quiz?')) {
       return
     }
@@ -153,12 +153,12 @@ export default function QuizPage() {
     }
   }
 
-  const handleAdicionarPerguntas = async (id: string) => {
+  const handleAdicionarPerguntas = async (id: number) => {
     setQuizSelecionado(id)
     await buscarPerguntas(id)
   }
 
-  const buscarPerguntas = async (quizId: string) => {
+  const buscarPerguntas = async (quizId: number) => {
     try {
       const response = await fetch(`/api/quiz/${quizId}/perguntas?admin=true`)
       if (!response.ok) {

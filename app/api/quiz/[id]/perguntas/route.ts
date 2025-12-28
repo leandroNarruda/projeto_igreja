@@ -5,6 +5,61 @@ import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
+interface PerguntaData {
+  enunciado: string
+  alternativaA: string
+  alternativaB: string
+  alternativaC: string
+  alternativaD: string
+  alternativaE: string
+  respostaCorreta: string
+  tempoSegundos: number | string
+}
+
+interface ValidacaoResultado {
+  valida: boolean
+  erros: string[]
+}
+
+// Função auxiliar para validar uma única pergunta
+function validarPergunta(
+  pergunta: PerguntaData,
+  index?: number
+): ValidacaoResultado {
+  const erros: string[] = []
+  const prefixo = index !== undefined ? `Pergunta ${index + 1}: ` : ''
+
+  if (!pergunta.enunciado || pergunta.enunciado.trim() === '') {
+    erros.push(`${prefixo}Enunciado é obrigatório`)
+  }
+
+  if (
+    !pergunta.alternativaA ||
+    !pergunta.alternativaB ||
+    !pergunta.alternativaC ||
+    !pergunta.alternativaD ||
+    !pergunta.alternativaE
+  ) {
+    erros.push(`${prefixo}Todas as 5 alternativas são obrigatórias`)
+  }
+
+  if (
+    !pergunta.respostaCorreta ||
+    !['A', 'B', 'C', 'D', 'E'].includes(pergunta.respostaCorreta)
+  ) {
+    erros.push(`${prefixo}Resposta correta deve ser A, B, C, D ou E`)
+  }
+
+  if (!pergunta.tempoSegundos || Number(pergunta.tempoSegundos) < 1) {
+    erros.push(`${prefixo}Tempo em segundos deve ser maior que 0`)
+  }
+
+  return {
+    valida: erros.length === 0,
+    erros,
+  }
+}
+
 export async function POST(
   request: Request,
   { params }: { params: { id: string } }
@@ -26,56 +81,19 @@ export async function POST(
       )
     }
 
-    const quizId = params.id
+    const quizId = parseInt(params.id, 10)
+    if (isNaN(quizId)) {
+      return NextResponse.json(
+        { error: 'ID do quiz inválido' },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
-    const {
-      enunciado,
-      alternativaA,
-      alternativaB,
-      alternativaC,
-      alternativaD,
-      alternativaE,
-      respostaCorreta,
-      tempoSegundos,
-    } = body
 
-    // Validações
-    if (!enunciado || enunciado.trim() === '') {
-      return NextResponse.json(
-        { error: 'Enunciado é obrigatório' },
-        { status: 400 }
-      )
-    }
-
-    if (
-      !alternativaA ||
-      !alternativaB ||
-      !alternativaC ||
-      !alternativaD ||
-      !alternativaE
-    ) {
-      return NextResponse.json(
-        { error: 'Todas as 5 alternativas são obrigatórias' },
-        { status: 400 }
-      )
-    }
-
-    if (
-      !respostaCorreta ||
-      !['A', 'B', 'C', 'D', 'E'].includes(respostaCorreta)
-    ) {
-      return NextResponse.json(
-        { error: 'Resposta correta deve ser A, B, C, D ou E' },
-        { status: 400 }
-      )
-    }
-
-    if (!tempoSegundos || tempoSegundos < 1) {
-      return NextResponse.json(
-        { error: 'Tempo em segundos deve ser maior que 0' },
-        { status: 400 }
-      )
-    }
+    // Detectar se é array ou objeto único
+    const isArray = Array.isArray(body)
+    const perguntasParaProcessar: PerguntaData[] = isArray ? body : [body]
 
     // Verificar se o quiz existe
     const quiz = await prisma.quiz.findUnique({
@@ -89,28 +107,67 @@ export async function POST(
       )
     }
 
-    const pergunta = await prisma.pergunta.create({
-      data: {
-        quizId,
-        enunciado: enunciado.trim(),
-        alternativaA: alternativaA.trim(),
-        alternativaB: alternativaB.trim(),
-        alternativaC: alternativaC.trim(),
-        alternativaD: alternativaD.trim(),
-        alternativaE: alternativaE.trim(),
-        respostaCorreta,
-        tempoSegundos: parseInt(tempoSegundos),
-      },
+    // Validar todas as perguntas antes de criar qualquer uma
+    const errosValidacao: string[] = []
+    perguntasParaProcessar.forEach((pergunta, index) => {
+      const validacao = validarPergunta(pergunta, isArray ? index : undefined)
+      if (!validacao.valida) {
+        errosValidacao.push(...validacao.erros)
+      }
     })
 
-    return NextResponse.json(
-      { message: 'Pergunta criada com sucesso', pergunta },
-      { status: 201 }
+    if (errosValidacao.length > 0) {
+      return NextResponse.json(
+        {
+          error: 'Erros de validação',
+          detalhes: errosValidacao,
+        },
+        { status: 400 }
+      )
+    }
+
+    // Criar todas as perguntas em uma transação
+    const perguntasCriadas = await prisma.$transaction(
+      perguntasParaProcessar.map(pergunta =>
+        prisma.pergunta.create({
+          data: {
+            quizId,
+            enunciado: pergunta.enunciado.trim(),
+            alternativaA: pergunta.alternativaA.trim(),
+            alternativaB: pergunta.alternativaB.trim(),
+            alternativaC: pergunta.alternativaC.trim(),
+            alternativaD: pergunta.alternativaD.trim(),
+            alternativaE: pergunta.alternativaE.trim(),
+            respostaCorreta: pergunta.respostaCorreta,
+            tempoSegundos: parseInt(String(pergunta.tempoSegundos)),
+          },
+        })
+      )
     )
+
+    // Retornar resposta no formato apropriado
+    if (isArray) {
+      return NextResponse.json(
+        {
+          message: `${perguntasCriadas.length} pergunta(s) criada(s) com sucesso`,
+          perguntas: perguntasCriadas,
+          total: perguntasCriadas.length,
+        },
+        { status: 201 }
+      )
+    } else {
+      return NextResponse.json(
+        {
+          message: 'Pergunta criada com sucesso',
+          pergunta: perguntasCriadas[0],
+        },
+        { status: 201 }
+      )
+    }
   } catch (error) {
-    console.error('Erro ao criar pergunta:', error)
+    console.error('Erro ao criar pergunta(s):', error)
     return NextResponse.json(
-      { error: 'Erro ao criar pergunta' },
+      { error: 'Erro ao criar pergunta(s)' },
       { status: 500 }
     )
   }
@@ -127,7 +184,14 @@ export async function GET(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const quizId = params.id
+    const quizId = parseInt(params.id, 10)
+    if (isNaN(quizId)) {
+      return NextResponse.json(
+        { error: 'ID do quiz inválido' },
+        { status: 400 }
+      )
+    }
+
     const isUserAdmin = await isAdmin()
 
     // Verificar se é uma requisição de gerenciamento (admin listando todas as perguntas)

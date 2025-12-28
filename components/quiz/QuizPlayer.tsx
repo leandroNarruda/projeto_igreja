@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/Card'
 
 interface Pergunta {
-  id: string
+  id: number
   enunciado: string
   alternativaA: string
   alternativaB: string
@@ -15,7 +15,7 @@ interface Pergunta {
 }
 
 interface QuizPlayerProps {
-  quizId: string
+  quizId: number
   pergunta: Pergunta
   onAnswer: (alternativa: string | null) => void
 }

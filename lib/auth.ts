@@ -7,7 +7,8 @@ import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
+  // Não usar adapter com CredentialsProvider + JWT strategy
+  // adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -16,34 +17,61 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Senha', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.error('[AUTH] Email ou senha não fornecidos')
+            return null
+          }
+
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email,
+            },
+          })
+
+          if (!user) {
+            console.error('[AUTH] Usuário não encontrado:', credentials.email)
+            return null
+          }
+
+          if (!user.password) {
+            console.error('[AUTH] Usuário sem senha:', credentials.email)
+            return null
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          )
+
+          if (!isPasswordValid) {
+            console.error('[AUTH] Senha inválida para:', credentials.email)
+            return null
+          }
+
+          // Garantir que id seja sempre number (compatibilidade com migração)
+          const userId =
+            typeof user.id === 'string' ? parseInt(user.id, 10) : user.id
+
+          if (isNaN(userId)) {
+            console.error('[AUTH] ID inválido:', user.id, typeof user.id)
+            return null
+          }
+
+          console.log('[AUTH] Login bem-sucedido:', {
+            userId,
+            email: user.email,
+          })
+
+          return {
+            id: userId, // Retornar como number conforme tipo User
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          }
+        } catch (error) {
+          console.error('[AUTH] Erro no authorize:', error)
           return null
-        }
-
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        })
-
-        if (!user || !user.password) {
-          return null
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        )
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
         }
       },
     }),
@@ -56,33 +84,65 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, trigger }) {
-      // Quando o usuário faz login, atualizar o token
-      if (user) {
-        token.id = user.id
-        token.role = user.role
-      }
-      // Se o token não tiver role, buscar do banco (para atualizar tokens antigos)
-      if (!token.role && token.id) {
-        try {
-          const dbUser = await prisma.user.findUnique({
-            where: { id: token.id as string },
-            select: { role: true },
-          })
-          if (dbUser) {
-            token.role = dbUser.role
+      try {
+        // Quando o usuário faz login, atualizar o token
+        if (user) {
+          const userId =
+            typeof user.id === 'string' ? parseInt(user.id, 10) : user.id
+          if (isNaN(userId)) {
+            console.error('[AUTH] JWT: ID inválido do user:', user.id)
+            return token
           }
-        } catch (error) {
-          console.error('Erro ao buscar role do usuário:', error)
+          token.id = userId
+          token.role = user.role
+          console.log('[AUTH] JWT: Token atualizado:', {
+            id: token.id,
+            role: token.role,
+          })
         }
+        // Se o token não tiver role, buscar do banco (para atualizar tokens antigos)
+        if (!token.role && token.id) {
+          try {
+            const userId =
+              typeof token.id === 'string' ? parseInt(token.id, 10) : token.id
+            const dbUser = await prisma.user.findUnique({
+              where: { id: userId },
+              select: { role: true },
+            })
+            if (dbUser) {
+              token.role = dbUser.role
+            }
+          } catch (error) {
+            console.error('[AUTH] Erro ao buscar role do usuário:', error)
+          }
+        }
+        return token
+      } catch (error) {
+        console.error('[AUTH] Erro no callback JWT:', error)
+        return token
       }
-      return token
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        session.user.role = (token.role as string) || 'USER'
+      try {
+        if (session.user && token.id) {
+          const userId =
+            typeof token.id === 'string' ? parseInt(token.id, 10) : token.id
+          if (!isNaN(userId)) {
+            session.user.id = userId
+            session.user.role = (token.role as string) || 'USER'
+            console.log('[AUTH] Session: Sessão criada:', {
+              id: session.user.id,
+              role: session.user.role,
+            })
+          } else {
+            console.error('[AUTH] Session: ID inválido no token:', token.id)
+          }
+        }
+        return session
+      } catch (error) {
+        console.error('[AUTH] Erro no callback session:', error)
+        return session
       }
-      return session
     },
   },
   events: {

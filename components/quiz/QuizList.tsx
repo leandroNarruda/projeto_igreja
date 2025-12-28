@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 
 interface Quiz {
-  id: string
+  id: number
   tema: string
   ativo: boolean
   createdAt: string
@@ -16,10 +16,10 @@ interface Quiz {
 
 interface QuizListProps {
   quizzes: Quiz[]
-  onAtivar: (id: string) => void
-  onDesativar: (id: string) => void
-  onDeletar: (id: string) => void
-  onAdicionarPerguntas: (id: string) => void
+  onAtivar: (id: number) => void
+  onDesativar: (id: number) => void
+  onDeletar: (id: number) => void
+  onAdicionarPerguntas: (id: number) => void
 }
 
 export const QuizList: React.FC<QuizListProps> = ({

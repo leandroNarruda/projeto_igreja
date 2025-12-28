@@ -27,7 +27,14 @@ export async function PUT(
       )
     }
 
-    const quizId = params.id
+    const quizId = parseInt(params.id, 10)
+    if (isNaN(quizId)) {
+      return NextResponse.json(
+        { error: 'ID do quiz inválido' },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const { tema, ativo } = body
 
@@ -98,7 +105,13 @@ export async function DELETE(
       )
     }
 
-    const quizId = params.id
+    const quizId = parseInt(params.id, 10)
+    if (isNaN(quizId)) {
+      return NextResponse.json(
+        { error: 'ID do quiz inválido' },
+        { status: 400 }
+      )
+    }
 
     await prisma.quiz.delete({
       where: { id: quizId },

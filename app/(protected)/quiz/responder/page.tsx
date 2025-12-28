@@ -7,13 +7,13 @@ import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
 
 interface QuizAtivo {
-  id: string
+  id: number
   tema: string
   totalPerguntas: number
 }
 
 interface Pergunta {
-  id: string
+  id: number
   enunciado: string
   alternativaA: string
   alternativaB: string

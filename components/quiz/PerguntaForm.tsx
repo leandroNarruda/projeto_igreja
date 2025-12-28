@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
 
 interface PerguntaFormProps {
-  quizId: string
+  quizId: number
   onSubmit: (data: {
     enunciado: string
     alternativaA: string

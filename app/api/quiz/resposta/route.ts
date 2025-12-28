@@ -13,11 +13,23 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { quizId, perguntaId, alternativaEscolhida } = body
+    let { quizId, perguntaId, alternativaEscolhida } = body
 
     if (!quizId || !perguntaId) {
       return NextResponse.json(
         { error: 'quizId e perguntaId são obrigatórios' },
+        { status: 400 }
+      )
+    }
+
+    // Converter para números se vierem como string
+    quizId = typeof quizId === 'string' ? parseInt(quizId, 10) : quizId
+    perguntaId =
+      typeof perguntaId === 'string' ? parseInt(perguntaId, 10) : perguntaId
+
+    if (isNaN(quizId) || isNaN(perguntaId)) {
+      return NextResponse.json(
+        { error: 'quizId e perguntaId devem ser números válidos' },
         { status: 400 }
       )
     }

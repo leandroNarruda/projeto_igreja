@@ -15,7 +15,13 @@ export async function GET(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const quizId = params.id
+    const quizId = parseInt(params.id, 10)
+    if (isNaN(quizId)) {
+      return NextResponse.json(
+        { error: 'ID do quiz inválido' },
+        { status: 400 }
+      )
+    }
 
     // Buscar todas as perguntas do quiz
     const todasPerguntas = await prisma.pergunta.findMany({
