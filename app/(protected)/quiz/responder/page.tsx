@@ -137,6 +137,9 @@ export default function ResponderQuizPage() {
       }))
     }
 
+    // Aguardar um frame para garantir que o estado foi atualizado
+    await new Promise(resolve => requestAnimationFrame(resolve))
+
     // Passar a última resposta diretamente para evitar race condition
     await enviarTodasRespostas(ultimaResposta)
   }
@@ -148,19 +151,22 @@ export default function ResponderQuizPage() {
       setEnviando(true)
 
       // Preparar array de respostas
-      const perguntaAtual = todasPerguntas[indicePerguntaAtual]
+      const ultimaPerguntaId = todasPerguntas[todasPerguntas.length - 1]?.id
+
       const respostasArray = todasPerguntas.map(pergunta => {
-        // Se for a última pergunta e ultimaResposta foi fornecida, usar ela
-        if (pergunta.id === perguntaAtual?.id && ultimaResposta !== undefined) {
+        // Se for a última pergunta e ultimaResposta foi fornecida, usar ela (prioridade)
+        if (pergunta.id === ultimaPerguntaId && ultimaResposta !== undefined) {
           return {
             perguntaId: pergunta.id,
             alternativaEscolhida: ultimaResposta,
           }
         }
         // Caso contrário, usar do estado
+        const respostaDoEstado = respostas[pergunta.id]
         return {
           perguntaId: pergunta.id,
-          alternativaEscolhida: respostas[pergunta.id] || null,
+          alternativaEscolhida:
+            respostaDoEstado !== undefined ? respostaDoEstado : null,
         }
       })
 
