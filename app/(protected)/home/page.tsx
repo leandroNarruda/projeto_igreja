@@ -114,7 +114,7 @@ export default function HomePage() {
                           {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
                         <h3 className="text-xl font-bold text-gray-900 mb-2">
-                          {item.nome}
+                          {item.nome.split(' ')[0]}
                         </h3>
                         <div className="space-y-1 text-sm text-gray-600">
                           <div>
@@ -223,7 +223,7 @@ export default function HomePage() {
                         {index < 3 ? medalhas[index] : `${item.posicao}º`}
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">
-                        {item.nome}
+                        {item.nome.split(' ')[0]}
                       </h3>
                       <div className="space-y-1 text-sm text-gray-600">
                         <div>

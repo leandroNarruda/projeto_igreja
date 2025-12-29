@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card } from '@/components/ui/Card'
 
 interface Pergunta {
@@ -35,6 +36,11 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
     setTempoRestante(pergunta.tempoSegundos)
     setAlternativaSelecionada(null)
     setRespondida(false)
+
+    // Remove o foco de qualquer elemento ativo
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
   }, [pergunta.id, pergunta.tempoSegundos])
 
   useEffect(() => {
@@ -86,65 +92,91 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
         ? 'bg-yellow-500'
         : 'bg-red-500'
 
+  const variants = {
+    initial: { x: 100, opacity: 0 },
+    animate: { x: 0, opacity: 1 },
+    exit: { x: -100, opacity: 0 },
+  }
+
+  const transition = {
+    duration: 0.5,
+    ease: 'easeInOut',
+  }
+
   return (
-    <Card className="max-w-3xl mx-auto">
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Tempo restante
-          </h3>
-          <span
-            className={`text-2xl font-bold ${
-              tempoRestante <= 10 ? 'text-red-600' : 'text-gray-900'
-            }`}
-          >
-            {tempoRestante}s
-          </span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-3">
-          <div
-            className={`h-3 rounded-full transition-all duration-300 ${corTempo}`}
-            style={{ width: `${porcentagemTempo}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          {pergunta.enunciado}
-        </h2>
-
-        <div className="space-y-3">
-          {alternativas.map(alt => (
-            <label
-              key={alt.letra}
-              className={`
-                flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all
-                ${
-                  alternativaSelecionada === alt.letra
-                    ? 'border-blue-600 bg-blue-50'
-                    : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                }
-                ${respondida ? 'opacity-60 cursor-not-allowed' : ''}
-              `}
-            >
-              <input
-                type="radio"
-                name="alternativa"
-                value={alt.letra}
-                checked={alternativaSelecionada === alt.letra}
-                onChange={() => handleAlternativaChange(alt.letra)}
-                disabled={respondida}
-                className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="font-semibold text-gray-900 mr-3">
-                {alt.letra})
+    <Card className="max-w-3xl mx-auto overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={pergunta.id}
+          variants={variants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={transition}
+          onAnimationComplete={() => {
+            // Rola a tela para o topo após a animação de entrada terminar
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+        >
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-lg font-semibold text-gray-700">
+                Tempo restante
+              </h3>
+              <span
+                className={`text-2xl font-bold ${
+                  tempoRestante <= 10 ? 'text-red-600' : 'text-gray-900'
+                }`}
+              >
+                {tempoRestante}s
               </span>
-              <span className="text-gray-700">{alt.texto}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div
+                className={`h-3 rounded-full transition-all duration-300 ${corTempo}`}
+                style={{ width: `${porcentagemTempo}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              {pergunta.enunciado}
+            </h2>
+
+            <div className="space-y-3">
+              {alternativas.map(alt => (
+                <label
+                  key={alt.letra}
+                  className={`
+                    flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all
+                    ${
+                      alternativaSelecionada === alt.letra
+                        ? 'border-blue-600 bg-blue-50'
+                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                    }
+                    ${respondida ? 'opacity-60 cursor-not-allowed' : ''}
+                  `}
+                >
+                  <input
+                    type="radio"
+                    name="alternativa"
+                    value={alt.letra}
+                    checked={alternativaSelecionada === alt.letra}
+                    onChange={() => handleAlternativaChange(alt.letra)}
+                    disabled={respondida}
+                    className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="font-semibold text-gray-900 mr-3">
+                    {alt.letra})
+                  </span>
+                  <span className="text-gray-700">{alt.texto}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </Card>
   )
 }

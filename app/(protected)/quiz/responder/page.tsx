@@ -128,7 +128,7 @@ export default function ResponderQuizPage() {
   const finalizarQuiz = async (ultimaResposta: string | null) => {
     if (!quizAtivo) return
 
-    // Garantir que a última resposta está salva
+    // Garantir que a última resposta está salva no estado (para consistência)
     const perguntaAtual = todasPerguntas[indicePerguntaAtual]
     if (perguntaAtual) {
       setRespostas(prev => ({
@@ -137,23 +137,32 @@ export default function ResponderQuizPage() {
       }))
     }
 
-    // Aguardar um pouco para garantir que o estado foi atualizado
-    setTimeout(async () => {
-      await enviarTodasRespostas()
-    }, 100)
+    // Passar a última resposta diretamente para evitar race condition
+    await enviarTodasRespostas(ultimaResposta)
   }
 
-  const enviarTodasRespostas = async () => {
+  const enviarTodasRespostas = async (ultimaResposta?: string | null) => {
     if (!quizAtivo) return
 
     try {
       setEnviando(true)
 
       // Preparar array de respostas
-      const respostasArray = todasPerguntas.map(pergunta => ({
-        perguntaId: pergunta.id,
-        alternativaEscolhida: respostas[pergunta.id] || null,
-      }))
+      const perguntaAtual = todasPerguntas[indicePerguntaAtual]
+      const respostasArray = todasPerguntas.map(pergunta => {
+        // Se for a última pergunta e ultimaResposta foi fornecida, usar ela
+        if (pergunta.id === perguntaAtual?.id && ultimaResposta !== undefined) {
+          return {
+            perguntaId: pergunta.id,
+            alternativaEscolhida: ultimaResposta,
+          }
+        }
+        // Caso contrário, usar do estado
+        return {
+          perguntaId: pergunta.id,
+          alternativaEscolhida: respostas[pergunta.id] || null,
+        }
+      })
 
       const response = await fetch('/api/quiz/resposta', {
         method: 'POST',
