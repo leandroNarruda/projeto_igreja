@@ -6,6 +6,7 @@ import { QuizInstructions } from '@/components/quiz/QuizInstructions'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
 import { Modal } from '@/components/ui/Modal'
+import { Loading } from '@/components/ui/Loading'
 import { useQuizAtivo, useEnviarRespostas } from '@/hooks/useQuiz'
 
 interface QuizAtivo {
@@ -385,11 +386,7 @@ export default function ResponderQuizPage() {
   }, [quizEmAndamento, resultado, interceptarNavegacao, router])
 
   if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Carregando...</div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (!quizAtivo) {
@@ -437,17 +434,9 @@ export default function ResponderQuizPage() {
 
   if (!perguntaAtual) {
     if (enviarRespostasMutation.isPending) {
-      return (
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-600">Enviando respostas...</div>
-        </div>
-      )
+      return <Loading text="Enviando respostas..." />
     }
-    return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Carregando pergunta...</div>
-      </div>
-    )
+    return <Loading text="Carregando pergunta..." />
   }
 
   const progresso = ((indicePerguntaAtual + 1) / todasPerguntas.length) * 100

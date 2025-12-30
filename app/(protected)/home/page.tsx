@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { QuizResult } from '@/components/quiz/QuizResult'
 import { useQuizAtivo, useClassificacaoQuiz } from '@/hooks/useQuiz'
+import { Loading } from '@/components/ui/Loading'
 
 interface ClassificacaoItem {
   posicao: number
@@ -32,11 +33,7 @@ export default function HomePage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
-        <div className="text-gray-600">Carregando...</div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (jaRespondeu && resultado) {

@@ -7,6 +7,7 @@ import { QuizList } from '@/components/quiz/QuizList'
 import { PerguntaForm } from '@/components/quiz/PerguntaForm'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
+import { Loading } from '@/components/ui/Loading'
 import {
   useQuizzes,
   usePerguntas,
@@ -149,11 +150,7 @@ export default function QuizPage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Carregando...</div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (quizSelecionado) {

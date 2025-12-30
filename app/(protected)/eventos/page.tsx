@@ -1,6 +1,7 @@
 'use client'
 
 import { useClassificacaoGeral } from '@/hooks/useQuiz'
+import { Loading } from '@/components/ui/Loading'
 
 interface ClassificacaoGeralItem {
   posicao: number
@@ -110,9 +111,7 @@ export default function EventosPage() {
           </h2>
 
           {isLoading ? (
-            <div className="text-center py-12">
-              <div className="text-gray-600">Carregando classificação...</div>
-            </div>
+            <Loading text="Carregando classificação..." fullScreen={false} />
           ) : classificacao.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-600">
