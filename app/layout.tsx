@@ -6,6 +6,7 @@ import { SessionProvider } from '@/components/providers/SessionProvider'
 import { QueryProvider } from '@/components/providers/QueryProvider'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import { MainContent } from '@/components/layout/MainContent'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -66,7 +67,7 @@ export default function RootLayout({
         <SessionProvider>
           <QueryProvider>
             <Navbar />
-            <main className="pb-0">{children}</main>
+            <MainContent>{children}</MainContent>
             <Footer />
           </QueryProvider>
         </SessionProvider>
