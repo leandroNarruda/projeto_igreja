@@ -34,12 +34,12 @@ export const Navbar = () => {
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center h-12">
+          <div className="flex items-center h-16">
             <Image
               src="/images/logos/logo_192.png"
               alt="Logo"
-              width={120}
-              height={48}
+              width={160}
+              height={56}
               className="h-full w-auto object-contain"
               priority
             />

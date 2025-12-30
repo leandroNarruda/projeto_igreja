@@ -60,8 +60,10 @@ export const RegisterForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <h2 className="text-2xl font-bold text-center mb-6">Cadastro</h2>
+    <Card className="w-full max-w-md bg-white/30 backdrop-blur-sm">
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">
+        Cadastro
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Nome"
@@ -104,9 +106,12 @@ export const RegisterForm = () => {
           {loading ? 'Criando conta...' : 'Criar Conta'}
         </Button>
       </form>
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="mt-4 text-center text-sm text-gray-800">
         Já tem uma conta?{' '}
-        <a href="/login" className="text-blue-600 hover:underline">
+        <a
+          href="/login"
+          className="text-blue-700 hover:text-blue-800 hover:underline font-medium"
+        >
           Faça login
         </a>
       </p>

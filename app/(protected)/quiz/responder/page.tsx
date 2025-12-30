@@ -7,6 +7,7 @@ import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
 import { Modal } from '@/components/ui/Modal'
 import { Loading } from '@/components/ui/Loading'
+import { PageTransition } from '@/components/layout/PageTransition'
 import { useQuizAtivo, useEnviarRespostas } from '@/hooks/useQuiz'
 
 interface QuizAtivo {
@@ -395,38 +396,42 @@ export default function ResponderQuizPage() {
 
   if (resultado) {
     return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
-        <div className="w-full px-4">
-          <QuizResult
-            total={resultado.total}
-            acertos={resultado.acertos}
-            erros={resultado.erros}
-            porcentagem={resultado.porcentagem}
-          />
-          <div className="text-center mt-6">
-            <button
-              onClick={() => router.push('/home')}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Voltar para Home
-            </button>
+      <PageTransition>
+        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
+          <div className="w-full px-4">
+            <QuizResult
+              total={resultado.total}
+              acertos={resultado.acertos}
+              erros={resultado.erros}
+              porcentagem={resultado.porcentagem}
+            />
+            <div className="text-center mt-6">
+              <button
+                onClick={() => router.push('/home')}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Voltar para Home
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </PageTransition>
     )
   }
 
   if (mostrarInstrucoes) {
     return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
-        <div className="w-full px-4">
-          <QuizInstructions
-            tema={quizAtivo.tema}
-            totalPerguntas={quizAtivo.totalPerguntas}
-            onStart={iniciarQuiz}
-          />
+      <PageTransition>
+        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
+          <div className="w-full px-4">
+            <QuizInstructions
+              tema={quizAtivo.tema}
+              totalPerguntas={quizAtivo.totalPerguntas}
+              onStart={iniciarQuiz}
+            />
+          </div>
         </div>
-      </div>
+      </PageTransition>
     )
   }
 
@@ -455,31 +460,33 @@ export default function ResponderQuizPage() {
         confirmText="Sair mesmo assim"
         cancelText="Cancelar"
       />
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
-        <div className="w-full px-4">
-          <div className="max-w-3xl mx-auto mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">
-                Pergunta {indicePerguntaAtual + 1} de {todasPerguntas.length}
-              </span>
-              <span className="text-sm text-gray-600">
-                {Math.round(progresso)}%
-              </span>
+      <PageTransition>
+        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+          <div className="w-full px-4">
+            <div className="max-w-3xl mx-auto mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-600">
+                  Pergunta {indicePerguntaAtual + 1} de {todasPerguntas.length}
+                </span>
+                <span className="text-sm text-gray-600">
+                  {Math.round(progresso)}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progresso}%` }}
+                />
+              </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progresso}%` }}
-              />
-            </div>
+            <QuizPlayer
+              quizId={quizAtivo.id}
+              pergunta={perguntaAtual}
+              onAnswer={handleResposta}
+            />
           </div>
-          <QuizPlayer
-            quizId={quizAtivo.id}
-            pergunta={perguntaAtual}
-            onAnswer={handleResposta}
-          />
         </div>
-      </div>
+      </PageTransition>
     </>
   )
 }

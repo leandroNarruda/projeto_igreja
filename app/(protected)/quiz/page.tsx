@@ -8,6 +8,7 @@ import { PerguntaForm } from '@/components/quiz/PerguntaForm'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Loading } from '@/components/ui/Loading'
+import { PageTransition } from '@/components/layout/PageTransition'
 import {
   useQuizzes,
   usePerguntas,
@@ -155,106 +156,115 @@ export default function QuizPage() {
 
   if (quizSelecionado) {
     return (
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setQuizSelecionado(null)
-              }}
-            >
-              ← Voltar
-            </Button>
-          </div>
+      <PageTransition>
+        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-6">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setQuizSelecionado(null)
+                }}
+              >
+                ← Voltar
+              </Button>
+            </div>
 
-          <div className="mb-6">
-            <PerguntaForm
-              quizId={quizSelecionado}
-              onSubmit={handleCriarPergunta}
-            />
-          </div>
+            <div className="mb-6">
+              <PerguntaForm
+                quizId={quizSelecionado}
+                onSubmit={handleCriarPergunta}
+              />
+            </div>
 
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Perguntas Cadastradas ({perguntas.length})
-            </h2>
-            <div className="space-y-4">
-              {perguntas.map((pergunta: Pergunta, index: number) => (
-                <Card key={pergunta.id}>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {index + 1}. {pergunta.enunciado}
-                      </h3>
-                      <div className="space-y-1 text-sm text-gray-700">
-                        <p>
-                          <span className="font-semibold">A)</span>{' '}
-                          {pergunta.alternativaA}
-                        </p>
-                        <p>
-                          <span className="font-semibold">B)</span>{' '}
-                          {pergunta.alternativaB}
-                        </p>
-                        <p>
-                          <span className="font-semibold">C)</span>{' '}
-                          {pergunta.alternativaC}
-                        </p>
-                        <p>
-                          <span className="font-semibold">D)</span>{' '}
-                          {pergunta.alternativaD}
-                        </p>
-                        <p>
-                          <span className="font-semibold">E)</span>{' '}
-                          {pergunta.alternativaE}
-                        </p>
-                      </div>
-                      <div className="mt-2 text-sm text-gray-600">
-                        <span className="font-semibold">Resposta correta:</span>{' '}
-                        {pergunta.respostaCorreta} |{' '}
-                        <span className="font-semibold">Tempo:</span>{' '}
-                        {pergunta.tempoSegundos}s
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Perguntas Cadastradas ({perguntas.length})
+              </h2>
+              <div className="space-y-4">
+                {perguntas.map((pergunta: Pergunta, index: number) => (
+                  <Card key={pergunta.id} index={index}>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {index + 1}. {pergunta.enunciado}
+                        </h3>
+                        <div className="space-y-1 text-sm text-gray-700">
+                          <p>
+                            <span className="font-semibold">A)</span>{' '}
+                            {pergunta.alternativaA}
+                          </p>
+                          <p>
+                            <span className="font-semibold">B)</span>{' '}
+                            {pergunta.alternativaB}
+                          </p>
+                          <p>
+                            <span className="font-semibold">C)</span>{' '}
+                            {pergunta.alternativaC}
+                          </p>
+                          <p>
+                            <span className="font-semibold">D)</span>{' '}
+                            {pergunta.alternativaD}
+                          </p>
+                          <p>
+                            <span className="font-semibold">E)</span>{' '}
+                            {pergunta.alternativaE}
+                          </p>
+                        </div>
+                        <div className="mt-2 text-sm text-gray-600">
+                          <span className="font-semibold">
+                            Resposta correta:
+                          </span>{' '}
+                          {pergunta.respostaCorreta} |{' '}
+                          <span className="font-semibold">Tempo:</span>{' '}
+                          {pergunta.tempoSegundos}s
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </PageTransition>
     )
   }
 
   return (
-    <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
-          {!mostrarFormQuiz && (
-            <Button variant="primary" onClick={() => setMostrarFormQuiz(true)}>
-              + Novo
-            </Button>
-          )}
-        </div>
-
-        {mostrarFormQuiz && (
-          <div className="mb-6">
-            <QuizForm
-              onSubmit={handleCriarQuiz}
-              onCancel={() => setMostrarFormQuiz(false)}
-            />
+    <PageTransition>
+      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 flex justify-between items-center">
+            <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
+            {!mostrarFormQuiz && (
+              <Button
+                variant="primary"
+                onClick={() => setMostrarFormQuiz(true)}
+              >
+                + Novo
+              </Button>
+            )}
           </div>
-        )}
 
-        <QuizList
-          quizzes={quizzes}
-          onAtivar={handleAtivar}
-          onDesativar={handleDesativar}
-          onDeletar={handleDeletar}
-          onAdicionarPerguntas={handleAdicionarPerguntas}
-        />
+          {mostrarFormQuiz && (
+            <div className="mb-6">
+              <QuizForm
+                onSubmit={handleCriarQuiz}
+                onCancel={() => setMostrarFormQuiz(false)}
+              />
+            </div>
+          )}
+
+          <QuizList
+            quizzes={quizzes}
+            onAtivar={handleAtivar}
+            onDesativar={handleDesativar}
+            onDeletar={handleDeletar}
+            onAdicionarPerguntas={handleAdicionarPerguntas}
+          />
+        </div>
       </div>
-    </div>
+    </PageTransition>
   )
 }

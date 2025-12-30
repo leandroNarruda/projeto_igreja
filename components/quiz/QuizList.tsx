@@ -38,8 +38,8 @@ export const QuizList: React.FC<QuizListProps> = ({
           </p>
         </Card>
       ) : (
-        quizzes.map(quiz => (
-          <Card key={quiz.id}>
+        quizzes.map((quiz, index) => (
+          <Card key={quiz.id} index={index}>
             <div className="flex  flex-col gap-4">
               {quiz.ativo && (
                 <div className="flex-1 w-full text-right">
