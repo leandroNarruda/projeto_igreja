@@ -167,7 +167,11 @@ export default function EventosPage() {
                     `}
                   >
                     <div className="text-center">
-                      <div className="text-5xl mb-3">
+                      <div
+                        className={`text-5xl mb-3 ${
+                          index < 3 ? '' : 'text-gray-900 font-bold'
+                        }`}
+                      >
                         {index < 3 ? medalhas[index] : `${item.posicao}º`}
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3 truncate">
