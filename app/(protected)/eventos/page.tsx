@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useClassificacaoGeral } from '@/hooks/useQuiz'
 
 interface ClassificacaoGeralItem {
   posicao: number
@@ -13,29 +13,8 @@ interface ClassificacaoGeralItem {
 }
 
 export default function EventosPage() {
-  const [loading, setLoading] = useState(true)
-  const [classificacao, setClassificacao] = useState<ClassificacaoGeralItem[]>(
-    []
-  )
-
-  useEffect(() => {
-    buscarClassificacaoGeral()
-  }, [])
-
-  const buscarClassificacaoGeral = async () => {
-    try {
-      const response = await fetch('/api/quiz/classificacao-geral')
-      const data = await response.json()
-
-      if (data.classificacao) {
-        setClassificacao(data.classificacao)
-      }
-    } catch (error) {
-      console.error('Erro ao buscar classificação geral:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data, isLoading } = useClassificacaoGeral()
+  const classificacao = data?.classificacao || []
 
   return (
     <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
@@ -130,7 +109,7 @@ export default function EventosPage() {
             Classificação Geral
           </h2>
 
-          {loading ? (
+          {isLoading ? (
             <div className="text-center py-12">
               <div className="text-gray-600">Carregando classificação...</div>
             </div>
@@ -145,18 +124,19 @@ export default function EventosPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-              {classificacao.map((item, index) => {
-                const medalhas = ['🥇', '🥈', '🥉']
-                const cores = [
-                  'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
-                  'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
-                  'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
-                ]
+              {classificacao.map(
+                (item: ClassificacaoGeralItem, index: number) => {
+                  const medalhas = ['🥇', '🥈', '🥉']
+                  const cores = [
+                    'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
+                    'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
+                    'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
+                  ]
 
-                return (
-                  <div
-                    key={item.userId}
-                    className={`
+                  return (
+                    <div
+                      key={item.userId}
+                      className={`
                       p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
                       ${
                         index < 3
@@ -165,48 +145,49 @@ export default function EventosPage() {
                       }
                       ${index === 0 ? 'transform scale-105' : ''}
                     `}
-                  >
-                    <div className="text-center">
-                      <div
-                        className={`text-5xl mb-3 ${
-                          index < 3 ? '' : 'text-gray-900 font-bold'
-                        }`}
-                      >
-                        {index < 3 ? medalhas[index] : `${item.posicao}º`}
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 truncate">
-                        {item.nome}
-                      </h3>
-                      <div className="space-y-2 text-sm text-gray-700">
-                        <div className="bg-white/50 rounded p-2">
-                          <div className="font-semibold text-gray-900">
-                            Total de Acertos
-                          </div>
-                          <div className="text-2xl font-bold text-blue-600">
-                            {item.totalAcertos}
-                          </div>
+                    >
+                      <div className="text-center">
+                        <div
+                          className={`text-5xl mb-3 ${
+                            index < 3 ? '' : 'text-gray-900 font-bold'
+                          }`}
+                        >
+                          {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
-                        <div className="bg-white/50 rounded p-2">
-                          <div className="font-semibold text-gray-900">
-                            Quizzes Respondidos
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 truncate">
+                          {item.nome}
+                        </h3>
+                        <div className="space-y-2 text-sm text-gray-700">
+                          <div className="bg-white/50 rounded p-2">
+                            <div className="font-semibold text-gray-900">
+                              Total de Acertos
+                            </div>
+                            <div className="text-2xl font-bold text-blue-600">
+                              {item.totalAcertos}
+                            </div>
                           </div>
-                          <div className="text-lg font-bold text-purple-600">
-                            {item.totalQuizzes}
+                          <div className="bg-white/50 rounded p-2">
+                            <div className="font-semibold text-gray-900">
+                              Quizzes Respondidos
+                            </div>
+                            <div className="text-lg font-bold text-purple-600">
+                              {item.totalQuizzes}
+                            </div>
                           </div>
-                        </div>
-                        <div className="bg-white/50 rounded p-2">
-                          <div className="font-semibold text-gray-900">
-                            Média de Acertos
-                          </div>
-                          <div className="text-lg font-bold text-green-600">
-                            {item.mediaPorcentagem}%
+                          <div className="bg-white/50 rounded p-2">
+                            <div className="font-semibold text-gray-900">
+                              Média de Acertos
+                            </div>
+                            <div className="text-lg font-bold text-green-600">
+                              {item.mediaPorcentagem}%
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                }
+              )}
             </div>
           )}
         </div>

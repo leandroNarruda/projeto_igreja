@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { SessionProvider } from '@/components/providers/SessionProvider'
+import { QueryProvider } from '@/components/providers/QueryProvider'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
@@ -63,9 +64,11 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <SessionProvider>
-          <Navbar />
-          <main className="pb-16">{children}</main>
-          <Footer />
+          <QueryProvider>
+            <Navbar />
+            <main className="pb-16">{children}</main>
+            <Footer />
+          </QueryProvider>
         </SessionProvider>
         <Script src="/sw-register.js" strategy="afterInteractive" />
       </body>

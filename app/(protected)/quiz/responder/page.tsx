@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuizInstructions } from '@/components/quiz/QuizInstructions'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
 import { Modal } from '@/components/ui/Modal'
+import { useQuizAtivo, useEnviarRespostas } from '@/hooks/useQuiz'
 
 interface QuizAtivo {
   id: number
@@ -26,13 +27,13 @@ interface Pergunta {
 
 export default function ResponderQuizPage() {
   const router = useRouter()
-  const [quizAtivo, setQuizAtivo] = useState<QuizAtivo | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { data: quizData, isLoading } = useQuizAtivo()
+  const enviarRespostasMutation = useEnviarRespostas()
+
   const [mostrarInstrucoes, setMostrarInstrucoes] = useState(true)
   const [todasPerguntas, setTodasPerguntas] = useState<Pergunta[]>([])
   const [indicePerguntaAtual, setIndicePerguntaAtual] = useState(0)
   const [respostas, setRespostas] = useState<Record<number, string | null>>({})
-  const [enviando, setEnviando] = useState(false)
   const [resultado, setResultado] = useState<{
     total: number
     acertos: number
@@ -44,45 +45,37 @@ export default function ResponderQuizPage() {
   const [quizEmAndamento, setQuizEmAndamento] = useState(false)
   const pendenteNavegacao = useRef<string | null>(null)
 
-  const buscarQuizAtivo = useCallback(async () => {
-    try {
-      const response = await fetch('/api/quiz/ativo')
-      const data = await response.json()
+  // Extrair dados do quiz ativo (memoizado para evitar recriação)
+  const quizAtivo: QuizAtivo | null = useMemo(() => {
+    return quizData?.quiz
+      ? {
+          id: quizData.quiz.id,
+          tema: quizData.quiz.tema,
+          totalPerguntas: quizData.quiz.totalPerguntas,
+        }
+      : null
+  }, [quizData?.quiz])
 
-      if (!data.quiz) {
+  // Verificar se já respondeu e redirecionar
+  useEffect(() => {
+    if (!isLoading && quizData) {
+      if (!quizData.quiz) {
         alert('Não há quiz ativo no momento')
         router.push('/home')
         return
       }
 
-      if (data.jaRespondeu) {
+      if (quizData.jaRespondeu) {
         router.push('/home')
         return
       }
-
-      setQuizAtivo({
-        id: data.quiz.id,
-        tema: data.quiz.tema,
-        totalPerguntas: data.quiz.totalPerguntas,
-      })
-    } catch (error) {
-      console.error('Erro ao buscar quiz ativo:', error)
-      alert('Erro ao carregar quiz')
-      router.push('/home')
-    } finally {
-      setLoading(false)
     }
-  }, [router])
-
-  useEffect(() => {
-    buscarQuizAtivo()
-  }, [buscarQuizAtivo])
+  }, [isLoading, quizData, router])
 
   const iniciarQuiz = async () => {
     if (!quizAtivo) return
 
     try {
-      setLoading(true)
       const response = await fetch(`/api/quiz/${quizAtivo.id}/perguntas`)
       const data = await response.json()
 
@@ -106,8 +99,6 @@ export default function ResponderQuizPage() {
       console.error('Erro ao buscar perguntas:', error)
       alert('Erro ao carregar perguntas')
       router.push('/home')
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -155,8 +146,6 @@ export default function ResponderQuizPage() {
     if (!quizAtivo) return false
 
     try {
-      setEnviando(true)
-
       // Preparar array de respostas
       const ultimaPerguntaId = todasPerguntas[todasPerguntas.length - 1]?.id
 
@@ -177,29 +166,10 @@ export default function ResponderQuizPage() {
         }
       })
 
-      const response = await fetch('/api/quiz/resposta', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          quizId: quizAtivo.id,
-          respostas: respostasArray,
-        }),
+      const data = await enviarRespostasMutation.mutateAsync({
+        quizId: quizAtivo.id,
+        respostas: respostasArray,
       })
-
-      const data = await response.json()
-
-      if (data.error) {
-        // Se o erro for "já respondeu", não mostrar alerta (pode ser que já tenha sido enviado)
-        // Apenas logar para debug
-        if (data.error.includes('já respondeu')) {
-          console.log('Quiz já foi respondido anteriormente')
-        } else {
-          alert(data.error)
-        }
-        return false
-      }
 
       if (data.resultado) {
         setResultado(data.resultado)
@@ -208,12 +178,15 @@ export default function ResponderQuizPage() {
       }
 
       return false
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao enviar respostas:', error)
-      alert('Erro ao enviar respostas')
+      // Se o erro for "já respondeu", não mostrar alerta (pode ser que já tenha sido enviado)
+      if (error?.message?.includes('já respondeu')) {
+        console.log('Quiz já foi respondido anteriormente')
+      } else {
+        alert(error?.message || 'Erro ao enviar respostas')
+      }
       return false
-    } finally {
-      setEnviando(false)
     }
   }
 
@@ -411,7 +384,7 @@ export default function ResponderQuizPage() {
     }
   }, [quizEmAndamento, resultado, interceptarNavegacao, router])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Carregando...</div>
@@ -463,7 +436,7 @@ export default function ResponderQuizPage() {
   const perguntaAtual = todasPerguntas[indicePerguntaAtual]
 
   if (!perguntaAtual) {
-    if (enviando) {
+    if (enviarRespostasMutation.isPending) {
       return (
         <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
           <div className="text-gray-600">Enviando respostas...</div>

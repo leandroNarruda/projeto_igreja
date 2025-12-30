@@ -1,12 +1,20 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuizForm } from '@/components/quiz/QuizForm'
 import { QuizList } from '@/components/quiz/QuizList'
 import { PerguntaForm } from '@/components/quiz/PerguntaForm'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
+import {
+  useQuizzes,
+  usePerguntas,
+  useCriarQuiz,
+  useAtualizarQuiz,
+  useDeletarQuiz,
+  useCriarPergunta,
+} from '@/hooks/useQuiz'
 
 interface Quiz {
   id: number
@@ -18,72 +26,58 @@ interface Quiz {
   }
 }
 
+interface Pergunta {
+  id: number
+  enunciado: string
+  alternativaA: string
+  alternativaB: string
+  alternativaC: string
+  alternativaD: string
+  alternativaE: string
+  respostaCorreta: string
+  tempoSegundos: number
+}
+
 export default function QuizPage() {
   const router = useRouter()
-  const [quizzes, setQuizzes] = useState<Quiz[]>([])
-  const [loading, setLoading] = useState(true)
   const [mostrarFormQuiz, setMostrarFormQuiz] = useState(false)
   const [quizSelecionado, setQuizSelecionado] = useState<number | null>(null)
-  const [perguntas, setPerguntas] = useState<any[]>([])
+
+  const { data: quizzesData, isLoading, isError, error } = useQuizzes()
+  const { data: perguntasData } = usePerguntas(quizSelecionado, true)
+
+  const quizzes = quizzesData?.quizzes || []
+  const perguntas = perguntasData?.perguntas || []
+
+  const criarQuizMutation = useCriarQuiz()
+  const atualizarQuizMutation = useAtualizarQuiz()
+  const deletarQuizMutation = useDeletarQuiz()
+  const criarPerguntaMutation = useCriarPergunta()
 
   useEffect(() => {
     console.log('QuizPage - Componente montado')
     console.log('QuizPage - URL atual:', window.location.href)
   }, [])
 
-  const buscarQuizzes = useCallback(async () => {
-    try {
-      console.log('QuizPage - Buscando quizzes...')
-      const response = await fetch('/api/quiz')
-      console.log('QuizPage - Response status:', response.status)
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        console.error('QuizPage - Erro na resposta:', errorData)
-
-        if (response.status === 403) {
-          console.error('QuizPage - Acesso negado (403)')
-          alert(
-            'Acesso negado. Apenas administradores podem acessar esta página.'
-          )
-          router.push('/home')
-          return
-        }
-        throw new Error(`Erro ao buscar quizzes: ${response.status}`)
-      }
-      const data = await response.json()
-      console.log('QuizPage - Quizzes recebidos:', data)
-      setQuizzes(data.quizzes || [])
-    } catch (error) {
-      console.error('QuizPage - Erro ao buscar quizzes:', error)
-      alert(
-        `Erro ao carregar quizzes: ${error instanceof Error ? error.message : 'Erro desconhecido'}`
-      )
-    } finally {
-      setLoading(false)
-    }
-  }, [router])
-
   useEffect(() => {
-    buscarQuizzes()
-  }, [buscarQuizzes])
+    if (isError) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Erro desconhecido'
+      if (errorMessage === 'Acesso negado') {
+        alert(
+          'Acesso negado. Apenas administradores podem acessar esta página.'
+        )
+        router.push('/home')
+      } else {
+        alert(`Erro ao carregar quizzes: ${errorMessage}`)
+      }
+    }
+  }, [isError, error, router])
 
   const handleCriarQuiz = async (tema: string) => {
     try {
-      const response = await fetch('/api/quiz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tema }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Erro ao criar quiz')
-      }
-
+      await criarQuizMutation.mutateAsync(tema)
       setMostrarFormQuiz(false)
-      buscarQuizzes()
     } catch (error) {
       console.error('Erro ao criar quiz:', error)
       throw error
@@ -92,19 +86,10 @@ export default function QuizPage() {
 
   const handleAtivar = async (id: number) => {
     try {
-      const response = await fetch(`/api/quiz/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ativo: true }),
+      await atualizarQuizMutation.mutateAsync({
+        id,
+        data: { ativo: true },
       })
-
-      if (!response.ok) {
-        throw new Error('Erro ao ativar quiz')
-      }
-
-      buscarQuizzes()
     } catch (error) {
       console.error('Erro ao ativar quiz:', error)
       alert('Erro ao ativar quiz')
@@ -113,19 +98,10 @@ export default function QuizPage() {
 
   const handleDesativar = async (id: number) => {
     try {
-      const response = await fetch(`/api/quiz/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ativo: false }),
+      await atualizarQuizMutation.mutateAsync({
+        id,
+        data: { ativo: false },
       })
-
-      if (!response.ok) {
-        throw new Error('Erro ao desativar quiz')
-      }
-
-      buscarQuizzes()
     } catch (error) {
       console.error('Erro ao desativar quiz:', error)
       alert('Erro ao desativar quiz')
@@ -138,37 +114,15 @@ export default function QuizPage() {
     }
 
     try {
-      const response = await fetch(`/api/quiz/${id}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        throw new Error('Erro ao deletar quiz')
-      }
-
-      buscarQuizzes()
+      await deletarQuizMutation.mutateAsync(id)
     } catch (error) {
       console.error('Erro ao deletar quiz:', error)
       alert('Erro ao deletar quiz')
     }
   }
 
-  const handleAdicionarPerguntas = async (id: number) => {
+  const handleAdicionarPerguntas = (id: number) => {
     setQuizSelecionado(id)
-    await buscarPerguntas(id)
-  }
-
-  const buscarPerguntas = async (quizId: number) => {
-    try {
-      const response = await fetch(`/api/quiz/${quizId}/perguntas?admin=true`)
-      if (!response.ok) {
-        throw new Error('Erro ao buscar perguntas')
-      }
-      const data = await response.json()
-      setPerguntas(data.perguntas)
-    } catch (error) {
-      console.error('Erro ao buscar perguntas:', error)
-    }
   }
 
   const handleCriarPergunta = async (data: {
@@ -184,26 +138,17 @@ export default function QuizPage() {
     if (!quizSelecionado) return
 
     try {
-      const response = await fetch(`/api/quiz/${quizSelecionado}/perguntas`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      await criarPerguntaMutation.mutateAsync({
+        quizId: quizSelecionado,
+        data,
       })
-
-      if (!response.ok) {
-        throw new Error('Erro ao criar pergunta')
-      }
-
-      await buscarPerguntas(quizSelecionado)
     } catch (error) {
       console.error('Erro ao criar pergunta:', error)
       throw error
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Carregando...</div>
@@ -220,7 +165,6 @@ export default function QuizPage() {
               variant="outline"
               onClick={() => {
                 setQuizSelecionado(null)
-                setPerguntas([])
               }}
             >
               ← Voltar
@@ -239,7 +183,7 @@ export default function QuizPage() {
               Perguntas Cadastradas ({perguntas.length})
             </h2>
             <div className="space-y-4">
-              {perguntas.map((pergunta, index) => (
+              {perguntas.map((pergunta: Pergunta, index: number) => (
                 <Card key={pergunta.id}>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">

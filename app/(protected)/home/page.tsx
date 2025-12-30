@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuizResult } from '@/components/quiz/QuizResult'
+import { useQuizAtivo, useClassificacaoQuiz } from '@/hooks/useQuiz'
 
 interface ClassificacaoItem {
   posicao: number
@@ -18,56 +18,20 @@ interface ClassificacaoItem {
 
 export default function HomePage() {
   const router = useRouter()
-  const [loading, setLoading] = useState(true)
-  const [quizAtivo, setQuizAtivo] = useState<any>(null)
-  const [jaRespondeu, setJaRespondeu] = useState(false)
-  const [resultado, setResultado] = useState<any>(null)
-  const [classificacao, setClassificacao] = useState<ClassificacaoItem[]>([])
+  const { data: quizData, isLoading } = useQuizAtivo()
+  const quizId = quizData?.quiz?.id
+  const { data: classificacaoData } = useClassificacaoQuiz(quizId || null)
 
-  useEffect(() => {
-    buscarQuizAtivo()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const buscarQuizAtivo = async () => {
-    try {
-      const response = await fetch('/api/quiz/ativo')
-      const data = await response.json()
-
-      if (data.quiz) {
-        setQuizAtivo(data.quiz)
-        setJaRespondeu(data.jaRespondeu)
-        if (data.jaRespondeu && data.resultado) {
-          setResultado(data.resultado)
-        }
-        // Buscar classificação
-        await buscarClassificacao(data.quiz.id)
-      }
-    } catch (error) {
-      console.error('Erro ao buscar quiz ativo:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const buscarClassificacao = async (quizId: number) => {
-    try {
-      const response = await fetch(`/api/quiz/${quizId}/classificacao?limit=3`)
-      const data = await response.json()
-
-      if (data.classificacao) {
-        setClassificacao(data.classificacao)
-      }
-    } catch (error) {
-      console.error('Erro ao buscar classificação:', error)
-    }
-  }
+  const quizAtivo = quizData?.quiz
+  const jaRespondeu = quizData?.jaRespondeu || false
+  const resultado = quizData?.resultado || null
+  const classificacao = classificacaoData?.classificacao || []
 
   const handleResponderQuiz = () => {
     router.push('/quiz/responder')
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
         <div className="text-gray-600">Carregando...</div>
@@ -93,7 +57,7 @@ export default function HomePage() {
                 Classificação
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {classificacao.map((item, index) => {
+                {classificacao.map((item: ClassificacaoItem, index: number) => {
                   const medalhas = ['🥇', '🥈', '🥉']
                   const cores = [
                     'bg-yellow-100 border-yellow-400',
@@ -202,7 +166,7 @@ export default function HomePage() {
               Classificação
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {classificacao.map((item, index) => {
+              {classificacao.map((item: ClassificacaoItem, index: number) => {
                 const medalhas = ['🥇', '🥈', '🥉']
                 const cores = [
                   'bg-yellow-100 border-yellow-400',
