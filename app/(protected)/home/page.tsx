@@ -1,11 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { QuizResult } from '@/components/quiz/QuizResult'
 import { useQuizAtivo, useClassificacaoQuiz } from '@/hooks/useQuiz'
 import { Loading } from '@/components/ui/Loading'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { WelcomeModal } from '@/components/ui/WelcomeModal'
 
 interface ClassificacaoItem {
   posicao: number
@@ -30,6 +32,23 @@ export default function HomePage() {
   const resultado = quizData?.resultado || null
   const classificacao = classificacaoData?.classificacao || []
 
+  // Estado para controlar o modal de boas-vindas
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
+
+  // Verificar se é a primeira visita do usuário
+  useEffect(() => {
+    const hasSeenWelcomeModal = localStorage.getItem('hasSeenWelcomeModal')
+    if (!hasSeenWelcomeModal) {
+      setShowWelcomeModal(true)
+    }
+  }, [])
+
+  // Função para fechar o modal e marcar como visto
+  const handleCloseWelcomeModal = () => {
+    setShowWelcomeModal(false)
+    localStorage.setItem('hasSeenWelcomeModal', 'true')
+  }
+
   const handleResponderQuiz = () => {
     router.push('/quiz/responder')
   }
@@ -41,6 +60,11 @@ export default function HomePage() {
   if (jaRespondeu && resultado) {
     return (
       <PageTransition>
+        <WelcomeModal
+          isOpen={showWelcomeModal}
+          onClose={handleCloseWelcomeModal}
+          videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
+        />
         <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
           <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
             <div className="mb-8">
@@ -131,6 +155,11 @@ export default function HomePage() {
   if (!quizAtivo) {
     return (
       <PageTransition>
+        <WelcomeModal
+          isOpen={showWelcomeModal}
+          onClose={handleCloseWelcomeModal}
+          videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
+        />
         <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
           <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 flex justify-center">
             <div className="text-center">
@@ -149,6 +178,11 @@ export default function HomePage() {
 
   return (
     <PageTransition>
+      <WelcomeModal
+        isOpen={showWelcomeModal}
+        onClose={handleCloseWelcomeModal}
+        videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
+      />
       <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex flex-col items-center justify-center mb-8">

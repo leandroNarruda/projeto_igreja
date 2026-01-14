@@ -2,9 +2,19 @@
 ### Configure estas variáveis antes de usar as requisições
 ### Para obter o sessionToken: faça login no navegador, abra DevTools > Application > Cookies > copie o valor de "next-auth.session-token"
 
+### DESENVOLVIMENTO LOCAL
 @baseUrl = http://localhost:3000
-@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..tsEfOv0WWC7mRZ-a.ZW5e3Sef-zGw1HXLvijsZzQha-hWLR3vuC9w59cJB7gEXRbNJvdI1Tg1xQ0cYzv49Lp0pib7x1I0r-ATSPKr78E_IyFQmqYGzn8LigO_jO5X67-UWjhwbQhDn8CyoRXLGkPr7VyHRRC6P31zvztvJDKZNR_JuRMfM0FoxK3o-tC8kyiAMXSBsh2X2AVo42LumQBnhzS5QLwIr1r1k9NH167Tn3HrhEEHbEJ1j2-u6TcTZPMzkFFHzC-IUS2_mYC4ukS1sBopixJOywxgXF7U093bRRDS_SxTbM7qRmiQaw.bAi0KLUIlvN4S5CD4zgyLg
-@quizId = 1
+# @baseUrl = https://projeto-igreja-git-main-leandroarrudas-projects.vercel.app
+
+### PRODUÇÃO (Vercel)
+### Como descobrir a URL de produção:
+### 1. Acesse https://vercel.com/dashboard
+### 2. Clique no seu projeto
+### 3. A URL de produção aparece no topo da página (ex: https://seu-projeto.vercel.app)
+### 4. Ou vá em Settings > Environment Variables e veja o valor de NEXTAUTH_URL
+### 5. Ou use o comando: vercel ls (se tiver Vercel CLI instalado)
+@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0.._ikWX_2Kr3TNc0_8.IElerQwcXLG1E1nkw9qsTkA4xiH6XG8kPp23FMXeAfG7Tmr9bv0w0CLkqiNyFqjdnfHTYQcVFDp9-JypWngfWRMDnSuJ-ZXrKGuTB4l5CI-PIdYsjeOZxiJAdVIGFiGAMmTr7zhmxessgcaqBV7mV7UMXn2wR41rcW2zw4WKFQRTb9yyN1VWYdvgtcL1WH2-vZe-ODNjEngQkKUq9XbFpsSXc7iZ7OWBDlF3Ir0.Kt5wDTZxdz1sclLKNgHejw
+@quizId = 2
 @userId = 1
 
 ### ============================================
@@ -92,143 +102,143 @@ Cookie: next-auth.session-token={{sessionToken}}
 
 [
   {
-    "enunciado": "De acordo com o texto de Sábado, o que Paulo e Silas faziam à meia-noite enquanto estavam presos em Filipos?",
-    "alternativaA": "Planejavam uma fuga estratégica",
-    "alternativaB": "Oravam e cantavam louvores a Deus",
-    "alternativaC": "Escreviam cartas para a igreja de Roma",
-    "alternativaD": "Pregavam silenciosamente para o carcereiro",
-    "alternativaE": "Dormiam profundamente apesar do tronco",
+    "enunciado": "De acordo com a lição de Sábado, em que Paulo baseia a necessidade de unidade entre os crentes?",
+    "alternativaA": "Nas tradições dos anciãos da igreja",
+    "alternativaB": "Nas regras estabelecidas pelos líderes de Filipos",
+    "alternativaC": "No ensino e no exemplo de Jesus",
+    "alternativaD": "Na sabedoria dos filósofos gregos",
+    "alternativaE": "Nas leis civis do Império Romano",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Conforme o texto de Sábado, qual foi a origem da desunião no universo?",
+    "alternativaA": "A queda do homem no jardim do Éden",
+    "alternativaB": "O orgulho e a sede de posição e poder de um único anjo no céu",
+    "alternativaC": "A confusão das línguas na Torre de Babel",
+    "alternativaD": "O conflito entre os discípulos de Jesus",
+    "alternativaE": "A falta de conhecimento das Escrituras",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "No relato do pastor adventista preso (Sábado), quais atividades ele realizou na cela ao ser identificado como pastor?",
-    "alternativaA": "Apenas orações individuais e jejuns",
-    "alternativaB": "Escrita de livros e alfabetização de presos",
-    "alternativaC": "Pregação, distribuição de literatura, batismos e Ceia do Senhor",
-    "alternativaD": "Debates teológicos com os guardas romanos",
-    "alternativaE": "Organização de um coral e aulas de grego",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Segundo o estudo de Domingo, em que período aproximado a maioria dos estudiosos acredita que as 'Cartas da Prisão' foram escritas?",
-    "alternativaA": "Entre 45 a 50 d.C.",
-    "alternativaB": "Por volta dos anos 60 a 62 d.C.",
-    "alternativaC": "Exatamente no ano 70 d.C.",
-    "alternativaD": "Entre 33 a 35 d.C.",
-    "alternativaE": "No final do primeiro século, em 95 d.C.",
+    "enunciado": "No estudo de Domingo, qual termo grego é utilizado para descrever a 'ambição egoísta' ou rivalidade?",
+    "alternativaA": "Koinonia",
+    "alternativaB": "Eritheia",
+    "alternativaC": "Kenodoxia",
+    "alternativaD": "Morphe",
+    "alternativaE": "Apologia",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Ao mencionar a 'guarda pretoriana' em Filipenses 1:13, a que Paulo estava se referindo especificamente em Roma?",
-    "alternativaA": "A um local físico de julgamento",
-    "alternativaB": "À residência oficial de Pôncio Pilatos",
-    "alternativaC": "A um grupo de soldados de elite (cerca de 14 mil pessoas)",
-    "alternativaD": "Aos muros que cercavam a cidade de Cesareia",
-    "alternativaE": "Ao conselho de anciãos judeus em Roma",
+    "enunciado": "Segundo o texto de Domingo, qual o sentido da palavra grega 'kenodoxia' (vaidade) na literatura extrabíblica?",
+    "alternativaA": "Desejo sincero de servir ao próximo",
+    "alternativaB": "Humildade extrema e submissão",
+    "alternativaC": "Arrogância, orgulho vazio e percepção inflada de si mesmo",
+    "alternativaD": "Preocupação com a aparência física externa",
+    "alternativaE": "Tristeza profunda por estar encarcerado",
     "respostaCorreta": "C",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Na lição de Segunda-feira, a quem Paulo estava acorrentado durante sua prisão domiciliar em Roma?",
-    "alternativaA": "A Lucas, o médico amado",
-    "alternativaB": "A um prisioneiro comum de guerra",
-    "alternativaC": "A um soldado romano de elite",
-    "alternativaD": "A Epafrodito e Timóteo",
-    "alternativaE": "Ao seu assistente literário",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Qual líder cristão do 2º século descreveu os soldados que guardavam os prisioneiros como 'feras selvagens'?",
-    "alternativaA": "Policarpo de Esmirna",
-    "alternativaB": "Inácio de Antioquia",
-    "alternativaC": "Clemente de Roma",
-    "alternativaD": "Justino o Mártir",
-    "alternativaE": "Tertuliano de Cartago",
+    "enunciado": "De acordo com Jesus (Mateus 15:19), citado na lição de Segunda-feira, de onde procedem os maus pensamentos?",
+    "alternativaA": "Das circunstâncias externas difíceis",
+    "alternativaB": "Do coração (ou da mente)",
+    "alternativaC": "Da influência direta de amigos mundanos",
+    "alternativaD": "Da falta de estudo da filosofia",
+    "alternativaE": "Apenas da influência dos líderes religiosos",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "De acordo com o texto de Terça-feira, qual era a ocupação de Lídia, a primeira convertida em Filipos?",
-    "alternativaA": "Fabricante de tendas",
-    "alternativaB": "Vendedora de púrpura",
-    "alternativaC": "Carcereira do império",
-    "alternativaD": "Serva na casa de César",
-    "alternativaE": "Escrava liberta",
+    "enunciado": "Na lição de Segunda-feira, como Paulo denomina a unidade mencionada em Efésios 4:3 que cria a 'paz que nos une'?",
+    "alternativaA": "Unidade da lei",
+    "alternativaB": "Unidade produzida pelo Espírito",
+    "alternativaC": "Unidade de costumes",
+    "alternativaD": "Unidade financeira da igreja",
+    "alternativaE": "Unidade por meio do comportamento externo",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "O que significava para a cidade de Filipos possuir o status de 'Ius Italicum'?",
-    "alternativaA": "A proibição do uso da língua grega",
-    "alternativaB": "A obrigação de pagar impostos dobrados a Roma",
-    "alternativaC": "Mesmos direitos de quem nascia na Itália e isenção de impostos pessoais",
-    "alternativaD": "O direito de eleger o próprio imperador",
-    "alternativaE": "A exclusividade no comércio de seda no Oriente",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Segundo o estudo de Quarta-feira, quem foi o morador local responsável por levar o evangelho a Colossos?",
-    "alternativaA": "Onésimo",
-    "alternativaB": "Filemom",
-    "alternativaC": "Epafras",
-    "alternativaD": "Timóteo",
-    "alternativaE": "Tíquico",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Com base nos achados mencionados no texto, qual era a população judaica estimada na região da Frígia (onde ficava Colossos)?",
-    "alternativaA": "Cerca de mil judeus",
-    "alternativaB": "Aproximadamente cinco mil judeus",
-    "alternativaC": "Cerca de dez mil judeus",
-    "alternativaD": "Mais de cinquenta mil judeus",
-    "alternativaE": "Menos de cem judeus",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Na lição de Quinta-feira, o que Paulo quer dizer ao chamar os cristãos de 'santos'?",
-    "alternativaA": "Pessoas que já morreram e foram canonizadas",
-    "alternativaB": "Pessoas que nunca cometeram pecados",
-    "alternativaC": "Indivíduos separados pelo batismo para ser o povo especial de Deus",
-    "alternativaD": "Líderes que alcançaram a perfeição absoluta",
-    "alternativaE": "Membros que pertenciam apenas à igreja de Jerusalém",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Quem escreveu na 'Review and Herald' em 1853 que a ordem divina do Novo Testamento é suficiente para organizar a igreja?",
-    "alternativaA": "Ellen G. White",
-    "alternativaB": "Tiago White",
-    "alternativaC": "J. N. Andrews",
-    "alternativaD": "Joseph Bates",
-    "alternativaE": "Guilherme Miller",
+    "enunciado": "Segundo o estudo de Terça-feira e Romanos 12:2, como o cristão deve ser transformado?",
+    "alternativaA": "Pelo cumprimento rigoroso de rituais",
+    "alternativaB": "Pela renovação da mente",
+    "alternativaC": "Pela mudança de residência geográfica",
+    "alternativaD": "Pela prática constante de caridade pública",
+    "alternativaE": "Pelo isolamento do mundo",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "No texto de Sexta-feira, como é medida a verdadeira e elevada natureza da missão e o valor da vida de uma pessoa?",
-    "alternativaA": "Pela quantidade de pessoas convertidas",
-    "alternativaB": "Pelo número de livros escritos na prisão",
-    "alternativaC": "Pela vida que foi entregue para salvá-lo (Cristo)",
-    "alternativaD": "Pela ausência de sofrimento e perseguição",
-    "alternativaE": "Pela posição de liderança ocupada na igreja",
-    "respostaCorreta": "C",
+    "enunciado": "Qual é o significado literal da palavra hebraica 'aqov' (traduzida como enganoso em Jeremias 17:9), conforme explicado na Terça-feira?",
+    "alternativaA": "Uma serpente pronta para o ataque",
+    "alternativaB": "Um terreno irregular que nos faz tropeçar",
+    "alternativaC": "Uma nuvem que esconde o sol",
+    "alternativaD": "Um espelho que reflete imagens distorcidas",
+    "alternativaE": "Uma prisão com portas trancadas",
+    "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Conforme o resumo da semana, qual é o fundamento da alegria de Paulo mesmo em circunstâncias terríveis?",
-    "alternativaA": "A expectativa de ser solto em breve",
-    "alternativaB": "O apoio financeiro recebido de Lídia",
-    "alternativaC": "Estar 'no Senhor' e focar na cruz de Cristo",
-    "alternativaD": "A derrota política do império romano",
-    "alternativaE": "O fato de não estar sozinho na cela",
-    "respostaCorreta": "C",
+    "enunciado": "Conforme o texto de Quarta-feira, que forma Jesus tomou sobre Si ao assumir a carne humana (Filipenses 2:7)?",
+    "alternativaA": "Forma de um rei glorioso",
+    "alternativaB": "Forma de servo (ou escravo)",
+    "alternativaC": "Forma de um anjo de luz",
+    "alternativaD": "Forma de um mestre da lei",
+    "alternativaE": "Forma de um filósofo sábio",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Segundo Hebreus 5:8, mencionado na Quarta-feira, o que Jesus aprendeu por meio das coisas que sofreu?",
+    "alternativaA": "Teologia sistemática",
+    "alternativaB": "A obediência",
+    "alternativaC": "A arte da pregação",
+    "alternativaD": "A paciência com os pecadores",
+    "alternativaE": "A liderança eclesiástica",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "No estudo de Quinta-feira, o que indica a palavra grega 'morphē' (forma) em relação a Jesus em Filipenses 2:6?",
+    "alternativaA": "Sua aparência física externa",
+    "alternativaB": "Sua natureza divina e igualdade com o Pai",
+    "alternativaC": "Sua condição de ser humano finito",
+    "alternativaD": "A túnica usada pelos sacerdotes",
+    "alternativaE": "Sua posição como carpinteiro",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Qual expressão Paulo utiliza em 1 Timóteo 3:16 para descrever o mistério de Deus se tornar homem, conforme a Quinta-feira?",
+    "alternativaA": "Plano da redenção",
+    "alternativaB": "Mistério da piedade",
+    "alternativaC": "Caminho da verdade",
+    "alternativaD": "Grande conflito universal",
+    "alternativaE": "Conselho da paz",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Segundo a citação de Ellen G. White na lição de Sexta-feira, qual será o tema de nosso estudo ao longo da eternidade?",
+    "alternativaA": "A história das nações da Terra",
+    "alternativaB": "Cristo e Sua obra de redenção",
+    "alternativaC": "As leis da física e da natureza",
+    "alternativaD": "As biografias dos heróis da fé",
+    "alternativaE": "A estrutura do santuário terrestre",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Na lição de Sexta-feira, a que Ellen White compara o amor de Deus em relação a todas as fontes de ternura humana?",
+    "alternativaA": "A uma pequena chama diante do sol",
+    "alternativaB": "A um pequeno riacho diante do oceano sem limites",
+    "alternativaC": "A uma gota de água diante de uma chuva torrencial",
+    "alternativaD": "A uma semente diante de uma floresta",
+    "alternativaE": "A uma estrela diante de toda a galáxia",
+    "respostaCorreta": "B",
     "tempoSegundos": 30
   }
 ]
@@ -357,6 +367,23 @@ Cookie: next-auth.session-token={{sessionToken}}
 {
   "ativo": true
 }
+
+### ============================================
+### USANDO A API EM PRODUÇÃO
+### ============================================
+###
+### Para usar as requisições em produção, substitua {{baseUrl}} por {{baseUrlProd}}:
+###
+### Exemplo de requisição em produção:
+### GET {{baseUrlProd}}/api/quiz/ativo
+### Cookie: next-auth.session-token={{sessionToken}}
+###
+### IMPORTANTE: Para obter o sessionToken em produção:
+### 1. Acesse sua aplicação em produção (ex: https://seu-projeto.vercel.app)
+### 2. Faça login no navegador
+### 3. Abra DevTools (F12) > Application > Cookies
+### 4. Copie o valor de "next-auth.session-token" (ou "__Secure-next-auth.session-token")
+### 5. Cole no @sessionToken acima
 
 ### ============================================
 ### NOTAS IMPORTANTES

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card } from '@/components/ui/Card'
+import { IgrejaModal } from '@/components/ui/IgrejaModal'
 
 export const RegisterForm = () => {
   const router = useRouter()
@@ -14,6 +15,9 @@ export const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showIgrejaModal, setShowIgrejaModal] = useState(false)
+  const [loadingIgreja, setLoadingIgreja] = useState(false)
+  const [userId, setUserId] = useState<number | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,15 +52,63 @@ export const RegisterForm = () => {
 
       if (!response.ok) {
         setError(data.error || 'Erro ao criar conta')
+        setLoading(false)
         return
       }
 
-      router.push('/login')
+      // Salvar userId e abrir modal de seleção de igreja
+      setUserId(data.userId)
+      setShowIgrejaModal(true)
+      setLoading(false)
     } catch (err) {
       setError('Erro ao criar conta. Tente novamente.')
-    } finally {
       setLoading(false)
     }
+  }
+
+  const handleConfirmarIgreja = async (igreja: string) => {
+    if (!userId) {
+      setError('Erro ao identificar usuário')
+      setShowIgrejaModal(false)
+      return
+    }
+
+    setLoadingIgreja(true)
+
+    try {
+      const response = await fetch('/api/auth/register/igreja', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          igreja,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || 'Erro ao salvar igreja')
+        setLoadingIgreja(false)
+        return
+      }
+
+      // Fechar modal e redirecionar para login
+      setShowIgrejaModal(false)
+      router.push('/login')
+    } catch (err) {
+      setError('Erro ao salvar igreja. Tente novamente.')
+      setLoadingIgreja(false)
+    }
+  }
+
+  const handleCloseIgrejaModal = () => {
+    // Se o usuário fechar o modal sem selecionar, ainda redireciona para login
+    // (a igreja ficará como null)
+    setShowIgrejaModal(false)
+    router.push('/login')
   }
 
   return (
@@ -115,6 +167,12 @@ export const RegisterForm = () => {
           Faça login
         </a>
       </p>
+      <IgrejaModal
+        isOpen={showIgrejaModal}
+        onConfirm={handleConfirmarIgreja}
+        onClose={handleCloseIgrejaModal}
+        loading={loadingIgreja}
+      />
     </Card>
   )
 }
