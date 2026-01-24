@@ -35,18 +35,19 @@ export default function HomePage() {
   // Estado para controlar o modal de boas-vindas
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
 
-  // Verificar se é a primeira visita do usuário
+  // Mostrar modal apenas quando acabou de logar
   useEffect(() => {
-    const hasSeenWelcomeModal = localStorage.getItem('hasSeenWelcomeModal')
-    if (!hasSeenWelcomeModal) {
+    const shouldShowModal =
+      sessionStorage.getItem('welcomeModalPending') === 'true'
+    if (shouldShowModal) {
       setShowWelcomeModal(true)
+      sessionStorage.removeItem('welcomeModalPending')
     }
   }, [])
 
-  // Função para fechar o modal e marcar como visto
+  // Função para fechar o modal
   const handleCloseWelcomeModal = () => {
     setShowWelcomeModal(false)
-    localStorage.setItem('hasSeenWelcomeModal', 'true')
   }
 
   const handleResponderQuiz = () => {

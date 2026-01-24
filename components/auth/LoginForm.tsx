@@ -29,6 +29,7 @@ export const LoginForm = () => {
       if (result?.error) {
         setError('Email ou senha incorretos')
       } else {
+        sessionStorage.setItem('welcomeModalPending', 'true')
         router.push('/home')
         router.refresh()
       }

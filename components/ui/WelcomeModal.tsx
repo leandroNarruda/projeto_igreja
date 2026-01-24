@@ -97,7 +97,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="bg-white rounded-xl shadow-2xl max-w-lg w-full relative overflow-hidden"
+              className="bg-white rounded-xl shadow-2xl max-w-lg w-full relative overflow-hidden max-h-[calc(100vh-2rem)] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               {/* Botão de fechar */}
