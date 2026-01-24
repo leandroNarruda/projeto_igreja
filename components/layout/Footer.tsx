@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, Calendar, User, HelpCircle } from 'lucide-react'
+import { Home, Calendar, User, Settings } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 
 export const Footer = () => {
@@ -21,22 +21,25 @@ export const Footer = () => {
       path: '/home',
       icon: Home,
     },
-    isAdmin
-      ? {
-          label: 'Quiz',
-          path: '/quiz',
-          icon: HelpCircle,
-        }
-      : {
-          label: 'Eventos',
-          path: '/eventos',
-          icon: Calendar,
-        },
+    {
+      label: 'Eventos',
+      path: '/eventos',
+      icon: Calendar,
+    },
     {
       label: 'Perfil',
       path: '/perfil',
       icon: User,
     },
+    ...(isAdmin
+      ? [
+          {
+            label: 'Admin',
+            path: '/quiz',
+            icon: Settings,
+          },
+        ]
+      : []),
   ]
 
   const handleNavigation = (path: string) => {

@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
@@ -23,6 +24,7 @@ interface ClassificacaoItem {
 
 export default function HomePage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const { data: quizData, isLoading } = useQuizAtivo()
   const quizId = quizData?.quiz?.id
   const { data: classificacaoData } = useClassificacaoQuiz(quizId || null)
@@ -81,14 +83,14 @@ export default function HomePage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
                   Classificação
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                   {classificacao.map(
                     (item: ClassificacaoItem, index: number) => {
                       const medalhas = ['🥇', '🥈', '🥉']
                       const cores = [
-                        'bg-yellow-100 border-yellow-400',
-                        'bg-gray-100 border-gray-400',
-                        'bg-orange-100 border-orange-400',
+                        'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
+                        'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
+                        'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
                       ]
                       return (
                         <motion.div
@@ -104,18 +106,24 @@ export default function HomePage() {
                             type: 'tween',
                             ease: 'easeOut',
                             duration: 0.4,
-                            delay: index * 0.1,
+                            delay: index * 0.05,
                           }}
                           className={`
-                          p-6 rounded-lg border-2 shadow-lg
-                          ${index < 3 ? cores[index] : 'bg-white border-gray-300'}
-                        `}
+                        p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
+                        ${
+                          index < 3
+                            ? cores[index]
+                            : item.userId === Number(session?.user?.id)
+                              ? 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-400 ring-2 ring-blue-400 ring-offset-2'
+                              : 'bg-white border-gray-300 hover:border-gray-400'
+                        }
+                      `}
                         >
                           <div className="text-center">
-                            <div className="text-4xl mb-2">
+                            <div className="text-4xl mb-2 text-gray-900">
                               {index < 3 ? medalhas[index] : `${item.posicao}º`}
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                            <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
                               {item.nome.split(' ')[0]}
                             </h3>
                             <div className="space-y-1 text-sm text-gray-600">
@@ -218,13 +226,13 @@ export default function HomePage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
                 Classificação
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {classificacao.map((item: ClassificacaoItem, index: number) => {
                   const medalhas = ['🥇', '🥈', '🥉']
                   const cores = [
-                    'bg-yellow-100 border-yellow-400',
-                    'bg-gray-100 border-gray-400',
-                    'bg-orange-100 border-orange-400',
+                    'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
+                    'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
+                    'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
                   ]
                   return (
                     <motion.div
@@ -240,18 +248,18 @@ export default function HomePage() {
                         type: 'tween',
                         ease: 'easeOut',
                         duration: 0.4,
-                        delay: index * 0.1,
+                        delay: index * 0.05,
                       }}
                       className={`
-                        p-6 rounded-lg border-2 shadow-lg
-                        ${index < 3 ? cores[index] : 'bg-white border-gray-300'}
+                        p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
+                        ${index < 3 ? cores[index] : 'bg-white border-gray-300 hover:border-gray-400'}
                       `}
                     >
                       <div className="text-center">
                         <div className="text-4xl mb-2">
                           {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
                           {item.nome.split(' ')[0]}
                         </h3>
                         <div className="space-y-1 text-sm text-gray-600">

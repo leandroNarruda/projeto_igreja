@@ -25,7 +25,7 @@ export async function GET(
 
     // Buscar parâmetro limit (padrão: 3)
     const url = new URL(request.url)
-    const limit = parseInt(url.searchParams.get('limit') || '3', 10)
+    const limit = parseInt(url.searchParams.get('limit') || '50', 10)
 
     // Buscar top N resultados ordenados por acertos (descendente)
     const resultados = await prisma.resultadoQuiz.findMany({

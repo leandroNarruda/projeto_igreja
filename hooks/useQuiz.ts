@@ -28,7 +28,7 @@ export function useClassificacaoQuiz(quizId: number | null) {
     queryKey: ['quiz', quizId, 'classificacao'],
     queryFn: async () => {
       if (!quizId) return null
-      const response = await fetch(`/api/quiz/${quizId}/classificacao?limit=3`)
+      const response = await fetch(`/api/quiz/${quizId}/classificacao?limit=50`)
       if (!response.ok) {
         throw new Error('Erro ao buscar classificação')
       }
