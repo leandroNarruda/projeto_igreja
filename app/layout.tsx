@@ -7,6 +7,7 @@ import { QueryProvider } from '@/components/providers/QueryProvider'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { MainContent } from '@/components/layout/MainContent'
+import { PWAInstallPrompt } from '@/components/ui/PWAInstallPrompt'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -62,13 +63,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <SessionProvider>
           <QueryProvider>
             <Navbar />
             <MainContent>{children}</MainContent>
             <Footer />
+            <PWAInstallPrompt />
           </QueryProvider>
         </SessionProvider>
         <Script src="/sw-register.js" strategy="afterInteractive" />

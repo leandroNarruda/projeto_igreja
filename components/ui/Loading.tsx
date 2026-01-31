@@ -12,12 +12,13 @@ export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
     ? 'min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center'
     : 'flex items-center justify-center py-8'
 
-  // Criar 12 bolinhas posicionadas em círculo
+  // Criar 12 bolinhas posicionadas em círculo (arredondado para evitar mismatch servidor/cliente)
+  const round2 = (n: number) => Math.round(n * 100) / 100
   const dots = Array.from({ length: 12 }, (_, i) => {
     const angle = (i * 360) / 12
     const radius = 80 // Distância do centro
-    const x = Math.cos((angle * Math.PI) / 180) * radius
-    const y = Math.sin((angle * Math.PI) / 180) * radius
+    const x = round2(Math.cos((angle * Math.PI) / 180) * radius)
+    const y = round2(Math.sin((angle * Math.PI) / 180) * radius)
 
     return {
       id: i,
