@@ -8,6 +8,7 @@ declare module 'next-auth' {
       name: string
       role: string
       socialName?: string | null
+      image?: string | null
     }
   }
 
@@ -17,6 +18,7 @@ declare module 'next-auth' {
     name: string
     role: string
     socialName?: string | null
+    image?: string | null
   }
 }
 

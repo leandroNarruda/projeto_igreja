@@ -1,7 +1,7 @@
 {
-  "name": "Projeto Igreja",
-  "short_name": "Igreja",
-  "description": "Sistema de autenticação para projeto igreja",
+  "name": "Bom de lição",
+  "short_name": "Bom de lição",
+  "description": "Bom de lição - aplicativo",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

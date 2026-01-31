@@ -12,13 +12,13 @@ import { PWAInstallPrompt } from '@/components/ui/PWAInstallPrompt'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Projeto Igreja',
-  description: 'Sistema de autenticação para projeto igreja',
+  title: 'Bom de lição',
+  description: 'Bom de lição - aplicativo',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Projeto Igreja',
+    title: 'Bom de lição',
   },
   icons: {
     apple: [

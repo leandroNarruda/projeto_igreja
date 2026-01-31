@@ -1,30 +1,20 @@
 'use client'
 
-import { signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import Image from 'next/image'
-import { LogOut } from 'lucide-react'
-import { IconButton } from '@/components/ui/IconButton'
+
+function getInitials(name: string | null | undefined): string {
+  if (!name || !name.trim()) return '?'
+  const parts = name.trim().split(/\s+/)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+  }
+  return name.slice(0, 2).toUpperCase()
+}
 
 export const Navbar = () => {
   const { data: session } = useSession()
-  const router = useRouter()
-
-  const handleLogout = async () => {
-    try {
-      await signOut({
-        redirect: false,
-        callbackUrl: '/login',
-      })
-      router.push('/login')
-      router.refresh()
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error)
-      // Força redirecionamento mesmo se houver erro
-      router.push('/login')
-      router.refresh()
-    }
-  }
 
   if (!session) {
     return null
@@ -45,14 +35,31 @@ export const Navbar = () => {
             />
           </div>
           <span className="text-gray-700">
-            Olá, {session.user?.name.split(' ')[0] || session.user?.email}
+            Olá, {session.user?.name?.split(' ')[0] || session.user?.email}
           </span>
-          <IconButton
-            icon={LogOut}
-            variant="minimal"
-            onClick={handleLogout}
-            aria-label="Sair"
-          />
+          <Link
+            href="/perfil"
+            className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+            aria-label="Ir para perfil"
+          >
+            {session.user?.image ? (
+              <Image
+                src={session.user.image}
+                alt=""
+                width={48}
+                height={48}
+                className="h-12 w-12 rounded-full object-cover border border-gray-200"
+                unoptimized
+              />
+            ) : (
+              <div
+                className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600"
+                aria-hidden
+              >
+                {getInitials(session.user?.name)}
+              </div>
+            )}
+          </Link>
         </div>
       </div>
     </nav>

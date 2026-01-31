@@ -194,7 +194,7 @@ export function PWAInstallPrompt() {
                 Instalar aplicativo
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-center text-sm mb-6">
-                Instale o Projeto Igreja no seu dispositivo para acesso rápido e
+                Instale o Bom de lição no seu dispositivo para acesso rápido e
                 uso offline.
               </p>
               <div className="flex flex-col gap-2">

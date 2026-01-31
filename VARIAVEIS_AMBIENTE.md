@@ -140,13 +140,48 @@ DATABASE_URL="mongodb+srv://usuario:senha@cluster.mongodb.net/nome_do_banco"
 
 ---
 
+### 4. `BLOB_READ_WRITE_TOKEN`
+
+**O que é:**
+Token de leitura e escrita do Vercel Blob, usado para armazenar arquivos (ex.: fotos de perfil/avatar) no Blob store do projeto.
+
+**Para que serve:**
+
+- Fazer upload de avatares na página de perfil
+- Remover avatares antigos ao trocar a foto
+- A variável é criada **automaticamente** pela Vercel quando você cria um Blob store no projeto
+
+**Como obter:**
+
+1. No [Dashboard da Vercel](https://vercel.com), abra o projeto.
+2. Vá em **Storage** (menu lateral) e crie um novo **Blob store** (ex.: nome "avatars").
+3. Após criar, a Vercel adiciona a variável `BLOB_READ_WRITE_TOKEN` ao projeto.
+4. **Em desenvolvimento local:** na raiz do projeto, rode `vercel env pull` (com o Vercel CLI linkado ao projeto) para baixar o `.env` com o token. Ou copie o valor na página do Blob store (Storage > seu store > configurações) e coloque em `.env` como `BLOB_READ_WRITE_TOKEN=...`.
+
+**Exemplo:**
+
+```env
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxx...
+```
+
+**Por que é importante:**
+
+- Sem essa variável, o upload de avatar na página de perfil não funciona (a API retornará erro ao tentar enviar a imagem ao Vercel Blob).
+
+**⚠️ IMPORTANTE:**
+
+- Essa variável é **opcional** se você não usar a funcionalidade de avatar. Se usar, configure o Blob store na Vercel e garanta o token em todos os ambientes (Production, Preview, Development) onde o upload for usado.
+
+---
+
 ## 📝 Resumo Rápido
 
-| Variável          | Obrigatória? | Uso                           | Exemplo                   |
-| ----------------- | ------------ | ----------------------------- | ------------------------- |
-| `NEXTAUTH_SECRET` | ✅ Sim       | Criptografar tokens e sessões | `openssl rand -base64 32` |
-| `NEXTAUTH_URL`    | ✅ Sim       | URL base da aplicação         | `http://localhost:3000`   |
-| `DATABASE_URL`    | ✅ Sim       | Conexão com banco de dados    | `"file:./dev.db"`         |
+| Variável                | Obrigatória? | Uso                              | Exemplo                      |
+| ----------------------- | ------------ | -------------------------------- | ---------------------------- |
+| `NEXTAUTH_SECRET`       | ✅ Sim       | Criptografar tokens e sessões    | `openssl rand -base64 32`    |
+| `NEXTAUTH_URL`          | ✅ Sim       | URL base da aplicação            | `http://localhost:3000`      |
+| `DATABASE_URL`          | ✅ Sim       | Conexão com banco de dados       | `"file:./dev.db"`            |
+| `BLOB_READ_WRITE_TOKEN` | ❌ Não\*     | Upload/delete de avatares (Blob) | (criado ao criar Blob store) |
 
 ---
 
