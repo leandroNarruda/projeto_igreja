@@ -37,6 +37,7 @@ export async function GET(
           select: {
             id: true,
             name: true,
+            social_name: true,
             email: true,
           },
         },
@@ -52,6 +53,7 @@ export async function GET(
       posicao: index + 1,
       userId: resultado.userId,
       nome: resultado.user.name,
+      social_name: resultado.user.social_name ?? null,
       email: resultado.user.email,
       acertos: resultado.acertos,
       erros: resultado.erros,

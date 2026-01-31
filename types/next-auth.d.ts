@@ -7,6 +7,7 @@ declare module 'next-auth' {
       email: string
       name: string
       role: string
+      socialName?: string | null
     }
   }
 
@@ -15,6 +16,7 @@ declare module 'next-auth' {
     email: string
     name: string
     role: string
+    socialName?: string | null
   }
 }
 

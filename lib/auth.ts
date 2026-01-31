@@ -110,6 +110,11 @@ export const authOptions: NextAuthOptions = {
         if (session.user && token.id) {
           session.user.id = token.id // Sempre number
           session.user.role = (token.role as string) || 'USER'
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id },
+            select: { social_name: true },
+          })
+          session.user.socialName = dbUser?.social_name ?? null
         }
         return session
       } catch (error) {

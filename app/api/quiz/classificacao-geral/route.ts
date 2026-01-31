@@ -19,6 +19,7 @@ export async function GET() {
           select: {
             id: true,
             name: true,
+            social_name: true,
             email: true,
           },
         },
@@ -34,6 +35,7 @@ export async function GET() {
       {
         userId: number
         nome: string
+        social_name: string | null
         email: string
         totalAcertos: number
         totalQuizzes: number
@@ -49,6 +51,7 @@ export async function GET() {
         classificacaoMap.set(userId, {
           userId,
           nome: resultado.user.name,
+          social_name: resultado.user.social_name ?? null,
           email: resultado.user.email,
           totalAcertos: 0,
           totalQuizzes: 0,
@@ -93,6 +96,7 @@ export async function GET() {
       posicao: index + 1,
       userId: item.userId,
       nome: item.nome,
+      social_name: item.social_name,
       email: item.email,
       totalAcertos: item.totalAcertos,
       totalQuizzes: item.totalQuizzes,

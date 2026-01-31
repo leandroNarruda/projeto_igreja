@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useClassificacaoGeral } from '@/hooks/useQuiz'
 import { Loading } from '@/components/ui/Loading'
@@ -10,6 +11,7 @@ interface ClassificacaoGeralItem {
   posicao: number
   userId: number
   nome: string
+  social_name?: string | null
   email: string
   totalAcertos: number
   totalQuizzes: number
@@ -19,6 +21,16 @@ interface ClassificacaoGeralItem {
 export default function EventosPage() {
   const { data, isLoading } = useClassificacaoGeral()
   const classificacao = data?.classificacao || []
+
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      window.location.hash === '#classificacao-geral'
+    ) {
+      const el = document.getElementById('classificacao-geral')
+      el?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [])
 
   return (
     <PageTransition>
@@ -124,7 +136,10 @@ export default function EventosPage() {
           </div>
 
           {/* Seção de Classificação Geral */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div
+            id="classificacao-geral"
+            className="bg-white rounded-lg shadow-md p-6"
+          >
             <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
               Classificação Geral
             </h2>
@@ -185,7 +200,11 @@ export default function EventosPage() {
                             {index < 3 ? medalhas[index] : `${item.posicao}º`}
                           </div>
                           <h3 className="text-xl font-bold text-gray-900 mb-3 truncate">
-                            {item.nome.split(' ')[0]}
+                            {
+                              (item.social_name?.trim() || item.nome).split(
+                                ' '
+                              )[0]
+                            }
                           </h3>
                           <div className="space-y-2 text-sm text-gray-700">
                             <div className="bg-white/50 rounded p-2">

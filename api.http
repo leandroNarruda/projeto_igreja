@@ -3,7 +3,7 @@
 ### Para obter o sessionToken: faça login no navegador, abra DevTools > Application > Cookies > copie o valor de "next-auth.session-token"
 
 ### DESENVOLVIMENTO LOCAL
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3001
 # @baseUrl = https://projeto-igreja-git-main-leandroarrudas-projects.vercel.app
 
 ### PRODUÇÃO (Vercel)
@@ -14,7 +14,7 @@
 ### 4. Ou vá em Settings > Environment Variables e veja o valor de NEXTAUTH_URL
 ### 5. Ou use o comando: vercel ls (se tiver Vercel CLI instalado)
 @sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0.._ikWX_2Kr3TNc0_8.IElerQwcXLG1E1nkw9qsTkA4xiH6XG8kPp23FMXeAfG7Tmr9bv0w0CLkqiNyFqjdnfHTYQcVFDp9-JypWngfWRMDnSuJ-ZXrKGuTB4l5CI-PIdYsjeOZxiJAdVIGFiGAMmTr7zhmxessgcaqBV7mV7UMXn2wR41rcW2zw4WKFQRTb9yyN1VWYdvgtcL1WH2-vZe-ODNjEngQkKUq9XbFpsSXc7iZ7OWBDlF3Ir0.Kt5wDTZxdz1sclLKNgHejw
-@quizId = 2
+@quizId = 3
 @userId = 1
 
 ### ============================================
@@ -102,143 +102,143 @@ Cookie: next-auth.session-token={{sessionToken}}
 
 [
   {
-    "enunciado": "De acordo com a lição de Sábado, em que Paulo baseia a necessidade de unidade entre os crentes?",
-    "alternativaA": "Nas tradições dos anciãos da igreja",
-    "alternativaB": "Nas regras estabelecidas pelos líderes de Filipos",
-    "alternativaC": "No ensino e no exemplo de Jesus",
-    "alternativaD": "Na sabedoria dos filósofos gregos",
-    "alternativaE": "Nas leis civis do Império Romano",
+    "enunciado": "De acordo com o texto de Sábado, como é possível sermos a 'luz do mundo'?",
+    "alternativaA": "Através de boas obras independentes",
+    "alternativaB": "Somente através de uma conexão íntima com Jesus",
+    "alternativaC": "Através do estudo acadêmico da Bíblia",
+    "alternativaD": "Seguindo os estatutos de Deuteronômio fielmente",
+    "alternativaE": "Através de visões e sonhos proféticos",
+    "respostaCorreta": "B",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Qual livro bíblico é citado no Sábado para afirmar que a obediência aos estatutos de Deus é a sabedoria e entendimento do povo aos olhos das outras nações?",
+    "alternativaA": "Deuteronômio",
+    "alternativaB": "Êxodo",
+    "alternativaC": "Salmos",
+    "alternativaD": "Provérbios",
+    "alternativaE": "Isaías",
+    "respostaCorreta": "A",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Na lição de Domingo, o que Paulo quer dizer com a expressão 'com temor e tremor' em Filipenses 2:12?",
+    "alternativaA": "Medo constante do julgamento final",
+    "alternativaB": "Receio de falhar nos esforços humanos",
+    "alternativaC": "Sentir a presença de Deus e a necessidade de obedecê-Lo",
+    "alternativaD": "Ansiedade em relação à perseguição romana",
+    "alternativaE": "Pavor físico diante da majestade divina",
     "respostaCorreta": "C",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Conforme o texto de Sábado, qual foi a origem da desunião no universo?",
-    "alternativaA": "A queda do homem no jardim do Éden",
-    "alternativaB": "O orgulho e a sede de posição e poder de um único anjo no céu",
-    "alternativaC": "A confusão das línguas na Torre de Babel",
-    "alternativaD": "O conflito entre os discípulos de Jesus",
-    "alternativaE": "A falta de conhecimento das Escrituras",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "No estudo de Domingo, qual termo grego é utilizado para descrever a 'ambição egoísta' ou rivalidade?",
-    "alternativaA": "Koinonia",
-    "alternativaB": "Eritheia",
-    "alternativaC": "Kenodoxia",
-    "alternativaD": "Morphe",
-    "alternativaE": "Apologia",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Segundo o texto de Domingo, qual o sentido da palavra grega 'kenodoxia' (vaidade) na literatura extrabíblica?",
-    "alternativaA": "Desejo sincero de servir ao próximo",
-    "alternativaB": "Humildade extrema e submissão",
-    "alternativaC": "Arrogância, orgulho vazio e percepção inflada de si mesmo",
-    "alternativaD": "Preocupação com a aparência física externa",
-    "alternativaE": "Tristeza profunda por estar encarcerado",
+    "enunciado": "Segundo o estudo de Domingo, qual é a origem da fé na vida do crente?",
+    "alternativaA": "É um mérito alcançado pelo estudo",
+    "alternativaB": "É uma decisão puramente humana e racional",
+    "alternativaC": "É um dom encorajado pela ação do Espírito Santo",
+    "alternativaD": "É um subproduto de boas obras constantes",
+    "alternativaE": "É herdada de pais e antepassados fiéis",
     "respostaCorreta": "C",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "De acordo com Jesus (Mateus 15:19), citado na lição de Segunda-feira, de onde procedem os maus pensamentos?",
-    "alternativaA": "Das circunstâncias externas difíceis",
-    "alternativaB": "Do coração (ou da mente)",
-    "alternativaC": "Da influência direta de amigos mundanos",
-    "alternativaD": "Da falta de estudo da filosofia",
-    "alternativaE": "Apenas da influência dos líderes religiosos",
+    "enunciado": "De acordo com o estudo de Segunda-feira, qual o significado da palavra 'irrepreensível' em Filipenses 2:15?",
+    "alternativaA": "Perfeito em todos os sentidos",
+    "alternativaB": "Sem culpa ou sem censura",
+    "alternativaC": "Aquele que nunca foi tentado",
+    "alternativaD": "Alguém que não comete erros sociais",
+    "alternativaE": "Uma pessoa isolada do mundo",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Na lição de Segunda-feira, como Paulo denomina a unidade mencionada em Efésios 4:3 que cria a 'paz que nos une'?",
-    "alternativaA": "Unidade da lei",
-    "alternativaB": "Unidade produzida pelo Espírito",
-    "alternativaC": "Unidade de costumes",
-    "alternativaD": "Unidade financeira da igreja",
-    "alternativaE": "Unidade por meio do comportamento externo",
+    "enunciado": "Qual é o significado literal da palavra grega traduzida como 'inofensivos' em Filipenses 2:15?",
+    "alternativaA": "Manso como um cordeiro",
+    "alternativaB": "Sem armas de guerra",
+    "alternativaC": "Não misturado, puro",
+    "alternativaD": "Silencioso e discreto",
+    "alternativaE": "Amável com os inimigos",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Na Terça-feira, que imagem Paulo utiliza para se referir à possibilidade de sua morte a serviço de Cristo?",
+    "alternativaA": "Um grão de trigo que cai na terra",
+    "alternativaB": "Uma vela que se apaga",
+    "alternativaC": "Ser derramado como libação",
+    "alternativaD": "Um soldado que tomba em batalha",
+    "alternativaE": "Uma ovelha levada ao matadouro",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "Segundo o texto de Terça-feira, as libações na Bíblia hebraica geralmente ocorrem em qual contexto?",
+    "alternativaA": "Isoladamente, como um ato único de devoção",
+    "alternativaB": "Apenas em cerimônias de coroação de reis",
+    "alternativaC": "Acompanhando um sacrifício",
+    "alternativaD": "Durante as refeições diárias dos sacerdotes",
+    "alternativaE": "No início das viagens missionárias",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30
+  },
+  {
+    "enunciado": "De acordo com a Quarta-feira, qual característica de Timóteo é destacada por ter sido testada por provações?",
+    "alternativaA": "Sua eloquência na pregação",
+    "alternativaB": "Seu caráter comprovado",
+    "alternativaC": "Sua juventude vigorosa",
+    "alternativaD": "Sua ascendência judaica",
+    "alternativaE": "Sua habilidade como tradutor",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Segundo o estudo de Terça-feira e Romanos 12:2, como o cristão deve ser transformado?",
-    "alternativaA": "Pelo cumprimento rigoroso de rituais",
-    "alternativaB": "Pela renovação da mente",
-    "alternativaC": "Pela mudança de residência geográfica",
-    "alternativaD": "Pela prática constante de caridade pública",
-    "alternativaE": "Pelo isolamento do mundo",
+    "enunciado": "Qual é o significado literal da palavra grega 'isopsichon', usada por Paulo para descrever Timóteo em Filipenses 2:20?",
+    "alternativaA": "Amigo de confiança",
+    "alternativaB": "Igual em alma",
+    "alternativaC": "Irmão de sangue",
+    "alternativaD": "Servo fiel",
+    "alternativaE": "Companheiro de viagem",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Qual é o significado literal da palavra hebraica 'aqov' (traduzida como enganoso em Jeremias 17:9), conforme explicado na Terça-feira?",
-    "alternativaA": "Uma serpente pronta para o ataque",
-    "alternativaB": "Um terreno irregular que nos faz tropeçar",
-    "alternativaC": "Uma nuvem que esconde o sol",
-    "alternativaD": "Um espelho que reflete imagens distorcidas",
-    "alternativaE": "Uma prisão com portas trancadas",
+    "enunciado": "Segundo a Quinta-feira, por que Paulo precisaria do 'manto' deixado em Trôade que ele pediu a Timóteo?",
+    "alternativaA": "Para usá-lo como um sinal de autoridade",
+    "alternativaB": "Devido ao frio em sua cela de pedra",
+    "alternativaC": "Para doá-lo a um prisioneiro necessitado",
+    "alternativaD": "Porque era uma vestimenta sagrada",
+    "alternativaE": "Para vendê-lo e comprar comida",
     "respostaCorreta": "B",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Conforme o texto de Quarta-feira, que forma Jesus tomou sobre Si ao assumir a carne humana (Filipenses 2:7)?",
-    "alternativaA": "Forma de um rei glorioso",
-    "alternativaB": "Forma de servo (ou escravo)",
-    "alternativaC": "Forma de um anjo de luz",
-    "alternativaD": "Forma de um mestre da lei",
-    "alternativaE": "Forma de um filósofo sábio",
-    "respostaCorreta": "B",
+    "enunciado": "A palavra grega para 'estimar' ou 'honrar' usada para Epafrodito também é aplicada no Novo Testamento para descrever:",
+    "alternativaA": "O valor das ofertas das viúvas",
+    "alternativaB": "A coroa de glória dos mártires",
+    "alternativaC": "Jesus como a 'preciosa' pedra angular",
+    "alternativaD": "A sabedoria dos líderes da igreja",
+    "alternativaE": "O brilho das estrelas no céu",
+    "respostaCorreta": "C",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "Segundo Hebreus 5:8, mencionado na Quarta-feira, o que Jesus aprendeu por meio das coisas que sofreu?",
-    "alternativaA": "Teologia sistemática",
-    "alternativaB": "A obediência",
-    "alternativaC": "A arte da pregação",
-    "alternativaD": "A paciência com os pecadores",
-    "alternativaE": "A liderança eclesiástica",
-    "respostaCorreta": "B",
+    "enunciado": "Segundo a citação de Ellen White na Sexta-feira, quem será considerado 'o mais próximo de Cristo'?",
+    "alternativaA": "Aquele que realizou mais milagres",
+    "alternativaB": "Aquele que conheceu mais línguas",
+    "alternativaC": "Aquele que bebeu mais profundamente do espírito de Seu amor altruísta",
+    "alternativaD": "Aquele que ocupou os cargos mais altos na igreja",
+    "alternativaE": "Aquele que sofreu as mortes mais cruéis",
+    "respostaCorreta": "C",
     "tempoSegundos": 30
   },
   {
-    "enunciado": "No estudo de Quinta-feira, o que indica a palavra grega 'morphē' (forma) em relação a Jesus em Filipenses 2:6?",
-    "alternativaA": "Sua aparência física externa",
-    "alternativaB": "Sua natureza divina e igualdade com o Pai",
-    "alternativaC": "Sua condição de ser humano finito",
-    "alternativaD": "A túnica usada pelos sacerdotes",
-    "alternativaE": "Sua posição como carpinteiro",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Qual expressão Paulo utiliza em 1 Timóteo 3:16 para descrever o mistério de Deus se tornar homem, conforme a Quinta-feira?",
-    "alternativaA": "Plano da redenção",
-    "alternativaB": "Mistério da piedade",
-    "alternativaC": "Caminho da verdade",
-    "alternativaD": "Grande conflito universal",
-    "alternativaE": "Conselho da paz",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Segundo a citação de Ellen G. White na lição de Sexta-feira, qual será o tema de nosso estudo ao longo da eternidade?",
-    "alternativaA": "A história das nações da Terra",
-    "alternativaB": "Cristo e Sua obra de redenção",
-    "alternativaC": "As leis da física e da natureza",
-    "alternativaD": "As biografias dos heróis da fé",
-    "alternativaE": "A estrutura do santuário terrestre",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Na lição de Sexta-feira, a que Ellen White compara o amor de Deus em relação a todas as fontes de ternura humana?",
-    "alternativaA": "A uma pequena chama diante do sol",
-    "alternativaB": "A um pequeno riacho diante do oceano sem limites",
-    "alternativaC": "A uma gota de água diante de uma chuva torrencial",
-    "alternativaD": "A uma semente diante de uma floresta",
-    "alternativaE": "A uma estrela diante de toda a galáxia",
-    "respostaCorreta": "B",
+    "enunciado": "De acordo com o texto da Sexta-feira (Testemunhos para a Igreja), qual é a relação entre a profundidade da 'noite' e as 'estrelas' para o povo de Deus?",
+    "alternativaA": "Quanto mais profunda a noite, mais as estrelas se apagam",
+    "alternativaB": "As estrelas só aparecem no início da noite",
+    "alternativaC": "Quanto mais profunda a noite, mais brilhantes serão as estrelas",
+    "alternativaD": "A noite impede que as estrelas sejam vistas",
+    "alternativaE": "As estrelas representam os anjos que afastam a noite",
+    "respostaCorreta": "C",
     "tempoSegundos": 30
   }
 ]

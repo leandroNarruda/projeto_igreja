@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+import { Trophy } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
@@ -14,6 +16,7 @@ interface ClassificacaoItem {
   posicao: number
   userId: number
   nome: string
+  social_name?: string | null
   email: string
   acertos: number
   erros: number
@@ -78,6 +81,23 @@ export default function HomePage() {
                 porcentagem={resultado.porcentagem}
               />
             </div>
+            <div className="text-center mb-6">
+              <Link
+                href="/eventos#classificacao-geral"
+                className="
+                  inline-flex items-center gap-2 px-4 py-2.5
+                  text-blue-700 font-medium
+                  bg-blue-50 border border-blue-200 rounded-lg
+                  hover:bg-blue-100 hover:border-blue-300 hover:underline
+                  transition-colors duration-200
+                "
+              >
+                <Trophy className="size-5 shrink-0" aria-hidden />
+                <span className="underline decoration-blue-300 decoration-2 underline-offset-2">
+                  Ver classificação geral do evento
+                </span>
+              </Link>
+            </div>
             {classificacao.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
@@ -124,7 +144,11 @@ export default function HomePage() {
                               {index < 3 ? medalhas[index] : `${item.posicao}º`}
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
-                              {item.nome.split(' ')[0]}
+                              {
+                                (item.social_name?.trim() || item.nome).split(
+                                  ' '
+                                )[0]
+                              }
                             </h3>
                             <div className="space-y-1 text-sm text-gray-600">
                               <div>
@@ -175,9 +199,24 @@ export default function HomePage() {
               <p className="text-gray-600 text-lg mb-4">
                 Não há quiz ativo no momento.
               </p>
-              <p className="text-gray-500">
+              <p className="text-gray-500 mb-4">
                 Aguarde um novo quiz ser disponibilizado.
               </p>
+              <Link
+                href="/eventos#classificacao-geral"
+                className="
+                  inline-flex items-center gap-2 px-4 py-2.5
+                  text-blue-700 font-medium
+                  bg-blue-50 border border-blue-200 rounded-lg
+                  hover:bg-blue-100 hover:border-blue-300 hover:underline
+                  transition-colors duration-200
+                "
+              >
+                <Trophy className="size-5 shrink-0" aria-hidden />
+                <span className="underline decoration-blue-300 decoration-2 underline-offset-2">
+                  Ver classificação geral do evento
+                </span>
+              </Link>
             </div>
           </div>
         </div>
@@ -220,6 +259,23 @@ export default function HomePage() {
                 }}
               />
             </button>
+            <p className="mt-4 text-center">
+              <Link
+                href="/eventos#classificacao-geral"
+                className="
+                  inline-flex items-center gap-2 px-4 py-2.5
+                  text-blue-700 font-medium
+                  bg-blue-50 border border-blue-200 rounded-lg
+                  hover:bg-blue-100 hover:border-blue-300 hover:underline
+                  transition-colors duration-200
+                "
+              >
+                <Trophy className="size-5 shrink-0" aria-hidden />
+                <span className="underline decoration-blue-300 decoration-2 underline-offset-2">
+                  Ver classificação geral do evento
+                </span>
+              </Link>
+            </p>
           </div>
           {classificacao.length > 0 && (
             <div className="mt-8">
@@ -260,7 +316,11 @@ export default function HomePage() {
                           {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
                         <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
-                          {item.nome.split(' ')[0]}
+                          {
+                            (item.social_name?.trim() || item.nome).split(
+                              ' '
+                            )[0]
+                          }
                         </h3>
                         <div className="space-y-1 text-sm text-gray-600">
                           <div>

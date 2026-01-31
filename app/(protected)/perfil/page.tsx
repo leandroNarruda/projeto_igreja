@@ -38,6 +38,16 @@ export default function PerfilPage() {
                       {session.user?.name}
                     </p>
                   </div>
+                  {session.user?.socialName && (
+                    <div>
+                      <span className="text-sm text-gray-600">
+                        Como quer ser chamado:
+                      </span>
+                      <p className="text-gray-900 font-medium">
+                        {session.user.socialName}
+                      </p>
+                    </div>
+                  )}
                   <div>
                     <span className="text-sm text-gray-600">Email:</span>
                     <p className="text-gray-900 font-medium">
