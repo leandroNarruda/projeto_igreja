@@ -3,6 +3,8 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
 function getInitials(name: string | null | undefined): string {
   if (!name || !name.trim()) return '?'
@@ -15,13 +17,19 @@ function getInitials(name: string | null | undefined): string {
 
 export const Navbar = () => {
   const { data: session } = useSession()
+  const { quizEmAndamento } = useQuizUI()
 
   if (!session) {
     return null
   }
 
   return (
-    <nav className="bg-white shadow-md">
+    <motion.nav
+      className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md"
+      initial={false}
+      animate={{ y: quizEmAndamento ? '-100%' : 0 }}
+      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center h-16">
@@ -62,6 +70,6 @@ export const Navbar = () => {
           </Link>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   )
 }

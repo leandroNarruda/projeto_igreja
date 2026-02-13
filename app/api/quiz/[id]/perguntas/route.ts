@@ -13,6 +13,7 @@ interface PerguntaData {
   alternativaD: string
   alternativaE: string
   respostaCorreta: string
+  justificativa: string
   tempoSegundos: number | string
 }
 
@@ -48,6 +49,10 @@ function validarPergunta(
     !['A', 'B', 'C', 'D', 'E'].includes(pergunta.respostaCorreta)
   ) {
     erros.push(`${prefixo}Resposta correta deve ser A, B, C, D ou E`)
+  }
+
+  if (!pergunta.justificativa || pergunta.justificativa.trim() === '') {
+    erros.push(`${prefixo}Justificativa é obrigatória`)
   }
 
   if (!pergunta.tempoSegundos || Number(pergunta.tempoSegundos) < 1) {
@@ -139,6 +144,7 @@ export async function POST(
             alternativaD: pergunta.alternativaD.trim(),
             alternativaE: pergunta.alternativaE.trim(),
             respostaCorreta: pergunta.respostaCorreta,
+            justificativa: pergunta.justificativa.trim(),
             tempoSegundos: parseInt(String(pergunta.tempoSegundos)),
           },
         })
@@ -164,10 +170,15 @@ export async function POST(
         { status: 201 }
       )
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Erro ao criar pergunta(s):', error)
+    const message =
+      error instanceof Error ? error.message : 'Erro ao criar pergunta(s)'
     return NextResponse.json(
-      { error: 'Erro ao criar pergunta(s)' },
+      {
+        error: 'Erro ao criar pergunta(s)',
+        detalhes: process.env.NODE_ENV === 'development' ? message : undefined,
+      },
       { status: 500 }
     )
   }
@@ -244,7 +255,7 @@ export async function GET(
       () => Math.random() - 0.5
     )
 
-    // Retornar todas as perguntas embaralhadas (sem respostaCorreta)
+    // Retornar todas as perguntas embaralhadas (com respostaCorreta para feedback visual)
     return NextResponse.json({
       perguntas: perguntasEmbaralhadas.map(p => ({
         id: p.id,
@@ -255,6 +266,8 @@ export async function GET(
         alternativaD: p.alternativaD,
         alternativaE: p.alternativaE,
         tempoSegundos: p.tempoSegundos,
+        respostaCorreta: p.respostaCorreta,
+        justificativa: p.justificativa,
       })),
     })
   } catch (error: any) {

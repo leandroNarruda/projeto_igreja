@@ -13,8 +13,8 @@
 ### 3. A URL de produção aparece no topo da página (ex: https://seu-projeto.vercel.app)
 ### 4. Ou vá em Settings > Environment Variables e veja o valor de NEXTAUTH_URL
 ### 5. Ou use o comando: vercel ls (se tiver Vercel CLI instalado)
-@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0.._ikWX_2Kr3TNc0_8.IElerQwcXLG1E1nkw9qsTkA4xiH6XG8kPp23FMXeAfG7Tmr9bv0w0CLkqiNyFqjdnfHTYQcVFDp9-JypWngfWRMDnSuJ-ZXrKGuTB4l5CI-PIdYsjeOZxiJAdVIGFiGAMmTr7zhmxessgcaqBV7mV7UMXn2wR41rcW2zw4WKFQRTb9yyN1VWYdvgtcL1WH2-vZe-ODNjEngQkKUq9XbFpsSXc7iZ7OWBDlF3Ir0.Kt5wDTZxdz1sclLKNgHejw
-@quizId = 3
+@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..DEJmdHuxGfIE9vy5.kSqMyGSCh4PKlsxvJeIwwThED6sBh5eW2g2PvkbBp_Ky0pao0NCP74yVlB5Mm60EAMRGM58aIvwHXYMttMWX22y-nX8l0IUgDPntWpjpd0ADgZlYjqhdjFDQdQlPOqtrZhP_JgKtPBf3gf7Dg1qzIaBUX6F3gu8vkqsde9vnv8EMc5LQn41M6z4gP96251iNXV3nfR01-J_FPzUnqOXI5pWImzXWjCbxLUbZ0tc.qWbqLtpTdN6IFoM72yqoWQ
+@quizId = 5
 @userId = 1
 
 ### ============================================
@@ -102,146 +102,164 @@ Cookie: next-auth.session-token={{sessionToken}}
 
 [
   {
-    "enunciado": "De acordo com o texto de Sábado, como é possível sermos a 'luz do mundo'?",
-    "alternativaA": "Através de boas obras independentes",
-    "alternativaB": "Somente através de uma conexão íntima com Jesus",
-    "alternativaC": "Através do estudo acadêmico da Bíblia",
-    "alternativaD": "Seguindo os estatutos de Deuteronômio fielmente",
-    "alternativaE": "Através de visões e sonhos proféticos",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
+    "enunciado": "Com base na introdução de Sábado, qual é o objetivo central dos princípios compartilhados por Paulo nos versículos finais da carta?",
+    "alternativaA": "Estabelecer uma liturgia rígida para as reuniões congregacionais.",
+    "alternativaB": "Apresentar estratégias de defesa jurídica perante as leis de Roma.",
+    "alternativaC": "Revelar segredos práticos para viver uma vida cristã de alegria.",
+    "alternativaD": "Organizar a hierarquia administrativa das igrejas da Ásia Menor.",
+    "alternativaE": "Debater questões teológicas complexas sobre a natureza do espírito.",
+    "respostaCorreta": "C",
+    "tempoSegundos": 30,
+    "justificativa": "A lição afirma que Paulo compartilha segredos para viver uma vida alegre, independentemente das circunstâncias externas."
   },
   {
-    "enunciado": "Qual livro bíblico é citado no Sábado para afirmar que a obediência aos estatutos de Deus é a sabedoria e entendimento do povo aos olhos das outras nações?",
-    "alternativaA": "Deuteronômio",
-    "alternativaB": "Êxodo",
-    "alternativaC": "Salmos",
-    "alternativaD": "Provérbios",
-    "alternativaE": "Isaías",
+    "enunciado": "No conteúdo de Sábado, o que é indicado como a fonte de força para enfrentar os desafios e pressões da vida cotidiana?",
+    "alternativaA": "A adoção de princípios bíblicos que geram uma paz interior estável.",
+    "alternativaB": "A confiança plena na eficiência dos sistemas de governo terrenos.",
+    "alternativaC": "A busca por cargos de liderança para influenciar a sociedade local.",
+    "alternativaD": "O isolamento social absoluto para evitar as tentações do mundo.",
+    "alternativaE": "A dependência de milagres visíveis para sustentar a fé em crises.",
     "respostaCorreta": "A",
-    "tempoSegundos": 30
+    "tempoSegundos": 30,
+    "justificativa": "Existem princípios que nos ajudam a encontrar força interior e experimentar uma paz estável que somente Deus pode dar."
   },
   {
-    "enunciado": "Na lição de Domingo, o que Paulo quer dizer com a expressão 'com temor e tremor' em Filipenses 2:12?",
-    "alternativaA": "Medo constante do julgamento final",
-    "alternativaB": "Receio de falhar nos esforços humanos",
-    "alternativaC": "Sentir a presença de Deus e a necessidade de obedecê-Lo",
-    "alternativaD": "Ansiedade em relação à perseguição romana",
-    "alternativaE": "Pavor físico diante da majestade divina",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "enunciado": "Segundo o estudo de Domingo, como Paulo se posiciona emocionalmente ao advertir sobre os 'inimigos da cruz de Cristo'?",
+    "alternativaA": "Ele redige uma condenação formal com termos de desprezo e ódio.",
+    "alternativaB": "Ele incentiva os fiéis a realizarem debates públicos e confrontos.",
+    "alternativaC": "Ele solicita que as autoridades civis punam aqueles que discordam.",
+    "alternativaD": "Ele demonstra amor profundo por eles e chega a chorar por sua condição.",
+    "alternativaE": "Ele adota uma postura de indiferença total para não contaminar a fé.",
+    "respostaCorreta": "D",
+    "tempoSegundos": 30,
+    "justificativa": "O texto destaca o amor de Paulo por aqueles com quem discorda, mencionando explicitamente que ele chora por eles."
   },
   {
-    "enunciado": "Segundo o estudo de Domingo, qual é a origem da fé na vida do crente?",
-    "alternativaA": "É um mérito alcançado pelo estudo",
-    "alternativaB": "É uma decisão puramente humana e racional",
-    "alternativaC": "É um dom encorajado pela ação do Espírito Santo",
-    "alternativaD": "É um subproduto de boas obras constantes",
-    "alternativaE": "É herdada de pais e antepassados fiéis",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "enunciado": "No texto de Domingo, qual é a função da Cruz mencionada para diferenciar os modelos de conduta em Efésios 2:11-14?",
+    "alternativaA": "Validar a superioridade moral dos cristãos sobre os cidadãos pagãos.",
+    "alternativaB": "Exigir o cumprimento rigoroso de ritos para provar a fidelidade real.",
+    "alternativaC": "Separar os crentes em grupos distintos baseados no conhecimento bíblico.",
+    "alternativaD": "Garantir sucesso material imediato aos que seguem o exemplo de Paulo.",
+    "alternativaE": "Derrubar barreiras e nivelar todos como pecadores carentes de Salvador.",
+    "respostaCorreta": "E",
+    "tempoSegundos": 30,
+    "justificativa": "A Cruz derruba barreiras e coloca todos no mesmo nível, reconhecendo a necessidade comum de salvação."
   },
   {
-    "enunciado": "De acordo com o estudo de Segunda-feira, qual o significado da palavra 'irrepreensível' em Filipenses 2:15?",
-    "alternativaA": "Perfeito em todos os sentidos",
-    "alternativaB": "Sem culpa ou sem censura",
-    "alternativaC": "Aquele que nunca foi tentado",
-    "alternativaD": "Alguém que não comete erros sociais",
-    "alternativaE": "Uma pessoa isolada do mundo",
+    "enunciado": "De acordo com a lição de Segunda-feira, qual é a promessa definitiva de Cristo em relação aos nossos 'humildes corpos'?",
+    "alternativaA": "Que eles serão restaurados à perfeição física da juventude biológica.",
+    "alternativaB": "Que serão transformados para serem conforme o corpo glorioso de Jesus.",
+    "alternativaC": "Que eles se tornarão invisíveis para habitar em dimensões espirituais.",
+    "alternativaD": "Que permanecerão em estado de sono eterno enquanto a alma ascende.",
+    "alternativaE": "Que serão gradualmente purificados através de rituais de consagração.",
     "respostaCorreta": "B",
-    "tempoSegundos": 30
+    "tempoSegundos": 30,
+    "justificativa": "A nossa pátria está no céu e aguardamos a transformação de nossos corpos humildes para serem semelhantes ao corpo glorioso de Cristo."
   },
   {
-    "enunciado": "Qual é o significado literal da palavra grega traduzida como 'inofensivos' em Filipenses 2:15?",
-    "alternativaA": "Manso como um cordeiro",
-    "alternativaB": "Sem armas de guerra",
-    "alternativaC": "Não misturado, puro",
-    "alternativaD": "Silencioso e discreto",
-    "alternativaE": "Amável com os inimigos",
+    "enunciado": "Conforme o estudo de Segunda-feira, por que a imortalidade cristã é única na visão do filósofo Luc Ferry?",
+    "alternativaA": "Porque oferece uma vitória definitiva em termos de identidade individual.",
+    "alternativaB": "Porque promete a fusão da alma com o anonimato da divindade eterna.",
+    "alternativaC": "Porque garante a preservação da espécie através de legados históricos.",
+    "alternativaD": "Porque foca na transcendência do medo através de abstrações mentais.",
+    "alternativaE": "Porque sugere a reencarnação cíclica para o progresso moral constante.",
+    "respostaCorreta": "A",
+    "tempoSegundos": 30,
+    "justificativa": "Diferente de abstrações, o cristianismo oferece imortalidade pessoal e vitória sobre a morte mantendo a identidade individual."
+  },
+  {
+    "enunciado": "No conteúdo de Terça-feira, que atitude específica Paulo recomenda como o antídoto contra a ansiedade?",
+    "alternativaA": "O estudo intelectual aprofundado de todas as cerimônias da lei judaica.",
+    "alternativaB": "A busca por isolamento em locais desertos para meditação filosófica.",
+    "alternativaC": "A apresentação de pedidos a Deus com oração, súplica e ações de graças.",
+    "alternativaD": "O desenvolvimento de técnicas de controle mental para ignorar os fatos.",
+    "alternativaE": "A dependência exclusiva do apoio psicológico de outros líderes da igreja.",
     "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "tempoSegundos": 30,
+    "justificativa": "O texto afirma que, para não ficarmos preocupados, devemos apresentar nossos pedidos a Deus com oração e gratidão."
   },
   {
-    "enunciado": "Na Terça-feira, que imagem Paulo utiliza para se referir à possibilidade de sua morte a serviço de Cristo?",
-    "alternativaA": "Um grão de trigo que cai na terra",
-    "alternativaB": "Uma vela que se apaga",
-    "alternativaC": "Ser derramado como libação",
-    "alternativaD": "Um soldado que tomba em batalha",
-    "alternativaE": "Uma ovelha levada ao matadouro",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "enunciado": "Segundo o estudo de Terça-feira, o que o termo grego 'nous' indica sobre a natureza da paz de Deus?",
+    "alternativaA": "Que ela é fruto de um alto nível de instrução e de sabedoria teológica.",
+    "alternativaB": "Que ela exige o afastamento total de qualquer tipo de conflito exterior.",
+    "alternativaC": "Que ela é uma emoção passageira que depende do estado de ânimo diário.",
+    "alternativaD": "Que ela é o resultado direto da ausência de problemas na vida cotidiana.",
+    "alternativaE": "Que ela excede a capacidade de compreensão da mente humana racional.",
+    "respostaCorreta": "E",
+    "tempoSegundos": 30,
+    "justificativa": "O uso de 'nous' sugere que a paz de Deus impacta a vida de forma que não pode ser compreendida apenas pela mente racional."
   },
   {
-    "enunciado": "Segundo o texto de Terça-feira, as libações na Bíblia hebraica geralmente ocorrem em qual contexto?",
-    "alternativaA": "Isoladamente, como um ato único de devoção",
-    "alternativaB": "Apenas em cerimônias de coroação de reis",
-    "alternativaC": "Acompanhando um sacrifício",
-    "alternativaD": "Durante as refeições diárias dos sacerdotes",
-    "alternativaE": "No início das viagens missionárias",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "enunciado": "No estudo de Quarta-feira, qual é a função da paz de Deus baseada na metáfora militar do termo 'phroureō'?",
+    "alternativaA": "Atuar como um general que ordena a destruição imediata dos inimigos.",
+    "alternativaB": "Servir como um escudo que impede o acesso de novos membros à igreja.",
+    "alternativaC": "Funcionar como uma arma de ataque contra os sistemas de governo ímpios.",
+    "alternativaD": "Atuar como uma guarnição de soldados protegendo corações e mentes.",
+    "alternativaE": "Servir como um tribunal militar que julga as intenções de cada fiel.",
+    "respostaCorreta": "D",
+    "tempoSegundos": 30,
+    "justificativa": "O termo 'phroureō' refere-se a soldados protegendo uma cidade, indicando que a paz de Deus guarda o interior do crente."
   },
   {
-    "enunciado": "De acordo com a Quarta-feira, qual característica de Timóteo é destacada por ter sido testada por provações?",
-    "alternativaA": "Sua eloquência na pregação",
-    "alternativaB": "Seu caráter comprovado",
-    "alternativaC": "Sua juventude vigorosa",
-    "alternativaD": "Sua ascendência judaica",
-    "alternativaE": "Sua habilidade como tradutor",
+    "enunciado": "Conforme a lição de Quarta-feira, por que Paulo omitiu as virtudes cardeais gregas ao listar os temas para pensamento?",
+    "alternativaA": "Porque os gregos não possuíam nenhum conceito de ética ou de moralidade.",
+    "alternativaB": "Porque o foco de Paulo estava nas virtudes bíblicas baseadas em Deus.",
+    "alternativaC": "Porque ele desejava criar uma nova filosofia separada do cristianismo.",
+    "alternativaD": "Porque as virtudes gregas eram consideradas pecaminosas em qualquer nível.",
+    "alternativaE": "Porque ele não conhecia a cultura de Filipos quando escreveu a epístola.",
     "respostaCorreta": "B",
-    "tempoSegundos": 30
+    "tempoSegundos": 30,
+    "justificativa": "Paulo foca nas virtudes bíblicas (verdade, justiça, pureza) em vez das virtudes cardeais gregas (prudência, temperança, etc.)."
   },
   {
-    "enunciado": "Qual é o significado literal da palavra grega 'isopsichon', usada por Paulo para descrever Timóteo em Filipenses 2:20?",
-    "alternativaA": "Amigo de confiança",
-    "alternativaB": "Igual em alma",
-    "alternativaC": "Irmão de sangue",
-    "alternativaD": "Servo fiel",
-    "alternativaE": "Companheiro de viagem",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
+    "enunciado": "Segundo o conteúdo de Quinta-feira, qual é o princípio revelado para viver com alegria independente da escassez ou da fartura?",
+    "alternativaA": "Aprender a viver contente através do fortalecimento que vem de Cristo.",
+    "alternativaB": "A acumulação preventiva de recursos para garantir estabilidade futura.",
+    "alternativaC": "A negação psicológica do sofrimento através de mantras de positividade.",
+    "alternativaD": "A dependência financeira constante de doações de outras congregações.",
+    "alternativaE": "A crença de que a fidelidade religiosa trará sempre riquezas materiais.",
+    "respostaCorreta": "A",
+    "tempoSegundos": 30,
+    "justificativa": "Paulo afirma que aprendeu o segredo de viver contente em toda situação, fortalecido por Aquele que o capacita."
   },
   {
-    "enunciado": "Segundo a Quinta-feira, por que Paulo precisaria do 'manto' deixado em Trôade que ele pediu a Timóteo?",
-    "alternativaA": "Para usá-lo como um sinal de autoridade",
-    "alternativaB": "Devido ao frio em sua cela de pedra",
-    "alternativaC": "Para doá-lo a um prisioneiro necessitado",
-    "alternativaD": "Porque era uma vestimenta sagrada",
-    "alternativaE": "Para vendê-lo e comprar comida",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "A palavra grega para 'estimar' ou 'honrar' usada para Epafrodito também é aplicada no Novo Testamento para descrever:",
-    "alternativaA": "O valor das ofertas das viúvas",
-    "alternativaB": "A coroa de glória dos mártires",
-    "alternativaC": "Jesus como a 'preciosa' pedra angular",
-    "alternativaD": "A sabedoria dos líderes da igreja",
-    "alternativaE": "O brilho das estrelas no céu",
+    "enunciado": "No texto de Quinta-feira, qual explicação bíblica é dada para a ausência de bênçãos que estão em harmonia com a vontade de Deus?",
+    "alternativaA": "A falta de cumprimento de ritos específicos de purificação diária.",
+    "alternativaB": "O destino predeterminado que impede a mudança das circunstâncias.",
+    "alternativaC": "A omissão do pedido direto em oração, conforme ensina Tiago 4:2.",
+    "alternativaD": "A necessidade de Deus testar a lealdade através de privações eternas.",
+    "alternativaE": "A insuficiência de obras de caridade para merecer a atenção divina.",
     "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "tempoSegundos": 30,
+    "justificativa": "O texto cita Tiago 4:2 enfatizando que muitas vezes não recebemos certas bênçãos simplesmente porque não pedimos."
   },
   {
-    "enunciado": "Segundo a citação de Ellen White na Sexta-feira, quem será considerado 'o mais próximo de Cristo'?",
-    "alternativaA": "Aquele que realizou mais milagres",
-    "alternativaB": "Aquele que conheceu mais línguas",
-    "alternativaC": "Aquele que bebeu mais profundamente do espírito de Seu amor altruísta",
-    "alternativaD": "Aquele que ocupou os cargos mais altos na igreja",
-    "alternativaE": "Aquele que sofreu as mortes mais cruéis",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "enunciado": "Conforme o estudo de Sexta-feira, qual é o perigo de concentrar os pensamentos excessivamente nas próprias falhas?",
+    "alternativaA": "Aumentar a vigilância e tornar o cristão imune a novos pecados graves.",
+    "alternativaB": "Gerar um sentimento de orgulho por ser mais consciente que os outros.",
+    "alternativaC": "Promover uma reforma de caráter baseada no medo da punição final.",
+    "alternativaD": "Diminuir a força necessária para vencer as próprias imperfeições.",
+    "alternativaE": "Alcançar a perfeição mais rapidamente através do constante remorso.",
+    "respostaCorreta": "D",
+    "tempoSegundos": 30,
+    "justificativa": "Ellen White alerta que quanto mais demoramos o pensamento em nossas imperfeições, menos força teremos para vencê-las."
   },
   {
-    "enunciado": "De acordo com o texto da Sexta-feira (Testemunhos para a Igreja), qual é a relação entre a profundidade da 'noite' e as 'estrelas' para o povo de Deus?",
-    "alternativaA": "Quanto mais profunda a noite, mais as estrelas se apagam",
-    "alternativaB": "As estrelas só aparecem no início da noite",
-    "alternativaC": "Quanto mais profunda a noite, mais brilhantes serão as estrelas",
-    "alternativaD": "A noite impede que as estrelas sejam vistas",
-    "alternativaE": "As estrelas representam os anjos que afastam a noite",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
+    "enunciado": "De acordo com a lição de Sexta-feira, qual é a condição para que o cristão tenha poder proporcional às suas necessidades diárias?",
+    "alternativaA": "Manter um cargo de alta relevância oficial na estrutura da igreja local.",
+    "alternativaB": "Dominar profundamente os idiomas originais para entender cada preceito.",
+    "alternativaC": "Realizar grandes sacrifícios públicos para ser visto como um fiel modelo.",
+    "alternativaD": "Aguardar pacientemente por uma manifestação espiritual milagrosa futura.",
+    "alternativaE": "Render-se diariamente a Deus para receber novas doses da Sua graça.",
+    "respostaCorreta": "E",
+    "tempoSegundos": 30,
+    "justificativa": "O poder proporcional às necessidades vem daqueles que se rendem diariamente e recebem novas provisões da graça divina."
   }
 ]
+
+
+
+
 
 ### Buscar próxima pergunta não respondida (requer autenticação)
 ### Retorna uma pergunta aleatória que o usuário ainda não respondeu

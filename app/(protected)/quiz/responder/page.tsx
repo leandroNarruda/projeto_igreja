@@ -9,6 +9,7 @@ import { Modal } from '@/components/ui/Modal'
 import { Loading } from '@/components/ui/Loading'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { useQuizAtivo, useEnviarRespostas } from '@/hooks/useQuiz'
+import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
 interface QuizAtivo {
   id: number
@@ -25,6 +26,8 @@ interface Pergunta {
   alternativaD: string
   alternativaE: string
   tempoSegundos: number
+  respostaCorreta?: string
+  justificativa?: string
 }
 
 export default function ResponderQuizPage() {
@@ -46,6 +49,14 @@ export default function ResponderQuizPage() {
   const [mostrarModalSaida, setMostrarModalSaida] = useState(false)
   const [quizEmAndamento, setQuizEmAndamento] = useState(false)
   const pendenteNavegacao = useRef<string | null>(null)
+  const { setQuizEmAndamento: setQuizUIEmAndamento } = useQuizUI()
+
+  // Sincronizar estado do quiz com o contexto (oculta/mostra footer)
+  useEffect(() => {
+    const emAndamento = quizEmAndamento && !resultado
+    setQuizUIEmAndamento(emAndamento)
+    return () => setQuizUIEmAndamento(false)
+  }, [quizEmAndamento, resultado, setQuizUIEmAndamento])
 
   // Extrair dados do quiz ativo (memoizado para evitar recriação)
   const quizAtivo: QuizAtivo | null = useMemo(() => {

@@ -2,14 +2,17 @@
 
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { Home, Calendar, User, Settings } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
+import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
 export const Footer = () => {
   const { data: session } = useSession()
   const pathname = usePathname()
   const router = useRouter()
   const { isAdmin } = usePermissions()
+  const { quizEmAndamento } = useQuizUI()
 
   if (!session) {
     return null
@@ -47,7 +50,12 @@ export const Footer = () => {
   }
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
+    <motion.footer
+      className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50"
+      initial={false}
+      animate={{ y: quizEmAndamento ? '100%' : 0 }}
+      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+    >
       <div className="max-w-7xl mx-auto">
         <nav className="flex justify-around items-center h-16">
           {navigationItems.map(item => {
@@ -92,6 +100,6 @@ export const Footer = () => {
           })}
         </nav>
       </div>
-    </footer>
+    </motion.footer>
   )
 }

@@ -92,6 +92,7 @@ model Pergunta {
   alternativaD    String
   alternativaE    String
   respostaCorreta String            // "A", "B", "C", "D" ou "E"
+  justificativa   String
   tempoSegundos   Int
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt

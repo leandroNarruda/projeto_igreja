@@ -4,6 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import { SessionProvider } from '@/components/providers/SessionProvider'
 import { QueryProvider } from '@/components/providers/QueryProvider'
+import { QuizUIProvider } from '@/components/providers/QuizUIProvider'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { MainContent } from '@/components/layout/MainContent'
@@ -67,10 +68,12 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <SessionProvider>
           <QueryProvider>
-            <Navbar />
-            <MainContent>{children}</MainContent>
-            <Footer />
-            <PWAInstallPrompt />
+            <QuizUIProvider>
+              <Navbar />
+              <MainContent>{children}</MainContent>
+              <Footer />
+              <PWAInstallPrompt />
+            </QuizUIProvider>
           </QueryProvider>
         </SessionProvider>
         <Script src="/sw-register.js" strategy="afterInteractive" />
