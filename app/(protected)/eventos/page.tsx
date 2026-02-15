@@ -99,42 +99,6 @@ export default function EventosPage() {
             </div>
           </div>
 
-          {/* Seção de Prêmios */}
-          <div className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-lg shadow-lg p-8 mb-8 text-white">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold mb-4">
-                🏅 Prêmios para os Top 3
-              </h2>
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
-                <p className="text-xl mb-4">
-                  Os três primeiros colocados na classificação geral ao final do
-                  ano receberão:
-                </p>
-                <div className="bg-white text-yellow-900 rounded-lg p-4 font-bold text-2xl">
-                  1 Ano de Assinatura na Plataforma
-                  <br />
-                  <span className="text-xl">
-                    &ldquo;A Bíblia comentada com Rodrigo Silva&rdquo;
-                  </span>
-                </div>
-              </div>
-              <div className="flex justify-center gap-8 mt-6">
-                <div className="text-center">
-                  <div className="text-5xl mb-2">🥇</div>
-                  <div className="font-semibold">1º Lugar</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-5xl mb-2">🥈</div>
-                  <div className="font-semibold">2º Lugar</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-5xl mb-2">🥉</div>
-                  <div className="font-semibold">3º Lugar</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Seção de Classificação Geral */}
           <div
             id="classificacao-geral"
