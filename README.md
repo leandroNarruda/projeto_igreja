@@ -97,6 +97,22 @@ projeto_igreja/
 └── middleware.ts        # Middleware de proteção de rotas
 ```
 
+## 📚 Documentação
+
+Este README contém informações básicas de setup. Para documentação completa:
+
+**[📖 Acessar Documentação Completa →](./docs/README.md)**
+
+### Principais Seções
+
+- **[Arquitetura](./docs/arquitetura.md)** - Visão geral do sistema, fluxos e modelo de dados
+- **[API - Backend](./docs/api/README.md)** - Documentação de todos os endpoints
+  - [Autenticação](./docs/api/auth.md)
+  - [Quiz](./docs/api/quiz.md)
+  - [Usuário](./docs/api/user.md)
+- **[Frontend](./docs/frontend/README.md)** - Estrutura e componentes do frontend
+  - [Rotas e Páginas](./docs/frontend/rotas.md)
+
 ## 🔐 Rotas
 
 ### Rotas Públicas (Não Autenticadas)
@@ -104,9 +120,16 @@ projeto_igreja/
 - `/login` - Página de login
 - `/cadastro` - Página de registro
 
-### Rotas Protegidas (Autenticadas)
+### Rotas Protegidas (Usuário Autenticado)
 
-- `/home` - Página inicial após login
+- `/home` - Dashboard principal
+- `/perfil` - Perfil do usuário
+- `/eventos` - Classificação geral do evento
+- `/quiz/responder` - Responder quiz ativo
+
+### Rotas de Admin
+
+- `/quiz` - Gerenciamento de quizzes (criar, editar, adicionar perguntas)
 
 ## 🛠️ Scripts Disponíveis
 
@@ -121,13 +144,29 @@ projeto_igreja/
 
 ## 📝 Funcionalidades
 
-- ✅ Cadastro de usuários
-- ✅ Login com email e senha
-- ✅ Proteção de rotas com middleware
-- ✅ Sessão persistente
+### Autenticação e Perfil
+- ✅ Cadastro de usuários com email e senha
+- ✅ Login com sessão JWT persistente
+- ✅ Proteção de rotas com middleware NextAuth
+- ✅ Upload de avatar de perfil
+- ✅ Nome social customizável
 - ✅ Logout
-- ✅ Interface responsiva com Tailwind CSS
+
+### Sistema de Quiz
+- ✅ Gerenciamento de quizzes (admin)
+- ✅ Quiz de múltipla escolha (5 alternativas)
+- ✅ Timer por pergunta
+- ✅ Feedback visual de acertos/erros
+- ✅ Cálculo automático de resultado
+- ✅ Classificação por quiz e geral
+- ✅ Apenas um quiz ativo por vez
+
+### Interface
+- ✅ Design responsivo com Tailwind CSS
+- ✅ Animações com Framer Motion
 - ✅ Componentes reutilizáveis
+- ✅ Loading states e error handling
+- ✅ Modal de boas-vindas
 
 ## 🔒 Segurança
 
