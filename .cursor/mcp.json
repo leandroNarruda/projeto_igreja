@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "prisma-db": {
+      "command": "npm",
+      "args": ["run", "mcp:dev"],
+      "env": {
+        "MCP_DATABASE_URL_LOCAL": "${MCP_DATABASE_URL_LOCAL}",
+        "MCP_DATABASE_URL_STAGING": "${MCP_DATABASE_URL_STAGING}",
+        "MCP_DATABASE_URL_PRODUCTION": "${MCP_DATABASE_URL_PRODUCTION}"
+      }
+    }
+  }
+}

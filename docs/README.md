@@ -17,6 +17,9 @@ Visão geral da arquitetura do sistema, fluxos principais e estrutura de camadas
 - [Visão Geral do Frontend](./frontend/README.md)
 - [Rotas e Páginas](./frontend/rotas.md) - Mapeamento de todas as rotas
 
+### 🔧 Ferramentas de Desenvolvimento
+- [Prisma MCP Server](./mcp/prisma-mcp.md) - Consultar banco de dados via chat no Cursor
+
 ## Navegação Rápida
 
 | Seção | Descrição |
