@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { publishRankingUpdated } from '@/lib/realtime/publish'
 
 export const dynamic = 'force-dynamic'
 
@@ -151,6 +152,11 @@ export async function POST(request: Request) {
         porcentagem,
       }
     })
+
+    // Realtime: publicar classificação atualizada (não bloqueia resposta em caso de falha)
+    publishRankingUpdated(quizId).catch(err =>
+      console.error('[quiz/resposta] publishRankingUpdated:', err)
+    )
 
     return NextResponse.json({
       resultado,

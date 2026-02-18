@@ -34,7 +34,8 @@ export function useClassificacaoQuiz(quizId: number | null) {
       }
       return response.json()
     },
-    enabled: !!quizId, // só executa se quizId existir
+    enabled: !!quizId,
+    refetchOnWindowFocus: false, // atualização via realtime (Ably)
   })
 }
 
@@ -90,6 +91,7 @@ export function useClassificacaoGeral() {
       }
       return response.json()
     },
+    refetchOnWindowFocus: false, // atualização via realtime (Ably)
   })
 }
 

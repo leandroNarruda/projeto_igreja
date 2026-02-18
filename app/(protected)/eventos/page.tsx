@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useClassificacaoGeral } from '@/hooks/useQuiz'
+import { useRankingGeralRealtime } from '@/hooks/useRankingRealtime'
 import { Loading } from '@/components/ui/Loading'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { Card } from '@/components/ui/Card'
@@ -21,6 +22,7 @@ interface ClassificacaoGeralItem {
 export default function EventosPage() {
   const { data, isLoading } = useClassificacaoGeral()
   const classificacao = data?.classificacao || []
+  useRankingGeralRealtime()
 
   useEffect(() => {
     if (

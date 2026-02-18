@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { QuizResult } from '@/components/quiz/QuizResult'
 import { useQuizAtivo, useClassificacaoQuiz } from '@/hooks/useQuiz'
+import { useRankingRealtime } from '@/hooks/useRankingRealtime'
 import { Loading } from '@/components/ui/Loading'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { WelcomeModal } from '@/components/ui/WelcomeModal'
@@ -38,6 +39,7 @@ export default function HomePage() {
   const { data: quizData, isLoading } = useQuizAtivo()
   const quizId = quizData?.quiz?.id
   const { data: classificacaoData } = useClassificacaoQuiz(quizId || null)
+  useRankingRealtime(quizId ?? null)
 
   const quizAtivo = quizData?.quiz
   const jaRespondeu = quizData?.jaRespondeu || false
