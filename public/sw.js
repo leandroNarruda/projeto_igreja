@@ -1,4 +1,4 @@
-const CACHE_NAME = 'projeto-igreja-v2';
+const CACHE_NAME = 'projeto-igreja-v3';
 const VERSION_URL = '/version.json';
 const STATIC_ASSETS = [
   '/',
@@ -10,6 +10,8 @@ const STATIC_ASSETS = [
   '/images/logos/logo_192.png',
   '/images/logos/logo_384.png',
   '/images/logos/logo_512.png',
+  '/images/logos/logo_192_maskable.png',
+  '/images/logos/logo_512_maskable.png',
   '/images/logos/logo_1024.png',
   '/images/backgrounds/background_1.jpeg',
   '/manifest.json'
