@@ -43,17 +43,29 @@ export function usePushNotifications() {
       return
     }
 
+    const applyState = (
+      registration: ServiceWorkerRegistration,
+      perm: NotificationPermission
+    ) => {
+      registration.pushManager.getSubscription().then(subscription => {
+        setState(
+          subscription
+            ? 'subscribed'
+            : perm === 'granted'
+              ? 'unsubscribed'
+              : 'prompt'
+        )
+      }).catch(() => setState('prompt'))
+    }
+
+    let readyTimeout: ReturnType<typeof setTimeout> | undefined
     try {
+      readyTimeout = setTimeout(() => setState('prompt'), 8000)
       const registration = await navigator.serviceWorker.ready
-      const subscription = await registration.pushManager.getSubscription()
-      setState(
-        subscription
-          ? 'subscribed'
-          : permission === 'granted'
-            ? 'unsubscribed'
-            : 'prompt'
-      )
+      clearTimeout(readyTimeout)
+      applyState(registration, permission)
     } catch {
+      clearTimeout(readyTimeout)
       setState('prompt')
     }
   }, [])

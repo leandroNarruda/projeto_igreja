@@ -140,11 +140,11 @@ self.addEventListener('push', (event) => {
   }
 
   // Vibração ao receber (Android; iOS pode ignorar)
-  if (self.navigator.vibrate) {
-    try {
+  try {
+    if (self.navigator && typeof self.navigator.vibrate === 'function') {
       self.navigator.vibrate([200, 100, 200]);
-    } catch (_) {}
-  }
+    }
+  } catch (_) {}
 
   const options = {
     body: data.body || '',
