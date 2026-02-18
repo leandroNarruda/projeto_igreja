@@ -1,4 +1,4 @@
-const CACHE_NAME = 'projeto-igreja-v3';
+const CACHE_NAME = 'projeto-igreja-v4';
 const VERSION_URL = '/version.json';
 const STATIC_ASSETS = [
   '/',
