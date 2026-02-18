@@ -139,12 +139,20 @@ self.addEventListener('push', (event) => {
     data = { title: 'Bom de lição', body: event.data.text() };
   }
 
+  // Vibração ao receber (Android; iOS pode ignorar)
+  if (self.navigator.vibrate) {
+    try {
+      self.navigator.vibrate([200, 100, 200]);
+    } catch (_) {}
+  }
+
   const options = {
     body: data.body || '',
     icon: data.icon || '/images/logos/logo_192.png',
     badge: data.badge || '/images/logos/logo_96.png',
     tag: data.tag || 'default',
     renotify: true,
+    requireInteraction: true,
     data: { url: data.url || '/' },
   };
 
