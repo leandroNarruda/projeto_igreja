@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth'
 import { isAdmin } from '@/lib/permissions'
 import { prisma } from '@/lib/prisma'
+import { notifyNewQuizAvailable } from '@/lib/push/notifications'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,6 +71,10 @@ export async function PUT(
         },
       },
     })
+
+    if (ativo === true) {
+      notifyNewQuizAvailable(quiz.tema, quiz.id).catch(() => {})
+    }
 
     return NextResponse.json({
       message: 'Quiz atualizado com sucesso',

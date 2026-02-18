@@ -4,9 +4,10 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { PageTransition } from '@/components/layout/PageTransition'
-import { Camera, LogOut, RotateCw } from 'lucide-react'
+import { Bell, BellOff, Camera, LogOut, RotateCw } from 'lucide-react'
 import Cropper from 'react-easy-crop'
 import type { Area, Point } from 'react-easy-crop'
+import { usePushNotifications } from '@/hooks/usePushNotifications'
 
 function getInitials(name: string | null | undefined): string {
   if (!name || !name.trim()) return '?'
@@ -86,6 +87,8 @@ export default function PerfilPage() {
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  const [pushLoading, setPushLoading] = useState(false)
+  const push = usePushNotifications()
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -288,13 +291,65 @@ export default function PerfilPage() {
                 <h2 className="text-lg font-semibold text-gray-800 mb-2">
                   Configurações
                 </h2>
-                <p className="text-gray-600 mb-4">
-                  Em breve você poderá gerenciar suas configurações aqui.
-                </p>
+
+                {push.isSupported && (
+                  <div className="flex items-center justify-between py-3">
+                    <div className="flex items-center gap-3">
+                      {push.isSubscribed ? (
+                        <Bell className="h-5 w-5 text-blue-600" />
+                      ) : (
+                        <BellOff className="h-5 w-5 text-gray-400" />
+                      )}
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">
+                          Notificações push
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {push.state === 'denied'
+                            ? 'Bloqueado nas configurações do navegador'
+                            : push.isSubscribed
+                              ? 'Você receberá avisos de novos quizzes e eventos'
+                              : 'Receba avisos de novos quizzes e eventos'}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={
+                        pushLoading ||
+                        push.state === 'denied' ||
+                        push.state === 'loading'
+                      }
+                      onClick={async () => {
+                        setPushLoading(true)
+                        if (push.isSubscribed) {
+                          await push.unsubscribe()
+                        } else {
+                          await push.subscribe()
+                        }
+                        setPushLoading(false)
+                      }}
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                        push.isSubscribed ? 'bg-blue-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          push.isSubscribed ? 'translate-x-5' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                )}
+
+                {push.error && (
+                  <p className="text-sm text-red-600 mt-1">{push.error}</p>
+                )}
+
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors font-medium"
+                  className="flex items-center gap-2 px-4 py-2 mt-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors font-medium"
                 >
                   <LogOut className="h-5 w-5" />
                   Sair da conta
