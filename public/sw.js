@@ -139,13 +139,6 @@ self.addEventListener('push', (event) => {
     data = { title: 'Bom de lição', body: event.data.text() };
   }
 
-  // Vibração ao receber (Android; iOS pode ignorar)
-  try {
-    if (self.navigator && typeof self.navigator.vibrate === 'function') {
-      self.navigator.vibrate([200, 100, 200]);
-    }
-  } catch (_) {}
-
   const options = {
     body: data.body || '',
     icon: data.icon || '/images/logos/logo_192.png',
