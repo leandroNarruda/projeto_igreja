@@ -1,18 +1,20 @@
-const CACHE_NAME = 'projeto-igreja-v4';
+const CACHE_NAME = 'projeto-igreja-v5';
 const VERSION_URL = '/version.json';
 const STATIC_ASSETS = [
   '/',
-  '/images/logos/logo_72.png',
-  '/images/logos/logo_96.png',
-  '/images/logos/logo_128.png',
-  '/images/logos/logo_144.png',
-  '/images/logos/logo_152.png',
   '/images/logos/logo_192.png',
-  '/images/logos/logo_384.png',
   '/images/logos/logo_512.png',
+  '/images/logos/logo_72_opaque.png',
+  '/images/logos/logo_96_opaque.png',
+  '/images/logos/logo_128_opaque.png',
+  '/images/logos/logo_144_opaque.png',
+  '/images/logos/logo_152_opaque.png',
+  '/images/logos/logo_192_opaque.png',
+  '/images/logos/logo_384_opaque.png',
+  '/images/logos/logo_512_opaque.png',
+  '/images/logos/logo_1024_opaque.png',
   '/images/logos/logo_192_maskable.png',
   '/images/logos/logo_512_maskable.png',
-  '/images/logos/logo_1024.png',
   '/images/backgrounds/background_1.jpeg',
   '/manifest.json'
 ];

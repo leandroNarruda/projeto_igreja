@@ -24,22 +24,22 @@ export const metadata: Metadata = {
   icons: {
     apple: [
       {
-        url: '/images/logos/logo_152.png',
+        url: '/images/logos/logo_152_opaque.png',
         sizes: '152x152',
         type: 'image/png',
       },
       {
-        url: '/images/logos/logo_192.png',
+        url: '/images/logos/logo_192_opaque.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
-        url: '/images/logos/logo_512.png',
+        url: '/images/logos/logo_512_opaque.png',
         sizes: '512x512',
         type: 'image/png',
       },
       {
-        url: '/images/logos/logo_1024.png',
+        url: '/images/logos/logo_1024_opaque.png',
         sizes: '1024x1024',
         type: 'image/png',
       },
