@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Trophy } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -18,11 +19,17 @@ interface ClassificacaoItem {
   nome: string
   social_name?: string | null
   email: string
+  image?: string | null
   acertos: number
   erros: number
   nulos: number
   total: number
   porcentagem: number
+}
+
+function getFirstLetter(name: string): string {
+  if (!name || !name.trim()) return '?'
+  return name.trim()[0].toUpperCase()
 }
 
 export default function HomePage() {
@@ -140,16 +147,34 @@ export default function HomePage() {
                       `}
                         >
                           <div className="text-center">
-                            <div className="text-4xl mb-2 text-gray-900">
+                            <div className="text-4xl mb-3 text-gray-900">
                               {index < 3 ? medalhas[index] : `${item.posicao}º`}
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
-                              {
-                                (item.social_name?.trim() || item.nome).split(
-                                  ' '
-                                )[0]
-                              }
-                            </h3>
+                            <div className="flex items-center justify-center gap-2 mb-3">
+                              {item.image ? (
+                                <Image
+                                  src={item.image}
+                                  alt=""
+                                  width={40}
+                                  height={40}
+                                  className="h-10 w-10 rounded-full object-cover border-2 border-gray-300 shrink-0"
+                                  unoptimized
+                                />
+                              ) : (
+                                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-gray-600 border-2 border-gray-300 shrink-0">
+                                  {getFirstLetter(
+                                    item.social_name?.trim() || item.nome
+                                  )}
+                                </div>
+                              )}
+                              <h3 className="text-xl font-bold text-gray-900 truncate min-w-0">
+                                {
+                                  (item.social_name?.trim() || item.nome).split(
+                                    ' '
+                                  )[0]
+                                }
+                              </h3>
+                            </div>
                             <div className="space-y-1 text-sm text-gray-600">
                               <div>
                                 <span className="font-semibold">Acertos:</span>{' '}
@@ -312,16 +337,34 @@ export default function HomePage() {
                       `}
                     >
                       <div className="text-center">
-                        <div className="text-4xl mb-2">
+                        <div className="text-4xl mb-3">
                           {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
-                          {
-                            (item.social_name?.trim() || item.nome).split(
-                              ' '
-                            )[0]
-                          }
-                        </h3>
+                        <div className="flex items-center justify-center gap-2 mb-3">
+                          {item.image ? (
+                            <Image
+                              src={item.image}
+                              alt=""
+                              width={40}
+                              height={40}
+                              className="h-10 w-10 rounded-full object-cover border-2 border-gray-300 shrink-0"
+                              unoptimized
+                            />
+                          ) : (
+                            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-gray-600 border-2 border-gray-300 shrink-0">
+                              {getFirstLetter(
+                                item.social_name?.trim() || item.nome
+                              )}
+                            </div>
+                          )}
+                          <h3 className="text-xl font-bold text-gray-900 truncate min-w-0">
+                            {
+                              (item.social_name?.trim() || item.nome).split(
+                                ' '
+                              )[0]
+                            }
+                          </h3>
+                        </div>
                         <div className="space-y-1 text-sm text-gray-600">
                           <div>
                             <span className="font-semibold">Acertos:</span>{' '}

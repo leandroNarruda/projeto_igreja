@@ -45,7 +45,29 @@ export async function POST(request: Request) {
     const arrayBuffer = await file.arrayBuffer()
     const inputBuffer = Buffer.from(arrayBuffer)
 
-    const processedBuffer = await sharp(inputBuffer)
+    // Ler e normalizar o parâmetro de rotação
+    const rotationParam = formData.get('rotation')
+    let rotation = 0
+    if (rotationParam) {
+      const rotationValue = parseInt(rotationParam.toString(), 10)
+      if (!isNaN(rotationValue)) {
+        // Normalizar para 0, 90, 180, 270
+        rotation = ((rotationValue % 360) + 360) % 360
+        // Validar que é múltiplo de 90
+        if (rotation % 90 !== 0) {
+          rotation = 0
+        }
+      }
+    }
+
+    let sharpInstance = sharp(inputBuffer)
+
+    // Aplicar rotação se fornecida
+    if (rotation > 0) {
+      sharpInstance = sharpInstance.rotate(rotation)
+    }
+
+    const processedBuffer = await sharpInstance
       .resize(AVATAR_SIZE, AVATAR_SIZE, { fit: 'cover' })
       .jpeg({ quality: 80 })
       .toBuffer()

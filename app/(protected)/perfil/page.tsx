@@ -2,9 +2,11 @@
 
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { PageTransition } from '@/components/layout/PageTransition'
-import { Camera, LogOut } from 'lucide-react'
+import { Camera, LogOut, RotateCw } from 'lucide-react'
+import Cropper from 'react-easy-crop'
+import type { Area, Point } from 'react-easy-crop'
 
 function getInitials(name: string | null | undefined): string {
   if (!name || !name.trim()) return '?'
@@ -15,12 +17,75 @@ function getInitials(name: string | null | undefined): string {
   return name.slice(0, 2).toUpperCase()
 }
 
+async function createCroppedImage(
+  imageSrc: string,
+  pixelCrop: Area,
+  rotation = 0
+): Promise<File> {
+  const image = await createImageElement(imageSrc)
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')!
+
+  const maxSize = Math.max(image.width, image.height)
+  const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2))
+
+  canvas.width = safeArea
+  canvas.height = safeArea
+
+  ctx.translate(safeArea / 2, safeArea / 2)
+  ctx.rotate((rotation * Math.PI) / 180)
+  ctx.translate(-safeArea / 2, -safeArea / 2)
+
+  ctx.drawImage(
+    image,
+    safeArea / 2 - image.width * 0.5,
+    safeArea / 2 - image.height * 0.5
+  )
+
+  const data = ctx.getImageData(0, 0, safeArea, safeArea)
+
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
+
+  ctx.putImageData(
+    data,
+    Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
+    Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
+  )
+
+  return new Promise(resolve => {
+    canvas.toBlob(blob => {
+      if (blob) {
+        const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' })
+        resolve(file)
+      }
+    }, 'image/jpeg')
+  })
+}
+
+function createImageElement(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.addEventListener('load', () => resolve(image))
+    image.addEventListener('error', error => reject(error))
+    image.src = url
+  })
+}
+
 export default function PerfilPage() {
   const { data: session, status, update } = useSession()
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [isEditorOpen, setIsEditorOpen] = useState(false)
+
+  // Estados do cropper
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [rotation, setRotation] = useState(0)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -43,16 +108,61 @@ export default function PerfilPage() {
     }
   }
 
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+
+    setError(null)
+    setCrop({ x: 0, y: 0 })
+    setZoom(1)
+    setRotation(0)
+    setCroppedAreaPixels(null)
+
+    const url = URL.createObjectURL(file)
+    setPreviewUrl(url)
+    setIsEditorOpen(true)
+
+    e.target.value = ''
+  }
+
+  const handleCancelEditor = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
+    setPreviewUrl(null)
+    setCrop({ x: 0, y: 0 })
+    setZoom(1)
+    setRotation(0)
+    setCroppedAreaPixels(null)
+    setIsEditorOpen(false)
+  }
+
+  const handleRotate = () => {
+    setRotation(prev => (prev + 90) % 360)
+  }
+
+  const onCropComplete = useCallback(
+    (croppedArea: Area, croppedAreaPixels: Area) => {
+      setCroppedAreaPixels(croppedAreaPixels)
+    },
+    []
+  )
+
+  const handleUpload = async () => {
+    if (!previewUrl || !croppedAreaPixels) return
 
     setError(null)
     setUploading(true)
 
     try {
+      const croppedFile = await createCroppedImage(
+        previewUrl,
+        croppedAreaPixels,
+        rotation
+      )
+
       const formData = new FormData()
-      formData.append('avatar', file)
+      formData.append('avatar', croppedFile)
 
       const res = await fetch('/api/user/avatar', {
         method: 'POST',
@@ -67,11 +177,11 @@ export default function PerfilPage() {
       }
 
       await update()
+      handleCancelEditor()
     } catch {
       setError('Erro ao enviar foto. Tente novamente.')
     } finally {
       setUploading(false)
-      e.target.value = ''
     }
   }
 
@@ -194,6 +304,87 @@ export default function PerfilPage() {
           </div>
         </div>
       </div>
+
+      {/* Modal de edição de foto - Estilo WhatsApp */}
+      {isEditorOpen && previewUrl && (
+        <div className="fixed inset-0 z-[100] bg-black">
+          {/* Header */}
+          <div className="absolute top-0 left-0 right-0 z-10 px-4 py-3 bg-gradient-to-b from-black/60 to-transparent">
+            <h3 className="text-white text-lg font-medium text-center">
+              Mover e redimensionar
+            </h3>
+          </div>
+
+          {/* Cropper Area */}
+          <div className="absolute inset-0">
+            <Cropper
+              image={previewUrl}
+              crop={crop}
+              zoom={zoom}
+              rotation={rotation}
+              aspect={1}
+              cropShape="round"
+              showGrid={false}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+            />
+          </div>
+
+          {/* Rotate Button */}
+          <div className="absolute top-16 right-4 z-10">
+            <button
+              type="button"
+              onClick={handleRotate}
+              disabled={uploading}
+              className="p-3 bg-black/40 hover:bg-black/60 rounded-full text-white transition-colors disabled:opacity-50"
+              title="Girar 90°"
+            >
+              <RotateCw className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Zoom Slider */}
+          <div className="absolute bottom-24 left-0 right-0 z-10 px-8">
+            <div className="flex items-center gap-4 max-w-md mx-auto">
+              <span className="text-white text-sm">-</span>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={e => setZoom(Number(e.target.value))}
+                disabled={uploading}
+                className="flex-1 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
+              />
+              <span className="text-white text-sm">+</span>
+            </div>
+          </div>
+
+          {/* Footer Actions */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 py-6 bg-gradient-to-t from-black/80 to-transparent">
+            <div className="flex items-center justify-between gap-4 max-w-md mx-auto">
+              <button
+                type="button"
+                onClick={handleCancelEditor}
+                disabled={uploading}
+                className="px-8 py-3 text-white font-semibold text-lg hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleUpload}
+                disabled={uploading}
+                className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold text-lg rounded-lg transition-colors disabled:opacity-50 shadow-lg"
+              >
+                {uploading ? 'Enviando…' : 'Escolher'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PageTransition>
   )
 }
