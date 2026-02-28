@@ -38,7 +38,7 @@ export const Footer = () => {
       ? [
           {
             label: 'Admin',
-            path: '/quiz',
+            path: '/admin',
             icon: Settings,
           },
         ]
@@ -60,7 +60,10 @@ export const Footer = () => {
         <nav className="flex justify-around items-center h-16">
           {navigationItems.map(item => {
             const Icon = item.icon
-            const isActive = pathname === item.path
+            const isActive =
+              item.path === '/admin'
+                ? pathname === '/admin' || pathname.startsWith('/admin/')
+                : pathname === item.path
 
             return (
               <button

@@ -22,6 +22,13 @@ export const metadata: Metadata = {
     title: 'Bom de lição',
   },
   icons: {
+    icon: [
+      {
+        url: '/images/logos/logo_192_opaque.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+    ],
     apple: [
       {
         url: '/images/logos/logo_152_opaque.png',

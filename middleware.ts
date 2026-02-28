@@ -91,6 +91,12 @@ export async function middleware(request: NextRequest) {
     if (!isAdmin) {
       return NextResponse.redirect(new URL('/home', request.url))
     }
+
+    // Redirecionar /quiz (admin) para /admin/quiz para uma única entrada
+    const path = request.nextUrl.pathname
+    if (path === '/quiz' || path === '/quiz/') {
+      return NextResponse.redirect(new URL('/admin/quiz', request.url))
+    }
   }
 
   // Proteger rota de responder quiz (requer autenticação)

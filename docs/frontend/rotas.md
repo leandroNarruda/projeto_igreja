@@ -216,11 +216,28 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 
 ## Rotas de Admin
 
-Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redireciona para `/home`.
+Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redireciona para `/home`. O link "Admin" no footer leva a `/admin` (dashboard). A rota `/quiz` (sem `/quiz/responder`) redireciona para `/admin/quiz` quando o usuário é admin.
 
-### `/quiz`
+### `/admin`
 
-**Arquivo**: `app/(protected)/quiz/page.tsx`
+**Arquivo**: `app/(protected)/admin/page.tsx`
+
+**Objetivo**: Dashboard do administrador com duas opções: gerenciar quizzes ou gerenciar usuários.
+
+**Tipo de acesso**: Protegido (ADMIN)
+
+**Componentes principais**:
+- Dois cards/links: "Gerenciar quizzes" → `/admin/quiz`, "Gerenciar usuários" → `/admin/usuarios`
+
+**Dados consumidos**: Nenhum (apenas navegação)
+
+**Fluxo**: Admin escolhe uma das opções e navega para a sub-rota correspondente.
+
+---
+
+### `/admin/quiz`
+
+**Arquivo**: `app/(protected)/admin/quiz/page.tsx`
 
 **Objetivo**: Gerenciar quizzes (criar, editar, deletar, adicionar perguntas).
 
@@ -230,6 +247,7 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 - `QuizForm` - Formulário para criar quiz
 - `QuizList` - Lista de quizzes com ações
 - Botão para adicionar perguntas
+- Link "Voltar ao painel" para `/admin`
 
 **Dados consumidos**:
 - `GET /api/quiz` - Lista todos os quizzes
@@ -240,56 +258,58 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 
 **Fluxo**:
 1. Exibe lista de quizzes
-2. Admin pode:
-   - Criar novo quiz
-   - Ativar/desativar quiz
-   - Deletar quiz
-   - Adicionar perguntas
-3. Ao clicar "Adicionar perguntas": Navegação para tela de perguntas (mesmo arquivo, estado diferente)
+2. Admin pode: criar novo quiz, ativar/desativar, deletar, adicionar perguntas
+3. Ao clicar "Adicionar perguntas": estado interno mostra formulário e lista de perguntas (mesmo arquivo)
 
-**Estado vazio**:
-- Sem quizzes: "Nenhum quiz cadastrado. Crie o primeiro!"
+**Estado vazio**: Sem quizzes: "Nenhum quiz cadastrado. Crie o primeiro!"
 
-**Estado erro**:
-- Acesso negado (não é admin): Redireciona para `/home` com alerta
-- Erro ao carregar: Exibe mensagem de erro
+**Estado erro**: Acesso negado → redireciona para `/home`; erro ao carregar → alerta
 
 ---
 
-### `/quiz` (Adicionar Perguntas)
+### `/admin/quiz` (Adicionar Perguntas)
 
-**Arquivo**: `app/(protected)/quiz/page.tsx` (estado: `quizSelecionado !== null`)
+**Arquivo**: `app/(protected)/admin/quiz/page.tsx` (estado: `quizSelecionado !== null`)
 
 **Objetivo**: Adicionar perguntas a um quiz específico.
 
 **Tipo de acesso**: Protegido (ADMIN)
 
-**Componentes principais**:
-- `PerguntaForm` - Formulário para criar pergunta
-- Lista de perguntas já cadastradas
+**Dados consumidos**: `POST /api/quiz/{id}/perguntas`, `GET /api/quiz/{id}/perguntas?admin=true`
+
+**Fluxo**: Botão "Voltar" retorna à lista de quizzes (mesma página, estado diferente).
+
+---
+
+### `/admin/usuarios`
+
+**Arquivo**: `app/(protected)/admin/usuarios/page.tsx`
+
+**Objetivo**: Listar usuários da aplicação com paginação e link para edição.
+
+**Tipo de acesso**: Protegido (ADMIN)
+
+**Dados consumidos**: `GET /api/admin/users?page=1&limit=20`
+
+**Componentes principais**: Tabela com nome, e-mail, igreja, perfil (role) e botão "Editar" por linha.
+
+**Fluxo**: Admin vê a lista; ao clicar "Editar", navega para `/admin/usuarios/[id]`.
+
+---
+
+### `/admin/usuarios/[id]`
+
+**Arquivo**: `app/(protected)/admin/usuarios/[id]/page.tsx`
+
+**Objetivo**: Editar um usuário (nome, e-mail, nome social, igreja, senha).
+
+**Tipo de acesso**: Protegido (ADMIN)
 
 **Dados consumidos**:
-- `POST /api/quiz/{id}/perguntas` - Criar pergunta(s)
-- `GET /api/quiz/{id}/perguntas?admin=true` - Listar perguntas
+- `GET /api/admin/users/[id]` - Carregar dados do usuário
+- `PATCH /api/admin/users/[id]` - Salvar alterações
 
-**Fluxo**:
-1. Admin preenche formulário de pergunta:
-   - Enunciado
-   - 5 alternativas (A-E)
-   - Resposta correta
-   - Justificativa
-   - Tempo em segundos
-2. Submete formulário
-3. Pergunta é adicionada à lista
-4. Pode adicionar múltiplas perguntas
-5. Botão "Voltar" retorna para lista de quizzes
-
-**Estado vazio**:
-- Sem perguntas: "Nenhuma pergunta cadastrada ainda"
-
-**Estado erro**:
-- Validação falhou: Exibe erros de cada campo
-- Erro ao criar: Exibe mensagem de erro
+**Fluxo**: Formulário com campos editáveis; senha opcional ("Deixar em branco para não alterar"). Botões Salvar e Cancelar (volta para `/admin/usuarios`).
 
 ---
 
@@ -317,6 +337,7 @@ export const config = {
 |------|----------|------------------|
 | `/login`, `/cadastro` | Usuário autenticado | → `/home` |
 | `/home` | Usuário não autenticado | → `/login?callbackUrl=/home` |
+| `/quiz` ou `/quiz/` | Usuário é ADMIN | → `/admin/quiz` |
 | `/quiz` (exceto `/quiz/responder`) | Usuário não autenticado | → `/login?callbackUrl=/quiz` |
 | `/quiz` (exceto `/quiz/responder`) | Usuário não é ADMIN | → `/home` |
 | `/quiz/responder` | Usuário não autenticado | → `/login?callbackUrl=/quiz/responder` |
@@ -331,11 +352,11 @@ export const config = {
 
 **Arquivo**: `app/(protected)/layout.tsx`
 
-Links disponíveis:
+Links disponíveis (footer):
 - **Home** → `/home`
-- **Perfil** → `/perfil`
 - **Eventos** → `/eventos`
-- **Quizzes** (se admin) → `/quiz`
+- **Perfil** → `/perfil`
+- **Admin** (se admin) → `/admin`
 
 Botão de logout no menu dropdown do perfil.
 

@@ -12,6 +12,7 @@ interface ModalProps {
   message: string
   confirmText?: string
   cancelText?: string
+  confirmDisabled?: boolean
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -22,6 +23,7 @@ export const Modal: React.FC<ModalProps> = ({
   message,
   confirmText = 'Confirmar',
   cancelText = 'Cancelar',
+  confirmDisabled = false,
 }) => {
   // Prevenir scroll do body quando modal estiver aberto
   useEffect(() => {
@@ -83,7 +85,11 @@ export const Modal: React.FC<ModalProps> = ({
                 <Button variant="outline" onClick={onClose}>
                   {cancelText}
                 </Button>
-                <Button variant="primary" onClick={onConfirm}>
+                <Button
+                  variant="primary"
+                  onClick={onConfirm}
+                  disabled={confirmDisabled}
+                >
                   {confirmText}
                 </Button>
               </div>

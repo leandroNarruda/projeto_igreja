@@ -14,7 +14,7 @@
 ### 4. Ou vá em Settings > Environment Variables e veja o valor de NEXTAUTH_URL
 ### 5. Ou use o comando: vercel ls (se tiver Vercel CLI instalado)
 @sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..DEJmdHuxGfIE9vy5.kSqMyGSCh4PKlsxvJeIwwThED6sBh5eW2g2PvkbBp_Ky0pao0NCP74yVlB5Mm60EAMRGM58aIvwHXYMttMWX22y-nX8l0IUgDPntWpjpd0ADgZlYjqhdjFDQdQlPOqtrZhP_JgKtPBf3gf7Dg1qzIaBUX6F3gu8vkqsde9vnv8EMc5LQn41M6z4gP96251iNXV3nfR01-J_FPzUnqOXI5pWImzXWjCbxLUbZ0tc.qWbqLtpTdN6IFoM72yqoWQ
-@quizId = 5
+@quizId = 7
 @userId = 1
 
 ### ============================================
@@ -65,6 +65,49 @@ DELETE {{baseUrl}}/api/quiz/{{quizId}}
 Cookie: next-auth.session-token={{sessionToken}}
 
 ### ============================================
+### ADMIN - USUÁRIOS (requer ADMIN)
+### ============================================
+
+### Listar usuários (com paginação)
+GET {{baseUrl}}/api/admin/users?page=1&limit=20
+Cookie: next-auth.session-token={{sessionToken}}
+
+### Obter um usuário por ID
+GET {{baseUrl}}/api/admin/users/{{userId}}
+Cookie: next-auth.session-token={{sessionToken}}
+
+### Atualizar usuário (nome, email, social_name, igreja, senha opcional)
+PATCH {{baseUrl}}/api/admin/users/{{userId}}
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "social_name": "João",
+  "igreja": "Igreja Central"
+}
+
+### Atualizar usuário (incluindo nova senha)
+### Envie "password" apenas se quiser alterar a senha; em branco = não altera
+PATCH {{baseUrl}}/api/admin/users/{{userId}}
+Content-Type: application/json
+Cookie: next-auth.session-token={{sessionToken}}
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "social_name": "João",
+  "igreja": "Igreja Central",
+  "password": "novaSenha123"
+}
+
+### Excluir usuário (requer ADMIN)
+### Não é possível excluir a própria conta
+DELETE {{baseUrl}}/api/admin/users/{{userId}}
+Cookie: next-auth.session-token={{sessionToken}}
+
+### ============================================
 ### QUIZ ATIVO
 ### ============================================
 
@@ -101,162 +144,161 @@ Content-Type: application/json
 Cookie: next-auth.session-token={{sessionToken}}
 
 [
-  {
-    "enunciado": "Com base na introdução de Sábado, qual é o objetivo central dos princípios compartilhados por Paulo nos versículos finais da carta?",
-    "alternativaA": "Estabelecer uma liturgia rígida para as reuniões congregacionais.",
-    "alternativaB": "Apresentar estratégias de defesa jurídica perante as leis de Roma.",
-    "alternativaC": "Revelar segredos práticos para viver uma vida cristã de alegria.",
-    "alternativaD": "Organizar a hierarquia administrativa das igrejas da Ásia Menor.",
-    "alternativaE": "Debater questões teológicas complexas sobre a natureza do espírito.",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30,
-    "justificativa": "A lição afirma que Paulo compartilha segredos para viver uma vida alegre, independentemente das circunstâncias externas."
-  },
-  {
-    "enunciado": "No conteúdo de Sábado, o que é indicado como a fonte de força para enfrentar os desafios e pressões da vida cotidiana?",
-    "alternativaA": "A adoção de princípios bíblicos que geram uma paz interior estável.",
-    "alternativaB": "A confiança plena na eficiência dos sistemas de governo terrenos.",
-    "alternativaC": "A busca por cargos de liderança para influenciar a sociedade local.",
-    "alternativaD": "O isolamento social absoluto para evitar as tentações do mundo.",
-    "alternativaE": "A dependência de milagres visíveis para sustentar a fé em crises.",
-    "respostaCorreta": "A",
-    "tempoSegundos": 30,
-    "justificativa": "Existem princípios que nos ajudam a encontrar força interior e experimentar uma paz estável que somente Deus pode dar."
-  },
-  {
-    "enunciado": "Segundo o estudo de Domingo, como Paulo se posiciona emocionalmente ao advertir sobre os 'inimigos da cruz de Cristo'?",
-    "alternativaA": "Ele redige uma condenação formal com termos de desprezo e ódio.",
-    "alternativaB": "Ele incentiva os fiéis a realizarem debates públicos e confrontos.",
-    "alternativaC": "Ele solicita que as autoridades civis punam aqueles que discordam.",
-    "alternativaD": "Ele demonstra amor profundo por eles e chega a chorar por sua condição.",
-    "alternativaE": "Ele adota uma postura de indiferença total para não contaminar a fé.",
-    "respostaCorreta": "D",
-    "tempoSegundos": 30,
-    "justificativa": "O texto destaca o amor de Paulo por aqueles com quem discorda, mencionando explicitamente que ele chora por eles."
-  },
-  {
-    "enunciado": "No texto de Domingo, qual é a função da Cruz mencionada para diferenciar os modelos de conduta em Efésios 2:11-14?",
-    "alternativaA": "Validar a superioridade moral dos cristãos sobre os cidadãos pagãos.",
-    "alternativaB": "Exigir o cumprimento rigoroso de ritos para provar a fidelidade real.",
-    "alternativaC": "Separar os crentes em grupos distintos baseados no conhecimento bíblico.",
-    "alternativaD": "Garantir sucesso material imediato aos que seguem o exemplo de Paulo.",
-    "alternativaE": "Derrubar barreiras e nivelar todos como pecadores carentes de Salvador.",
-    "respostaCorreta": "E",
-    "tempoSegundos": 30,
-    "justificativa": "A Cruz derruba barreiras e coloca todos no mesmo nível, reconhecendo a necessidade comum de salvação."
-  },
-  {
-    "enunciado": "De acordo com a lição de Segunda-feira, qual é a promessa definitiva de Cristo em relação aos nossos 'humildes corpos'?",
-    "alternativaA": "Que eles serão restaurados à perfeição física da juventude biológica.",
-    "alternativaB": "Que serão transformados para serem conforme o corpo glorioso de Jesus.",
-    "alternativaC": "Que eles se tornarão invisíveis para habitar em dimensões espirituais.",
-    "alternativaD": "Que permanecerão em estado de sono eterno enquanto a alma ascende.",
-    "alternativaE": "Que serão gradualmente purificados através de rituais de consagração.",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30,
-    "justificativa": "A nossa pátria está no céu e aguardamos a transformação de nossos corpos humildes para serem semelhantes ao corpo glorioso de Cristo."
-  },
-  {
-    "enunciado": "Conforme o estudo de Segunda-feira, por que a imortalidade cristã é única na visão do filósofo Luc Ferry?",
-    "alternativaA": "Porque oferece uma vitória definitiva em termos de identidade individual.",
-    "alternativaB": "Porque promete a fusão da alma com o anonimato da divindade eterna.",
-    "alternativaC": "Porque garante a preservação da espécie através de legados históricos.",
-    "alternativaD": "Porque foca na transcendência do medo através de abstrações mentais.",
-    "alternativaE": "Porque sugere a reencarnação cíclica para o progresso moral constante.",
-    "respostaCorreta": "A",
-    "tempoSegundos": 30,
-    "justificativa": "Diferente de abstrações, o cristianismo oferece imortalidade pessoal e vitória sobre a morte mantendo a identidade individual."
-  },
-  {
-    "enunciado": "No conteúdo de Terça-feira, que atitude específica Paulo recomenda como o antídoto contra a ansiedade?",
-    "alternativaA": "O estudo intelectual aprofundado de todas as cerimônias da lei judaica.",
-    "alternativaB": "A busca por isolamento em locais desertos para meditação filosófica.",
-    "alternativaC": "A apresentação de pedidos a Deus com oração, súplica e ações de graças.",
-    "alternativaD": "O desenvolvimento de técnicas de controle mental para ignorar os fatos.",
-    "alternativaE": "A dependência exclusiva do apoio psicológico de outros líderes da igreja.",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30,
-    "justificativa": "O texto afirma que, para não ficarmos preocupados, devemos apresentar nossos pedidos a Deus com oração e gratidão."
-  },
-  {
-    "enunciado": "Segundo o estudo de Terça-feira, o que o termo grego 'nous' indica sobre a natureza da paz de Deus?",
-    "alternativaA": "Que ela é fruto de um alto nível de instrução e de sabedoria teológica.",
-    "alternativaB": "Que ela exige o afastamento total de qualquer tipo de conflito exterior.",
-    "alternativaC": "Que ela é uma emoção passageira que depende do estado de ânimo diário.",
-    "alternativaD": "Que ela é o resultado direto da ausência de problemas na vida cotidiana.",
-    "alternativaE": "Que ela excede a capacidade de compreensão da mente humana racional.",
-    "respostaCorreta": "E",
-    "tempoSegundos": 30,
-    "justificativa": "O uso de 'nous' sugere que a paz de Deus impacta a vida de forma que não pode ser compreendida apenas pela mente racional."
-  },
-  {
-    "enunciado": "No estudo de Quarta-feira, qual é a função da paz de Deus baseada na metáfora militar do termo 'phroureō'?",
-    "alternativaA": "Atuar como um general que ordena a destruição imediata dos inimigos.",
-    "alternativaB": "Servir como um escudo que impede o acesso de novos membros à igreja.",
-    "alternativaC": "Funcionar como uma arma de ataque contra os sistemas de governo ímpios.",
-    "alternativaD": "Atuar como uma guarnição de soldados protegendo corações e mentes.",
-    "alternativaE": "Servir como um tribunal militar que julga as intenções de cada fiel.",
-    "respostaCorreta": "D",
-    "tempoSegundos": 30,
-    "justificativa": "O termo 'phroureō' refere-se a soldados protegendo uma cidade, indicando que a paz de Deus guarda o interior do crente."
-  },
-  {
-    "enunciado": "Conforme a lição de Quarta-feira, por que Paulo omitiu as virtudes cardeais gregas ao listar os temas para pensamento?",
-    "alternativaA": "Porque os gregos não possuíam nenhum conceito de ética ou de moralidade.",
-    "alternativaB": "Porque o foco de Paulo estava nas virtudes bíblicas baseadas em Deus.",
-    "alternativaC": "Porque ele desejava criar uma nova filosofia separada do cristianismo.",
-    "alternativaD": "Porque as virtudes gregas eram consideradas pecaminosas em qualquer nível.",
-    "alternativaE": "Porque ele não conhecia a cultura de Filipos quando escreveu a epístola.",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30,
-    "justificativa": "Paulo foca nas virtudes bíblicas (verdade, justiça, pureza) em vez das virtudes cardeais gregas (prudência, temperança, etc.)."
-  },
-  {
-    "enunciado": "Segundo o conteúdo de Quinta-feira, qual é o princípio revelado para viver com alegria independente da escassez ou da fartura?",
-    "alternativaA": "Aprender a viver contente através do fortalecimento que vem de Cristo.",
-    "alternativaB": "A acumulação preventiva de recursos para garantir estabilidade futura.",
-    "alternativaC": "A negação psicológica do sofrimento através de mantras de positividade.",
-    "alternativaD": "A dependência financeira constante de doações de outras congregações.",
-    "alternativaE": "A crença de que a fidelidade religiosa trará sempre riquezas materiais.",
-    "respostaCorreta": "A",
-    "tempoSegundos": 30,
-    "justificativa": "Paulo afirma que aprendeu o segredo de viver contente em toda situação, fortalecido por Aquele que o capacita."
-  },
-  {
-    "enunciado": "No texto de Quinta-feira, qual explicação bíblica é dada para a ausência de bênçãos que estão em harmonia com a vontade de Deus?",
-    "alternativaA": "A falta de cumprimento de ritos específicos de purificação diária.",
-    "alternativaB": "O destino predeterminado que impede a mudança das circunstâncias.",
-    "alternativaC": "A omissão do pedido direto em oração, conforme ensina Tiago 4:2.",
-    "alternativaD": "A necessidade de Deus testar a lealdade através de privações eternas.",
-    "alternativaE": "A insuficiência de obras de caridade para merecer a atenção divina.",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30,
-    "justificativa": "O texto cita Tiago 4:2 enfatizando que muitas vezes não recebemos certas bênçãos simplesmente porque não pedimos."
-  },
-  {
-    "enunciado": "Conforme o estudo de Sexta-feira, qual é o perigo de concentrar os pensamentos excessivamente nas próprias falhas?",
-    "alternativaA": "Aumentar a vigilância e tornar o cristão imune a novos pecados graves.",
-    "alternativaB": "Gerar um sentimento de orgulho por ser mais consciente que os outros.",
-    "alternativaC": "Promover uma reforma de caráter baseada no medo da punição final.",
-    "alternativaD": "Diminuir a força necessária para vencer as próprias imperfeições.",
-    "alternativaE": "Alcançar a perfeição mais rapidamente através do constante remorso.",
-    "respostaCorreta": "D",
-    "tempoSegundos": 30,
-    "justificativa": "Ellen White alerta que quanto mais demoramos o pensamento em nossas imperfeições, menos força teremos para vencê-las."
-  },
-  {
-    "enunciado": "De acordo com a lição de Sexta-feira, qual é a condição para que o cristão tenha poder proporcional às suas necessidades diárias?",
-    "alternativaA": "Manter um cargo de alta relevância oficial na estrutura da igreja local.",
-    "alternativaB": "Dominar profundamente os idiomas originais para entender cada preceito.",
-    "alternativaC": "Realizar grandes sacrifícios públicos para ser visto como um fiel modelo.",
-    "alternativaD": "Aguardar pacientemente por uma manifestação espiritual milagrosa futura.",
-    "alternativaE": "Render-se diariamente a Deus para receber novas doses da Sua graça.",
-    "respostaCorreta": "E",
-    "tempoSegundos": 30,
-    "justificativa": "O poder proporcional às necessidades vem daqueles que se rendem diariamente e recebem novas provisões da graça divina."
-  }
+	{
+	"enunciado": "De acordo com o estudo de Sábado, quais são os dois reinos contrastados pelo apóstolo Paulo que afetam diretamente a vossa vida espiritual?",
+	"alternativaA": "O reino místico dos céus e o reino material da terra humana.",
+	"alternativaB": "O reino eterno da luz divina e o domínio sombrio das trevas.",
+	"alternativaC": "O reino dos anjos celestiais e o domínio dos seres mortais.",
+	"alternativaD": "O reino da graça abundante e o reino do juízo escatológico.",
+	"alternativaE": "O reino da nação de Israel e o reino das nações gentílicas.",
+	"respostaCorreta": "B",
+	"justificativa": "O texto da lição afirma claramente que Paulo, em Colossenses 1:12 e 13, contrasta dois reinos: 'o reino da luz' e 'o domínio das trevas'.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "Com base no estudo de Sábado, como vós sois qualificados para participar da herança e transportados para o reino do Filho amado?",
+	"alternativaA": "Pela observância rigorosa de todas as leis morais dadas a Moisés.",
+	"alternativaB": "Pelo esforço humano contínuo para alcançar a perfeição de vida.",
+	"alternativaC": "Pela redenção e remissão dos pecados na própria pessoa de Jesus.",
+	"alternativaD": "Pela participação ativa em todos os rituais da igreja primitiva.",
+	"alternativaE": "Pelo afastamento completo de todas as influências da sociedade.",
+	"respostaCorreta": "C",
+	"justificativa": "A lição destaca que Deus nos livrou das trevas e nos transportou para o reino do Filho, enfatizando que é 'na pessoa de Jesus... que temos a redenção'.",
+	"tempoSegundos": 45
+	},
+	{
+	"enunciado": "Conforme o estudo de Domingo, por que deveis crer que apenas Jesus é capaz de vos revelar plenamente o caráter de Deus Pai?",
+	"alternativaA": "Porque Ele estudou as antigas escrituras mais que os profetas.",
+	"alternativaB": "Porque Ele foi o primeiro anjo criado como mensageiro divino.",
+	"alternativaC": "Porque Ele é a representação bidimensional perfeita da forma.",
+	"alternativaD": "Porque Ele é o pensamento audível e o caráter visível de Deus.",
+	"alternativaE": "Porque Ele recebeu treinamento especial no santuário superior.",
+	"respostaCorreta": "D",
+	"justificativa": "A lição descreve que Jesus é 'o pensamento de Deus tornado audível e o caráter de Deus tornado visível', o que O torna o único capaz de revelar o Pai.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "Segundo o estudo de Domingo, qual é a principal diferença entre a imagem de Deus em vós e a imagem de Deus revelada em Jesus Cristo?",
+	"alternativaA": "Vós a refletis em certos aspectos limitados, mas Jesus é a expressão exata.",
+	"alternativaB": "Vós a possuís de forma inata de nascença, e Jesus a adquiriu apenas na terra.",
+	"alternativaC": "Vós a refletis na parte espiritual, e Jesus a reflete unicamente na matéria.",
+	"alternativaD": "Vós sois uma imagem totalmente imperceptível, e Jesus a imagem perceptível.",
+	"alternativaE": "Vós refletis a glória integral do Pai, enquanto Jesus abriu mão dessa imagem.",
+	"respostaCorreta": "A",
+	"justificativa": "Os humanos refletem a imagem de Deus apenas em certos aspectos, os quais o pecado danificou, enquanto Jesus é a 'expressão exata de seu ser'.",
+	"tempoSegundos": 45
+	},
+	{
+	"enunciado": "No estudo de Segunda-feira, o que vós deveis entender quando a Bíblia chama Jesus de 'o primogênito de toda a criação'?",
+	"alternativaA": "Que Ele foi o primeiro ser material a ser criado no começo do universo.",
+	"alternativaB": "Que Ele nasceu na terra antes do surgimento dos profetas mais antigos.",
+	"alternativaC": "Que Ele é a primeira criatura de ordem angelical a governar os humanos.",
+	"alternativaD": "Que Ele foi gerado primordialmente como o princípio da criação espacial.",
+	"alternativaE": "Que Ele possui o relacionamento e a posição de total preeminência.",
+	"respostaCorreta": "E",
+	"justificativa": "O conceito bíblico de 'primogênito' enfatiza o relacionamento especial e a preeminência, independentemente da ordem cronológica de nascimento ou criação.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "De acordo com o estudo de Segunda-feira, de que maneira vós deveis interpretar a declaração de que 'todas as coisas subsistem por Ele'?",
+	"alternativaA": "Jesus é o modelo de bom comportamento que todas as criaturas devem seguir.",
+	"alternativaB": "Jesus é a força primária natural que deu impulso inicial ao resto do universo.",
+	"alternativaC": "Jesus atua como o fator unificador que mantém o universo reunido e coeso.",
+	"alternativaD": "Jesus é o monarca severo que domina com força as potestades celestiais.",
+	"alternativaE": "Jesus é unicamente o iniciador da linha do tempo do mundo material visível.",
+	"respostaCorreta": "C",
+	"justificativa": "A palavra grega 'synistēmi' significa 'reunir' ou 'unir', indicando que Jesus é o fator unificador do universo em Seu papel de Criador e Redentor.",
+	"tempoSegundos": 45
+	},
+	{
+	"enunciado": "Considerando o estudo de Terça-feira, o que o apóstolo Paulo deseja vos ensinar ao chamar repetidamente Jesus de 'a cabeça da igreja'?",
+	"alternativaA": "Que Ele fornece a liderança, a orientação e o sustento para o crescimento.",
+	"alternativaB": "Que Ele é a parte superior intocável que não se envolve com os membros.",
+	"alternativaC": "Que Ele atua como uma figura representativa sem a autoridade gerencial.",
+	"alternativaD": "Que Ele substitui completamente a necessidade de qualquer apoio pastoral.",
+	"alternativaE": "Que Ele atua como o juiz distante que apenas contabiliza os vossos erros.",
+	"respostaCorreta": "A",
+	"justificativa": "A metáfora da cabeça na Bíblia refere-se a liderança, orientação e sustento, os quais Cristo fornece para a unidade e o crescimento da Sua igreja.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "Segundo o estudo de Terça-feira, que profunda lição espiritual vós podeis extrair da analogia de um corpo físico que sofre a perda de um membro?",
+	"alternativaA": "A necessidade constante de excluir membros falhos para purificar o corpo.",
+	"alternativaB": "A facilidade prática com que a igreja progride ignorando os membros ausentes.",
+	"alternativaC": "A substituição veloz de qualquer membro que não entregue os resultados ideais.",
+	"alternativaD": "A importância vital e incomparável de cada pessoa como parte indispensável.",
+	"alternativaE": "A total irrelevância das atitudes individuais frente à soberania absoluta de Deus.",
+	"respostaCorreta": "D",
+	"justificativa": "A lição usa o exemplo de perder um braço ou uma perna para nos ensinar sobre a imensa importância de cada indivíduo como parte vital do corpo da igreja.",
+	"tempoSegundos": 45
+	},
+	{
+	"enunciado": "Observando o estudo de Quarta-feira, como vós podeis compreender a conexão teológica entre Jesus ser a 'cabeça' e, ao mesmo tempo, o 'princípio'?",
+	"alternativaA": "Ele é o criador da vida terrena biológica, mas sem vínculo com a vida da igreja.",
+	"alternativaB": "Ele é o começo apenas na linha do tempo, por ter habitado antes da igreja surgir.",
+	"alternativaC": "Ele é a fonte absoluta e o iniciador tanto da Criação divina quanto da Sua igreja.",
+	"alternativaD": "Ele é a mente arquitetônica que planejou as estrelas, mas não moldou as pessoas.",
+	"alternativaE": "Ele é o governante da fase final que conclui o trabalho iniciado pelos profetas.",
+	"respostaCorreta": "C",
+	"justificativa": "A palavra grega para princípio refere-se a Jesus como a fonte ou iniciador da igreja e da Criação, conectando-se diretamente ao Seu papel de Cabeça.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "Com base no estudo de Quarta-feira, por que vós deveis considerar a ressurreição de Cristo como a preeminente, se Moisés ressuscitou muito antes Dele?",
+	"alternativaA": "Porque Moisés obteve vida apenas em espírito, enquanto Cristo em forma física.",
+	"alternativaB": "Porque sem a vitória da ressurreição de Cristo, absolutamente ninguém ressurgiria.",
+	"alternativaC": "Porque a volta à vida de Moisés foi escondida, e a de Cristo presenciada por todos.",
+	"alternativaD": "Porque Moisés precisou de intervenção de anjos, enquanto Cristo o fez sem auxílio.",
+	"alternativaE": "Porque Cristo retomou a vida no terceiro dia, enquanto Moisés aguardou milênios.",
+	"respostaCorreta": "B",
+	"justificativa": "A lição esclarece que a ressurreição de Jesus é a preeminente porque Ele é o iniciador da nova criação; sem a Sua ressurreição, ninguém mais poderia ressuscitar.",
+	"tempoSegundos": 45
+	},
+	{
+	"enunciado": "Ao lerdes o estudo de Quinta-feira, o que significa a grandiosa 'plenitude' que agradou a Deus Pai fazer habitar na pessoa do Filho?",
+	"alternativaA": "A capacidade singular de Jesus realizar milagres voltados apenas à cura de doentes.",
+	"alternativaB": "O conhecimento memorizado de todas as tradições patriarcais e ensinos farisaicos.",
+	"alternativaC": "A submissão incontestável de Jesus a todas as leis civis impostas pelo jugo romano.",
+	"alternativaD": "A aceitação totalmente pacífica do flagelo humano sem jamais esboçar discordância.",
+	"alternativaE": "A glória completa do Pai, que abrange eternidade, poder de criar e sábia providência.",
+	"respostaCorreta": "E",
+	"justificativa": "A 'plenitude' que habitou em Cristo refere-se à glória do Pai, incluindo Sua eternidade, autoexistência, poder de criar e sabedoria em conquistar o pecado.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "Segundo o estudo de Quinta-feira, qual foi a maravilhosa estratégia de sabedoria na cruz que vós podeis contemplar no plano redentor de Deus?",
+	"alternativaA": "O uso de legiões de anjos armados para esmagar as trevas instantaneamente.",
+	"alternativaB": "A conversão de um instrumento sem glória em prova do amor eterno ao universo.",
+	"alternativaC": "O pacto diplomático pacífico selado entre o trono da graça e as forças infernais.",
+	"alternativaD": "A revelação de conhecimentos ocultos aos líderes religiosos da época de Jesus.",
+	"alternativaE": "O uso do terror celestial para obrigar cada ser criado a submeter-se à Sua lei.",
+	"respostaCorreta": "B",
+	"justificativa": "Deus mostrou Sua sabedoria ao transformar a cruz, 'aquele objeto aparentemente sem glória', em um 'testemunho de Seu amor eterno por cada ser criado'.",
+	"tempoSegundos": 45
+	},
+	{
+	"enunciado": "De acordo com o estudo de Sexta-feira, por que C. S. Lewis argumenta que vós jamais deveis considerar Jesus como sendo apenas um mestre moral brilhante?",
+	"alternativaA": "Porque os Seus ensinamentos espirituais eram profundos demais para pessoas simples.",
+	"alternativaB": "Porque Ele se recusou a escrever um código de ética que a humanidade pudesse ler.",
+	"alternativaC": "Porque alguém que fizesse Suas afirmações teria de ser Deus, um louco ou um demônio.",
+	"alternativaD": "Porque Seu foco principal era desvendar sinais do fim e não lidar com os males éticos.",
+	"alternativaE": "Porque os fenômenos milagrosos que operava ofuscavam toda Sua instrução pedagógica.",
+	"respostaCorreta": "C",
+	"justificativa": "C. S. Lewis enfatiza que Jesus não nos deixou a opção de chamá-lo apenas de grande mestre; pelas Suas declarações, Ele ou é o Filho de Deus, um lunático, ou o diabo.",
+	"tempoSegundos": 30
+	},
+	{
+	"enunciado": "Com base no estudo de Sexta-feira, que conclusão teológica transformadora vós deveis assumir pelo fato de Jesus ser a 'expressão exata do Seu Ser'?",
+	"alternativaA": "Que Ele figura como a obra-prima da criação angélica, moldada para parecer divina.",
+	"alternativaB": "Que existiu um tempo remoto em que Ele não vivia, sendo adotado por Sua pureza.",
+	"alternativaC": "Que Ele adquiriu a divindade e onipotência progressivamente ao longo do ministério.",
+	"alternativaD": "Que Ele é verdadeiramente o Filho eterno, igual a Deus e existindo por Si mesmo.",
+	"alternativaE": "Que Ele representava perfeitamente o Pai apenas durante a fase da Sua encarnação.",
+	"respostaCorreta": "D",
+	"justificativa": "As notas de estudo baseadas em Ellen G. White asseguram que Ele é preexistente, nunca houve tempo em que Ele não existisse, sendo o Filho eterno e igual a Deus.",
+	"tempoSegundos": 45
+	}
 ]
-
 
 
 
@@ -325,56 +367,160 @@ Content-Type: application/json
 Cookie: next-auth.session-token={{sessionToken}}
 
 [
-  {
-    "enunciado": "Qual é o maior estado do Brasil em área?",
-    "alternativaA": "Amazonas",
-    "alternativaB": "Pará",
-    "alternativaC": "Mato Grosso",
-    "alternativaD": "Minas Gerais",
-    "alternativaE": "Bahia",
-    "respostaCorreta": "A",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Qual é a maior cidade do Brasil em população?",
-    "alternativaA": "Rio de Janeiro",
-    "alternativaB": "São Paulo",
-    "alternativaC": "Brasília",
-    "alternativaD": "Salvador",
-    "alternativaE": "Fortaleza",
-    "respostaCorreta": "B",
-    "tempoSegundos": 30
-  },
-  {
-    "enunciado": "Quantos países fazem fronteira com o Brasil?",
-    "alternativaA": "8",
-    "alternativaB": "9",
-    "alternativaC": "10",
-    "alternativaD": "11",
-    "alternativaE": "12",
-    "respostaCorreta": "C",
-    "tempoSegundos": 45
-  },
-  {
-    "enunciado": "Qual é o ponto mais alto do Brasil?",
-    "alternativaA": "Pico da Neblina",
-    "alternativaB": "Pico da Bandeira",
-    "alternativaC": "Pedra da Mina",
-    "alternativaD": "Pico do Calçado",
-    "alternativaE": "Monte Roraima",
-    "respostaCorreta": "A",
-    "tempoSegundos": 40
-  },
-  {
-    "enunciado": "Qual é o maior rio do Brasil?",
-    "alternativaA": "Rio São Francisco",
-    "alternativaB": "Rio Paraná",
-    "alternativaC": "Rio Amazonas",
-    "alternativaD": "Rio Tocantins",
-    "alternativaE": "Rio Madeira",
-    "respostaCorreta": "C",
-    "tempoSegundos": 30
-  }
+{
+"enunciado": "De acordo com o estudo de Sábado, como a cruz de Cristo atua no processo de reconciliação individual que vos é apresentado?",
+"alternativaA": "Funciona como um símbolo estático da dor enfrentada pela humanidade caída.",
+"alternativaB": "Atua como um decreto legal sem provocar qualquer mudança interior na vida.",
+"alternativaC": "Torna-se uma realidade ativa que transforma genuinamente o coração das pessoas.",
+"alternativaD": "Serve como um lembrete totalmente passivo do julgamento divino sobre o mundo.",
+"alternativaE": "Age como um elemento redentor exclusivo e restrito apenas para a nação de Israel.",
+"respostaCorreta": "C",
+"justificativa": "O texto destaca que, no nível individual, a cruz deixa de ser um símbolo passivo e torna-se uma realidade ativa, com o amor de Deus transformando as pessoas.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "Considerando o estudo de Sábado, qual é a dimensão do alcance da reconciliação realizada por Jesus, da qual vós sois os grandes beneficiários?",
+"alternativaA": "Limita-se exclusivamente aos seres humanos adultos que aceitam e professam a fé cristã.",
+"alternativaB": "Restringe-se à mera restauração moral e ética do planeta Terra após a entrada do pecado.",
+"alternativaC": "Alcança estritamente o aspecto espiritual de cada um, ignorando completamente o mundo material.",
+"alternativaD": "Abrange uma grande dimensão cósmica e também uma esfera inteiramente pessoal e individual.",
+"alternativaE": "Concentra-se apenas na esfera cósmica universal, deixando o indivíduo humano em segundo plano.",
+"respostaCorreta": "D",
+"justificativa": "A lição afirma que Paulo descreveu o alcance cósmico da reconciliação, que em seguida torna-se pessoal e individual, alcançando todos e tudo.",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Conforme o estudo de Domingo, qual foi a atitude de Deus logo após a entrada do pecado, para que fôsseis reconciliados com Ele?",
+"alternativaA": "Exigiu que Adão oferecesse sacrifícios para provar seu nível de arrependimento imediato.",
+"alternativaB": "Tomou a iniciativa de buscar o ser humano, clamando por Adão logo no jardim do Éden.",
+"alternativaC": "Afastou-se temporariamente para que toda a humanidade sentisse o imenso peso de sua culpa.",
+"alternativaD": "Estabeleceu um sistema de leis muito rígidas para garantir a obediência humana no futuro.",
+"alternativaE": "Delegou aos santos anjos a árdua tarefa de mediar um tratado de paz com os seres caídos.",
+"respostaCorreta": "B",
+"justificativa": "A lição ressalta que desde a entrada do pecado, Deus tomou a iniciativa de nos reconciliar, ilustrado de forma prática pelo chamado 'Onde estás?' no Éden.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "De acordo com o estudo de Domingo sobre as três partes do evangelho que vos são ensinadas, como essas etapas ocorrem na experiência humana?",
+"alternativaA": "Devem ser vividas rigorosamente como uma sequência rígida de eventos anuais inalteráveis.",
+"alternativaB": "Ocorrem de forma exclusiva no momento do batismo, sem a menor necessidade de renovação.",
+"alternativaC": "Exigem um longo e doloroso período de purificação prévia antes de se alcançar a justificação.",
+"alternativaD": "São etapas estritamente teóricas que dependem do alto grau de conhecimento teológico do crente.",
+"alternativaE": "Podem acontecer perfeitamente todas de uma vez e ser renovadas diariamente por meio da entrega.",
+"respostaCorreta": "E",
+"justificativa": "O material explica que o sacrifício, a justificação e a nova vida não são eventos isolados, podendo acontecer simultaneamente e ser renovados a cada manhã.",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Segundo o estudo de Segunda-feira, que crença comum sobre a salvação é diretamente contestada pela ideia de que deveis permanecer firmes na fé?",
+"alternativaA": "O perigoso ensino teológico de que, uma vez alcançada a salvação, estareis salvos para todo o sempre.",
+"alternativaB": "A falsa doutrina de que o sofrimento humano severo purifica a alma de todos os pecados para a vida eterna.",
+"alternativaC": "A antiquada ideia de que a salvação final depende do estrito cumprimento de todas as obras da lei mosaica.",
+"alternativaD": "A limitadora crença de que apenas as pessoas consideradas imaculadas desde o nascimento poderão ser salvas.",
+"alternativaE": "O temeroso conceito de que a maravilhosa graça divina se mostra insuficiente para cobrir os pecados mais graves.",
+"respostaCorreta": "A",
+"justificativa": "O autor da lição contrasta explicitamente a necessidade bíblica de permanecer alicerçado e firme com a famosa frase 'uma vez salvo, salvo para sempre'.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "Conforme o estudo de Segunda-feira, ao vos exortar a continuar na fé, qual é a conotação da palavra grega traduzida como 'fundamentados'?",
+"alternativaA": "Significa estar em um constante e dinâmico movimento missionário para espalhar o evangelho em todo o mundo.",
+"alternativaB": "Denota a capacidade puramente intelectual e acadêmica de defender a doutrina contra todos os falsos mestres.",
+"alternativaC": "Refere-se a ter estabelecido com sucesso um alicerce sólido de fé e amor baseado plenamente na Palavra de Deus.",
+"alternativaD": "Aponta para a extrema flexibilidade espiritual de conseguir adaptar-se perfeitamente às diferentes culturas pagãs.",
+"alternativaE": "Indica o alcance de um estado de perfeição moral absoluta que impede o crente de cometer novos erros e pecados.",
+"respostaCorreta": "C",
+"justificativa": "O texto bíblico define o termo 'fundamentados' como uma condição onde se tem estabelecido um alicerce sólido de fé e amor na Palavra, em contraste com instabilidade.",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Com base no estudo de Terça-feira, como o apóstolo Paulo encarava o imenso sofrimento que enfrentava para que o evangelho chegasse até vós?",
+"alternativaA": "Como um justo castigo divino direto pelas terríveis e violentas perseguições que ele promoveu no seu passado.",
+"alternativaB": "Como uma tremenda e incompreensível injustiça que o desanimava profundamente de continuar escrevendo suas cartas.",
+"alternativaC": "Como uma prova cabal e definitiva de que seu ministério apostólico havia perdido completamente o apoio celestial.",
+"alternativaD": "Como um grande motivo de alegria, pois compreendia pela fé que suas aflições resultavam de fato em vosso benefício.",
+"alternativaE": "Como um enorme obstáculo intransponível que acabou paralisando totalmente o avanço da missão e a pregação da Palavra.",
+"respostaCorreta": "D",
+"justificativa": "A lição relata que, escrevendo aos Colossenses, Paulo alegrava-se em seus sofrimentos por saber que eles eram convertidos em benefícios para a igreja.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "De acordo com o estudo de Terça-feira, qual é o sentido mais amplo da palavra grega 'oikonomia' em relação ao ministério que vos foi confiado?",
+"alternativaA": "O controle financeiro extremamente rigoroso de todos os recursos arrecadados pelas antigas congregações locais.",
+"alternativaB": "O modo de Deus ordenar as coisas de forma soberana, incluindo todas as maravilhosas provisões do plano da salvação.",
+"alternativaC": "A grande autoridade eclesiástica exclusiva que foi concedida sem ressalvas apenas aos doze apóstolos do primeiro século.",
+"alternativaD": "O rígido isolamento espiritual voluntário com o objetivo principal de se conseguir alcançar um nível superior de santidade.",
+"alternativaE": "A obrigatoriedade absoluta e inflexível de cumprir os antigos rituais cerimoniais para manter o favor divino sempre intacto.",
+"respostaCorreta": "B",
+"justificativa": "No seu sentido mais amplo, oikonomia (dispensação/mordomia) refere-se ao modo como Deus ordena a Sua obra e orquestra o grande e eterno plano da salvação.",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Segundo o estudo de Quarta-feira, o que significa na prática cristã a expressão 'Cristo em vós', que capacita a vossa vida espiritual?",
+"alternativaA": "A imitação externa e rigorosa dos antigos hábitos culturais vividos por Jesus Cristo durante a sua jornada terrestre.",
+"alternativaB": "A mera aceitação intelectual e histórica da brilhante trajetória de Cristo conforme foi relatada nos evangelhos bíblicos.",
+"alternativaC": "A manifestação muito frequente de dons milagrosos extraordinários em absolutamente todos os cultos públicos da igreja.",
+"alternativaD": "O abandono total e irrevogável de qualquer atividade secular ou rotineira para conseguir viver em constante meditação.",
+"alternativaE": "A habitação real, transformadora e espiritual de Cristo em vosso próprio coração de maneira diária por meio da vossa fé.",
+"respostaCorreta": "E",
+"justificativa": "A lição declara diretamente e de maneira simples que a expressão 'Cristo em vós' refere-se à habitação espiritual de Cristo no coração do crente através da fé.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "Refletindo sobre o estudo de Quarta-feira, qual foi o resultado prático e maravilhoso do mistério revelado pelo evangelho para a comunhão entre vós?",
+"alternativaA": "A separação definitiva e oficial entre fiéis judeus e gentios, formando congregações cristãs totalmente independentes e autônomas.",
+"alternativaB": "A participação plena e igualitária tanto de judeus como de gentios nas promessas divinas, sendo ambos reunidos em um único corpo.",
+"alternativaC": "A incontestável e ampla supremacia doutrinária de todos os cristãos de origem judaica sobre os recém-convertidos de origem gentílica.",
+"alternativaD": "A abolição completa, imediata e absoluta de toda a rica cultura judaica em favor da adoção massiva das filosofias pagãs greco-romanas.",
+"alternativaE": "A criação de um complexo sistema hierárquico na igreja, onde os gentios são divinamente chamados exclusivamente para servir aos judeus.",
+"respostaCorreta": "B",
+"justificativa": "O mistério revelado resulta na quebra de barreiras, de modo que os que creem, judeus ou gentios, participam igualmente do evangelho e formam o mesmo corpo (igreja).",
+"tempoSegundos": 45
+},
+{
+"enunciado": "De acordo com o estudo de Quinta-feira, quais são as duas principais ações que o apóstolo Paulo utilizava intensamente para vos apresentar perfeitos em Cristo?",
+"alternativaA": "Ensinar fielmente todos os pontos essenciais da doutrina cristã e advertir continuamente sobre os grandes perigos dos falsos mestres.",
+"alternativaB": "Debater de forma estritamente filosófica com os sábios gregos e estabelecer renomadas escolas seculares de oratória e retórica cristã.",
+"alternativaC": "Curar publicamente os doentes nas grandes praças de Roma e realizar milagres grandiosos e assombrosos perante as enormes multidões.",
+"alternativaD": "Arrecadar grandes e expressivas doações financeiras voluntárias e coordenar a construção de templos suntuosos por toda a região da Ásia.",
+"alternativaE": "Promover ativamente e secretamente revoltas políticas violentas contra o vasto Império Romano para defender toda a liberdade civil cristã.",
+"respostaCorreta": "A",
+"justificativa": "Em Colossenses 1:28, o apóstolo Paulo explicita seu método duplo para o amadurecimento espiritual: ensinando a doutrina e advertindo quanto aos perigos espirituais.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "Com base no estudo de Quinta-feira, qual é a estratégia mais comum dos falsos ensinos contra os quais deveis ser extremamente prudentes como as serpentes?",
+"alternativaA": "Negar de maneira muito aberta, ofensiva e imediata a existência de Deus e a inerrância absoluta e sagrada das Sagradas Escrituras.",
+"alternativaB": "Promover o pensamento do ateísmo científico moderno como sendo a única e verdadeira forma racional e aceitável de raciocínio humano.",
+"alternativaC": "Obrigar severamente que todos os cristãos fiéis abandonem suas próprias famílias e carreiras para viverem reclusos em mosteiros isolados.",
+"alternativaD": "Misturar algumas verdades valiosas com erros sutis, acrescentando, retirando ou simplesmente questionando a atual aplicação bíblica.",
+"alternativaE": "Substituir completamente a leitura diária da Bíblia por antigos e obscuros livros de sabedoria oriental totalmente desconhecidos da igreja.",
+"respostaCorreta": "D",
+"justificativa": "O estudo adverte que os falsos ensinos raramente são um erro absoluto; eles misturam a verdade com acréscimos, subtrações ou dúvidas sobre a aplicação atual da Bíblia.",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Conforme o estudo de Sexta-feira, quando humildemente vos entregais a Jesus e O aceitais como único Salvador, o que passa a substituir definitivamente o vosso caráter imperfeito?",
+"alternativaA": "O vasto e excelente histórico de boas obras humanitárias que foi ativamente acumulado ao longo de intensos anos de frequência à igreja.",
+"alternativaB": "A tão desejada absolvição divina que seria supostamente comprada por meio de altíssimas e generosas ofertas dadas aos líderes espirituais.",
+"alternativaC": "O caráter imaculado e perfeitamente santo de Cristo, que atua graciosamente fazendo com que sejais plenamente aceitos como se não tivésseis pecado.",
+"alternativaD": "O grande e inquestionável mérito acumulado no céu pelos santos e gloriosos mártires que sofreram intensas perseguições nas gerações passadas.",
+"alternativaE": "O nível de arrependimento espiritual muito mais profundo, o qual precisaria obrigatoriamente ser demonstrado por severas penitências corporais.",
+"respostaCorreta": "C",
+"justificativa": "A escritora Ellen G. White salienta, no texto adicional, que na salvação não usamos nossa justiça; o caráter de Cristo toma o nosso lugar, imputando-nos total retidão.",
+"tempoSegundos": 30
+},
+{
+"enunciado": "De acordo com o estudo de Sexta-feira, qual é a condição contínua ensinada para que Cristo opere e realize plenamente em vós 'tanto o querer como o efetuar'?",
+"alternativaA": "O domínio absoluto e exaustivamente acadêmico de todos os idiomas bíblicos originais, voltado de forma exclusiva para o complexo ensino teológico.",
+"alternativaB": "A manutenção diária da profunda ligação com Cristo por meio da fé genuína e a entrega contínua, humilde e constante da vossa vontade pessoal a Ele.",
+"alternativaC": "O isolamento social, total e preventivo, contra todas as diversas influências do mundo secular atual, passando a viver apenas em comunidades fechadas.",
+"alternativaD": "A prática religiosa muito rigorosa e ininterrupta da realização de jejuns extremamente prolongados durante todo o início de cada nova semana de trabalho.",
+"alternativaE": "A participação ativa, fortemente irrestrita e totalmente obrigatória em absolutamente todos os cargos ou funções de liderança oferecidos pela congregação.",
+"respostaCorreta": "B",
+"justificativa": "A lição baseada no livro Caminho a Cristo orienta que o cristão deve manter essa contínua conexão de fé e submissão da vontade para que Deus opere eficazmente na sua vida.",
+"tempoSegundos": 45
+}
 ]
 
 ### 4. Ative o quiz para que os usuários possam respondê-lo

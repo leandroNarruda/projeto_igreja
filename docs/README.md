@@ -12,6 +12,7 @@ Visão geral da arquitetura do sistema, fluxos principais e estrutura de camadas
 - [Autenticação](./api/auth.md) - Registro, login e gestão de sessões
 - [Quiz](./api/quiz.md) - Gerenciamento e resposta de quizzes
 - [Usuário](./api/user.md) - Perfil e configurações do usuário
+- [Admin](./api/admin.md) - APIs de administração (listar e editar usuários)
 
 ### 🎨 Frontend
 - [Visão Geral do Frontend](./frontend/README.md)
@@ -46,6 +47,7 @@ docs/
 ├── arquitetura.md         # Arquitetura e fluxos
 ├── api/
 │   ├── README.md          # Visão geral das APIs
+│   ├── admin.md           # Endpoints de administração (admin)
 │   ├── auth.md            # Endpoints de autenticação
 │   ├── quiz.md            # Endpoints de quiz
 │   └── user.md            # Endpoints de usuário

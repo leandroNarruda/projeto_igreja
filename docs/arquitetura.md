@@ -15,13 +15,15 @@ graph TB
     subgraph NextJS[Next.js Application]
         subgraph AppRouter[App Router]
             AuthPages[Páginas Auth<br/>login, cadastro]
-            ProtectedPages[Páginas Protegidas<br/>home, quiz, perfil, eventos]
+            ProtectedPages[Páginas Protegidas<br/>home, perfil, eventos, quiz/responder]
+            AdminPages[Área Admin<br/>/admin, /admin/quiz, /admin/usuarios]
         end
         
         subgraph APIRoutes[API Routes]
             AuthAPI[/api/auth]
             QuizAPI[/api/quiz]
             UserAPI[/api/user]
+            AdminAPI[/api/admin/users]
         end
         
         Middleware[Middleware<br/>Proteção de Rotas]
@@ -41,7 +43,9 @@ graph TB
     Browser --> Middleware
     Middleware --> AuthPages
     Middleware --> ProtectedPages
+    Middleware --> AdminPages
     ProtectedPages --> APIRoutes
+    AdminPages --> APIRoutes
     APIRoutes --> Auth
     Auth --> PrismaORM
     PrismaORM --> Tables
@@ -55,7 +59,8 @@ graph TB
 
 Estrutura baseada em grupos de rotas:
 - `(auth)/` - Páginas públicas de autenticação
-- `(protected)/` - Páginas que requerem login
+- `(protected)/` - Páginas que requerem login (home, perfil, eventos, quiz/responder, admin)
+- `(protected)/admin/` - Área administrativa (dashboard em `/admin`, quizzes em `/admin/quiz`, usuários em `/admin/usuarios`)
 
 **Responsabilidades**:
 - Renderização de páginas (SSR/CSR)
@@ -70,7 +75,8 @@ Estrutura baseada em grupos de rotas:
 Endpoints REST organizados por domínio:
 - `/api/auth/*` - Autenticação e registro
 - `/api/quiz/*` - CRUD de quizzes e perguntas
-- `/api/user/*` - Perfil e configurações
+- `/api/user/*` - Perfil e configurações do usuário autenticado
+- `/api/admin/users` - Listagem e edição de usuários (apenas ADMIN)
 
 **Responsabilidades**:
 - Lógica de negócio
