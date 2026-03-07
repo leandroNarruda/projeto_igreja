@@ -68,13 +68,21 @@ export async function sendToSubscription(
 }
 
 /**
- * Envia push para todos os inscritos (ou filtrados por userIds).
+ * Envia push para todos os inscritos (ou filtrados por userIds / excludeUserIds).
  */
 export async function sendPushToUsers(
   payload: PushPayload,
-  userIds?: number[]
+  userIds?: number[],
+  excludeUserIds?: number[]
 ): Promise<{ sent: number; failed: number; removed: number }> {
-  const where = userIds?.length ? { userId: { in: userIds } } : {}
+  let where: { userId?: { in?: number[]; notIn?: number[] } } = {}
+  if (userIds?.length && excludeUserIds?.length) {
+    where = { userId: { in: userIds, notIn: excludeUserIds } }
+  } else if (excludeUserIds?.length) {
+    where = { userId: { notIn: excludeUserIds } }
+  } else if (userIds?.length) {
+    where = { userId: { in: userIds } }
+  }
 
   const subscriptions = await prisma.webPushSubscription.findMany({ where })
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { notifyQuizResponded } from '@/lib/push/notifications'
 import { publishRankingUpdated } from '@/lib/realtime/publish'
 
 export const dynamic = 'force-dynamic'
@@ -157,6 +158,18 @@ export async function POST(request: Request) {
     publishRankingUpdated(quizId).catch(err =>
       console.error('[quiz/resposta] publishRankingUpdated:', err)
     )
+
+    // Push: notificar outros usuários que fulano respondeu (não bloqueia resposta)
+    const respondent = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { social_name: true, avatar_url: true },
+    })
+    notifyQuizResponded(
+      session.user.id,
+      respondent?.social_name ?? null,
+      respondent?.avatar_url ?? null,
+      quizId
+    ).catch(() => {})
 
     return NextResponse.json({
       resultado,
