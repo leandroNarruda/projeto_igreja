@@ -109,7 +109,7 @@ export const Footer = () => {
                     height={30}
                     className="h-8 w-auto object-contain"
                   />
-                ) : (
+                ) : Icon ? (
                   <>
                     <Icon
                       size={24}
@@ -121,7 +121,7 @@ export const Footer = () => {
                       {item.label}
                     </span>
                   </>
-                )}
+                ) : null}
                 {isActive && (
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-full" />
                 )}
