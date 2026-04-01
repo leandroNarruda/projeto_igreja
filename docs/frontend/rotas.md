@@ -239,31 +239,56 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 
 **Arquivo**: `app/(protected)/admin/quiz/page.tsx`
 
-**Objetivo**: Gerenciar quizzes (criar, editar, deletar, adicionar perguntas).
+**Objetivo**: Gerenciar quizzes (listar, ativar/desativar, deletar e abrir fluxo de criação).
 
 **Tipo de acesso**: Protegido (ADMIN)
 
 **Componentes principais**:
-- `QuizForm` - Formulário para criar quiz
 - `QuizList` - Lista de quizzes com ações
+- Botão `+ Novo` para navegar para `/admin/quiz/novo`
 - Botão para adicionar perguntas
 - Link "Voltar ao painel" para `/admin`
 
 **Dados consumidos**:
 - `GET /api/quiz` - Lista todos os quizzes
-- `POST /api/quiz` - Criar quiz
 - `PUT /api/quiz/{id}` - Atualizar quiz (ativar/desativar)
 - `DELETE /api/quiz/{id}` - Deletar quiz
 - `GET /api/quiz/{id}/perguntas?admin=true` - Listar perguntas (admin)
 
 **Fluxo**:
 1. Exibe lista de quizzes
-2. Admin pode: criar novo quiz, ativar/desativar, deletar, adicionar perguntas
+2. Admin pode: abrir criação, ativar/desativar, deletar, adicionar perguntas
 3. Ao clicar "Adicionar perguntas": estado interno mostra formulário e lista de perguntas (mesmo arquivo)
 
 **Estado vazio**: Sem quizzes: "Nenhum quiz cadastrado. Crie o primeiro!"
 
 **Estado erro**: Acesso negado → redireciona para `/home`; erro ao carregar → alerta
+
+---
+
+### `/admin/quiz/novo`
+
+**Arquivo**: `app/(protected)/admin/quiz/novo/page.tsx`
+
+**Objetivo**: Criar um novo quiz em página dedicada, com opção de importar perguntas em JSON.
+
+**Tipo de acesso**: Protegido (ADMIN)
+
+**Componentes principais**:
+- `QuizForm` com campos de tema e `Perguntas em JSON (opcional)`
+- Botão "Voltar para Quizzes"
+
+**Dados consumidos**:
+- `POST /api/quiz` - Criar quiz com ou sem perguntas em lote
+
+**Fluxo**:
+1. Admin acessa `/admin/quiz/novo`
+2. Informa tema e, opcionalmente, cola array JSON de perguntas
+3. Ao salvar com sucesso, retorna para `/admin/quiz`
+
+**Estado erro**:
+- JSON inválido no formulário
+- Erros de validação retornados pela API (campos obrigatórios das perguntas)
 
 ---
 
@@ -356,6 +381,7 @@ Links disponíveis (footer):
 - **Home** → `/home`
 - **Eventos** → `/eventos`
 - **Perfil** → `/perfil`
+- **Minha ES** → link externo para `https://es.minhaes.org/quizgeral/2/633509E6-457A-4302-9D56-46CC7523CFE5` (abre nova aba)
 - **Admin** (se admin) → `/admin`
 
 Botão de logout no menu dropdown do perfil.
@@ -402,14 +428,15 @@ graph TD
 ```mermaid
 graph TD
     A[/home] --> B[/quiz]
-    B --> C[Cria quiz]
-    C --> D[Adiciona perguntas]
-    D --> E{Todas adicionadas?}
-    E -->|Não| D
-    E -->|Sim| F[Ativa quiz]
-    F --> G[/home]
-    G --> H[Usuários respondem]
-    H --> I[Admin vê resultados]
+    B --> C[/admin/quiz]
+    C --> D[Abre /admin/quiz/novo]
+    D --> E[Cria quiz com ou sem JSON de perguntas]
+    E --> F[Retorna para /admin/quiz]
+    F --> G[Adiciona perguntas adicionais se necessário]
+    G --> H[Ativa quiz]
+    H --> I[/home]
+    I --> J[Usuários respondem]
+    J --> K[Admin vê resultados]
 ```
 
 ---
@@ -425,7 +452,8 @@ graph TD
 | `/perfil` | `POST /api/user/avatar`, Session |
 | `/eventos` | `GET /api/quiz/classificacao-geral` |
 | `/quiz/responder` | `GET /api/quiz/ativo`, `GET /api/quiz/{id}/perguntas`, `POST /api/quiz/resposta` |
-| `/quiz` (admin) | `GET /api/quiz`, `POST /api/quiz`, `PUT /api/quiz/{id}`, `DELETE /api/quiz/{id}`, `POST /api/quiz/{id}/perguntas`, `GET /api/quiz/{id}/perguntas?admin=true` |
+| `/admin/quiz` (admin) | `GET /api/quiz`, `PUT /api/quiz/{id}`, `DELETE /api/quiz/{id}`, `POST /api/quiz/{id}/perguntas`, `GET /api/quiz/{id}/perguntas?admin=true` |
+| `/admin/quiz/novo` (admin) | `POST /api/quiz` |
 
 ---
 

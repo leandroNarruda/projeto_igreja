@@ -2,19 +2,22 @@
 
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Home, Calendar, User, Settings } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
 export const Footer = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const pathname = usePathname()
   const router = useRouter()
   const { isAdmin } = usePermissions()
   const { quizEmAndamento } = useQuizUI()
 
-  if (!session) {
+  const isSessionLoading = status === 'loading'
+
+  if (!session && !isSessionLoading) {
     return null
   }
 
@@ -34,7 +37,13 @@ export const Footer = () => {
       path: '/perfil',
       icon: User,
     },
-    ...(isAdmin
+    {
+      label: 'Minha ES',
+      path: 'https://es.minhaes.org/quizgeral/2/633509E6-457A-4302-9D56-46CC7523CFE5',
+      external: true,
+      imageSrc: '/images/logo-minha-es.png',
+    },
+    ...(isAdmin && !isSessionLoading
       ? [
           {
             label: 'Admin',
@@ -45,7 +54,12 @@ export const Footer = () => {
       : []),
   ]
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (path: string, external?: boolean) => {
+    if (external) {
+      window.open(path, '_blank', 'noopener,noreferrer')
+      return
+    }
+
     router.push(path)
   }
 
@@ -60,8 +74,9 @@ export const Footer = () => {
         <nav className="flex justify-around items-center h-16">
           {navigationItems.map(item => {
             const Icon = item.icon
-            const isActive =
-              item.path === '/admin'
+            const isActive = item.external
+              ? false
+              : item.path === '/admin'
                 ? pathname === '/admin' || pathname.startsWith('/admin/')
                 : pathname === item.path
 
@@ -71,7 +86,7 @@ export const Footer = () => {
                 onClick={e => {
                   e.preventDefault()
                   e.stopPropagation()
-                  handleNavigation(item.path)
+                  handleNavigation(item.path, item.external)
                 }}
                 className={`
                   relative flex flex-col items-center justify-center
@@ -86,15 +101,27 @@ export const Footer = () => {
                 aria-label={item.label}
                 type="button"
               >
-                <Icon
-                  size={24}
-                  className={isActive ? 'text-blue-600' : 'text-gray-600'}
-                />
-                <span
-                  className={`text-xs mt-1 font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}
-                >
-                  {item.label}
-                </span>
+                {item.imageSrc ? (
+                  <Image
+                    src={item.imageSrc}
+                    alt=""
+                    width={110}
+                    height={30}
+                    className="h-8 w-auto object-contain"
+                  />
+                ) : (
+                  <>
+                    <Icon
+                      size={24}
+                      className={isActive ? 'text-blue-600' : 'text-gray-600'}
+                    />
+                    <span
+                      className={`text-xs mt-1 font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}
+                    >
+                      {item.label}
+                    </span>
+                  </>
+                )}
                 {isActive && (
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-full" />
                 )}

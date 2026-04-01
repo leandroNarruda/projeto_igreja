@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { QuizForm } from '@/components/quiz/QuizForm'
 import { QuizList } from '@/components/quiz/QuizList'
 import { PerguntaForm } from '@/components/quiz/PerguntaForm'
 import { Card } from '@/components/ui/Card'
@@ -12,7 +11,6 @@ import { PageTransition } from '@/components/layout/PageTransition'
 import {
   useQuizzes,
   usePerguntas,
-  useCriarQuiz,
   useAtualizarQuiz,
   useDeletarQuiz,
   useCriarPergunta,
@@ -42,7 +40,6 @@ interface Pergunta {
 
 export default function AdminQuizPage() {
   const router = useRouter()
-  const [mostrarFormQuiz, setMostrarFormQuiz] = useState(false)
   const [quizSelecionado, setQuizSelecionado] = useState<number | null>(null)
 
   const { data: quizzesData, isLoading, isError, error } = useQuizzes()
@@ -51,7 +48,6 @@ export default function AdminQuizPage() {
   const quizzes = quizzesData?.quizzes || []
   const perguntas = perguntasData?.perguntas || []
 
-  const criarQuizMutation = useCriarQuiz()
   const atualizarQuizMutation = useAtualizarQuiz()
   const deletarQuizMutation = useDeletarQuiz()
   const criarPerguntaMutation = useCriarPergunta()
@@ -70,16 +66,6 @@ export default function AdminQuizPage() {
       }
     }
   }, [isError, error, router])
-
-  const handleCriarQuiz = async (tema: string) => {
-    try {
-      await criarQuizMutation.mutateAsync(tema)
-      setMostrarFormQuiz(false)
-    } catch (error) {
-      console.error('Erro ao criar quiz:', error)
-      throw error
-    }
-  }
 
   const handleAtivar = async (id: number) => {
     try {
@@ -232,24 +218,13 @@ export default function AdminQuizPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
-            {!mostrarFormQuiz && (
-              <Button
-                variant="primary"
-                onClick={() => setMostrarFormQuiz(true)}
-              >
-                + Novo
-              </Button>
-            )}
+            <Button
+              variant="primary"
+              onClick={() => router.push('/admin/quiz/novo')}
+            >
+              + Novo
+            </Button>
           </div>
-
-          {mostrarFormQuiz && (
-            <div className="mb-6">
-              <QuizForm
-                onSubmit={handleCriarQuiz}
-                onCancel={() => setMostrarFormQuiz(false)}
-              />
-            </div>
-          )}
 
           <QuizList
             quizzes={quizzes}

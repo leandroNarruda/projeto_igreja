@@ -9,7 +9,7 @@ interface LoadingProps {
 
 export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
   const containerClasses = fullScreen
-    ? 'min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center'
+    ? 'min-h-screen w-full bg-gray-50 flex items-center justify-center'
     : 'flex items-center justify-center py-8'
 
   // Criar 12 bolinhas posicionadas em círculo (arredondado para evitar mismatch servidor/cliente)

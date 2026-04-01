@@ -13,8 +13,8 @@
 ### 3. A URL de produção aparece no topo da página (ex: https://seu-projeto.vercel.app)
 ### 4. Ou vá em Settings > Environment Variables e veja o valor de NEXTAUTH_URL
 ### 5. Ou use o comando: vercel ls (se tiver Vercel CLI instalado)
-@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..DEJmdHuxGfIE9vy5.kSqMyGSCh4PKlsxvJeIwwThED6sBh5eW2g2PvkbBp_Ky0pao0NCP74yVlB5Mm60EAMRGM58aIvwHXYMttMWX22y-nX8l0IUgDPntWpjpd0ADgZlYjqhdjFDQdQlPOqtrZhP_JgKtPBf3gf7Dg1qzIaBUX6F3gu8vkqsde9vnv8EMc5LQn41M6z4gP96251iNXV3nfR01-J_FPzUnqOXI5pWImzXWjCbxLUbZ0tc.qWbqLtpTdN6IFoM72yqoWQ
-@quizId = 8
+@sessionToken = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..vCD0jONfNafN1T0Z.th04GCiLU7Z0XMuyWZ7TYziolD7KJHv5PXVRO4MTK7b5DfXSrBsXGln9qy0YR2mmKEv0AqxQAwyB1URLHpiujmYNxylrOqyCH9q80V2IaNYqkjPHLyOAT64Do-WxpQZD5d7AePCALj0-gtKNc9F9ALWzucSq3ZK-0z2rmIhAhwAPz9cwRs8XDPM62o155ds18geL-P2PN1tgjSDEsVZeCjhzZ8YD2FRCT8HVcQ0.Q-gavcvOPgXwUgh9MqjbCw
+@quizId = 11
 @userId = 1
 
 ### ============================================
@@ -145,158 +145,158 @@ Cookie: next-auth.session-token={{sessionToken}}
 
 [
 {
-"enunciado": "No estudo de Sábado, como são descritos os falsos ensinos que estavam ameaçando a fé dos cristãos em Colossos?",
-"alternativaA": "Como uma nova revelação profética que complementava o evangelho de Cristo.",
-"alternativaB": "Como filosofias baseadas em tradições humanas e princípios elementares do mundo.",
-"alternativaC": "Como um conjunto de regras morais necessárias para a convivência social pacífica.",
-"alternativaD": "Como instruções divinas dadas por anjos para a purificação total do corpo físico.",
-"alternativaE": "Como uma interpretação literal dos Dez Mandamentos focada na justiça social plena.",
+"enunciado": "De acordo com o estudo de Sábado, qual era a estratégia missionária de Paulo para alcançar cidades e vilarejos que ele não visitaria pessoalmente, como Hierápolis? ",
+"alternativaA": "Enviava mensageiros judeus pagos para estabelecer sinagogas locais em vilarejos rurais. ",
+"alternativaB": "Treinava trabalhadores leigos promissores para evangelizar centros menores do interior. ",
+"alternativaC": "Focava exclusivamente nos líderes políticos romanos para que estes convertessem o povo. ",
+"alternativaD": "Estabelecia escolas de filosofia grega para atrair os intelectuais das cidades vizinhas. ",
+"alternativaE": "Contratava soldados romanos convertidos para proteger os novos grupos de estudo bíblico. ",
 "respostaCorreta": "B",
-"justificativa": "O texto afirma que o falso ensino é descrito como 'filosofia', 'tradição dos homens' e 'princípios elementares do mundo'.",
-"tempoSegundos": 30
+"justificativa": "O texto afirma que a estratégia de Paulo envolvia o treinamento de trabalhadores leigos promissores para alcançar vilarejos que ele não visitaria. ",
+"tempoSegundos": 60
 },
 {
-"enunciado": "De acordo com a introdução de Sábado, por que o verso de memória desta semana não é uma evidência contra a guarda do sábado do sétimo dia?",
-"alternativaA": "Porque ele foi escrito para validar apenas a guarda dos festivais anuais da nação judaica.",
-"alternativaB": "Porque o apóstolo Paulo estava defendendo a guarda do domingo como o novo dia de repouso.",
-"alternativaC": "Porque o texto foi escrito para combater erros de falsos mestres, e não o quarto mandamento.",
-"alternativaD": "Porque a guarda do sábado era uma prática secreta que não deveria ser discutida publicamente.",
-"alternativaE": "Porque o versículo refere-se exclusivamente à proibição do consumo de carnes sacrificadas a ídolos.",
-"respostaCorreta": "C",
-"justificativa": "A lição esclarece que o texto não foi escrito sobre o quarto mandamento, mas em resposta a erros ensinados por falsos mestres.",
-"tempoSegundos": 45
-},
-{
-"enunciado": "Segundo o estudo de Domingo, onde vós podeis encontrar todos os tesouros da sabedoria e do conhecimento necessário para a vida?",
-"alternativaA": "Na observação atenta das leis da natureza e no estudo das ciências biológicas humanas.",
-"alternativaB": "Na prática constante de meditação profunda e no isolamento dos problemas do mundo.",
-"alternativaC": "Em Jesus Cristo, em quem estão escondidos todos os tesouros da sabedoria e da ciência.",
-"alternativaD": "Nas tradições dos anciãos que foram preservadas cuidadosamente ao longo das gerações.",
-"alternativaE": "No cumprimento rigoroso de todos os ritos e cerimônias prescritos no Antigo Testamento.",
-"respostaCorreta": "C",
-"justificativa": "Baseado em Colossenses 2:3, o texto afirma que esses tesouros estão em Cristo.",
-"tempoSegundos": 30
-},
-{
-"enunciado": "Conforme o estudo de Domingo, qual é o significado teológico do termo grego 'taxis' aplicado por Paulo à organização da igreja?",
-"alternativaA": "Refere-se a um sistema de cobrança de impostos para sustentar as missões internacionais.",
-"alternativaB": "Indica a hierarquia política necessária para que a igreja tenha influência no governo civil.",
-"alternativaC": "Representa a liberdade total de cada membro para realizar o culto conforme sua vontade.",
-"alternativaD": "Refere-se à ordem e ao decoro que preservam os ensinamentos bíblicos e a sabedoria divina.",
-"alternativaE": "Significa a tradição oral que deve ser seguida acima de qualquer instrução bíblica escrita.",
+"enunciado": "Considerando o estudo de Sábado, o que vós podeis concluir sobre o reconhecimento que Paulo dava ao trabalho coletivo na missão do evangelho? ",
+"alternativaA": "Ele acreditava que o sucesso da missão dependia exclusivamente da autoridade dos doze apóstolos. ",
+"alternativaB": "Ele defendia que apenas cristãos de origem judaica deveriam liderar as novas igrejas gentílicas. ",
+"alternativaC": "Ele afirmava que a missão era um esforço individual e solitário baseado em dons sobrenaturais. ",
+"alternativaD": "Ele reconhecia que o sucesso dependia do trabalho conjunto de judeus, gentios, homens e mulheres. ",
+"alternativaE": "Ele ensinava que as mulheres não possuíam papel relevante na rede de colaboradores missionários. ",
 "respostaCorreta": "D",
-"justificativa": "O texto explica que 'taxis' (ordem) é usada para preservar e promulgar a sabedoria de Deus e os ensinamentos bíblicos na igreja.",
+"justificativa": "Paulo reconhecia que o sucesso da missão dependia do trabalho conjunto de todos: judeus, gentios, homens e mulheres. ",
 "tempoSegundos": 45
 },
 {
-"enunciado": "No estudo de Segunda-feira, qual é a metáfora bíblica que Paulo utiliza para descrever a vossa estabilidade espiritual em Cristo?",
-"alternativaA": "A metáfora de uma planta que precisa estar profundamente enraizada para crescer firme.",
-"alternativaB": "A metáfora de um soldado que deve vestir uma armadura de metal para suportar as batalhas.",
-"alternativaC": "A metáfora de um edifício de pedras preciosas que brilha no meio da escuridão do pecado.",
-"alternativaD": "A metáfora de um navio que navega em águas calmas em direção a um porto seguro e eterno.",
-"alternativaE": "A metáfora de uma ovelha que segue o pastor por caminhos desconhecidos e muito perigosos.",
+"enunciado": "De acordo com o estudo de Domingo, por que Paulo decidiu enviar Tíquico e Onésimo pessoalmente aos colossenses em vez de apenas escrever? ",
+"alternativaA": "Porque a lei romana proibia o envio de cartas doutrinárias sem o acompanhamento de guardas. ",
+"alternativaB": "Porque algumas notícias e encorajamentos são melhor comunicados oralmente do que por escrito. ",
+"alternativaC": "Porque Onésimo conhecia as rotas comerciais secretas que evitavam a fiscalização em Laodiceia. ",
+"alternativaD": "Porque Tíquico precisava recolher dízimos e ofertas para a manutenção da prisão de Paulo em Roma. ",
+"alternativaE": "Porque Paulo temia que a carta fosse interceptada e destruída pelos judeus da circuncisão. ",
+"respostaCorreta": "B",
+"justificativa": "A lição destaca que algumas coisas são melhor comunicadas oralmente do que por escrito, visando consolar e encorajar os crentes. ",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Com base no estudo de Domingo, como Paulo descreve Tíquico e qual foi uma das funções importantes que ele desempenhou anteriormente? ",
+"alternativaA": "Um ex-soldado romano escolhido para converter a guarda pretoriana através de atos de caridade. ",
+"alternativaB": "Um médico amado que cuidava da saúde física de Paulo durante os naufrágios no Mediterrâneo. ",
+"alternativaC": "Um ministro fiel e cooperador escolhido para acompanhar a coleta para os crentes de Jerusalém. ",
+"alternativaD": "Um filósofo de Laodiceia treinado por Barnabé para debater com os gnósticos em Hierápolis. ",
+"alternativaE": "Um escravo fugitivo convertido em Roma que buscava reconciliação com os líderes da igreja. ",
+"respostaCorreta": "C",
+"justificativa": "Tíquico é descrito como ministro fiel e foi escolhido por Paulo para acompanhá-lo na viagem com a coleta para Jerusalém. ",
+"tempoSegundos": 60
+},
+{
+"enunciado": "De acordo com o estudo de Segunda-feira, o que vós podeis aprender sobre a união da equipe de Paulo ao observar a origem de seus colaboradores? ",
+"alternativaA": "A equipe era composta apenas por judeus, pois as tensões com gentios impediam o trabalho unido. ",
+"alternativaB": "A equipe era segregada em grupos diferentes para evitar conflitos sobre o rito da circuncisão. ",
+"alternativaC": "Apesar das tensões entre judeus e gentios, os colaboradores trabalhavam unidos e harmoniosamente. ",
+"alternativaD": "Os gentios eram proibidos de visitar as congregações fundadas originalmente por crentes judeus. ",
+"alternativaE": "Paulo preferia trabalhar sozinho devido à constante decepção causada pelos missionários gentios. ",
+"respostaCorreta": "C",
+"justificativa": "O texto ressalta que, apesar das tensões entre judeus e gentios, os colaboradores trabalhavam de forma eficaz e harmoniosa. ",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Conforme o estudo de Segunda-feira, o que as figuras de Marcos e Aristarco representam no contexto da rede de apoio de Paulo? ",
+"alternativaA": "Marcos representa a restauração de alguém que falhou e Aristarco a lealdade no sofrimento. ",
+"alternativaB": "Marcos representa a liderança gentílica e Aristarco a oposição judaica aos planos de Paulo. ",
+"alternativaC": "Ambos representam a decepção de Paulo por terem abandonado o ministério durante as prisões. ",
+"alternativaD": "Aristarco representa o sustento financeiro e Marcos a tradução dos textos para o latim romano. ",
+"alternativaE": "Eles representam os líderes de Laodiceia que se recusaram a ler a carta enviada pelo apóstolo. ",
 "respostaCorreta": "A",
-"justificativa": "Paulo usa a metáfora da planta (enraizados) para mostrar como o cristão se torna firme na fé.",
-"tempoSegundos": 30
+"justificativa": "Marcos, que antes falhou, tornou-se consolo e leal, enquanto Aristarco foi companheiro de prisão de Paulo. ",
+"tempoSegundos": 60
 },
 {
-"enunciado": "De acordo com o estudo de Segunda-feira, o que acontece quando aceitais ensinamentos que não estão fundamentados na Bíblia?",
-"alternativaA": "Vós estais apenas exercendo a vossa liberdade cristã de conhecer novas formas de pensamento.",
-"alternativaB": "Vós estais rejeitando a Cristo ao colocar autoridades humanas acima das Sagradas Escrituras.",
-"alternativaC": "Vós estais fortalecendo a vossa fé ao compreender as filosofias que dominam o mundo atual.",
-"alternativaD": "Vós estais cumprindo a profecia de que a igreja se tornaria um centro de sabedoria universal.",
-"alternativaE": "Vós estais demonstrando um amor maior ao aceitar a diversidade de crenças entre os irmãos.",
-"respostaCorreta": "B",
-"justificativa": "A lição afirma que aceitar ensinamentos não bíblicos significa rejeitar Cristo e elevar autoridades humanas acima da Bíblia.",
-"tempoSegundos": 45
-},
-{
-"enunciado": "Segundo o estudo de Terça-feira, a que experiência espiritual Paulo associa a 'circuncisão feita sem mãos' na vida do crente?",
-"alternativaA": "À prática de rituais de pureza que envolvem jejuns prolongados e sacrifícios de alimentos.",
-"alternativaB": "Ao batismo por imersão, que simboliza a identificação com a morte e ressurreição de Cristo.",
-"alternativaC": "À leitura diária e sistemática de todos os livros históricos contidos no Antigo Testamento.",
-"alternativaD": "À decisão de abandonar o trabalho secular para dedicar-se exclusivamente ao serviço da igreja.",
-"alternativaE": "Ao cumprimento de todas as festas anuais que eram celebradas no antigo santuário terrestre.",
-"respostaCorreta": "B",
-"justificativa": "O texto conecta a circuncisão do coração (mudança interior) com o batismo por imersão.",
-"tempoSegundos": 30
-},
-{
-"enunciado": "Conforme o estudo de Terça-feira, o que representa o 'escrito de dívida' que Jesus cravou na cruz ao morrer em vosso lugar?",
-"alternativaA": "Representa os Dez Mandamentos, que foram abolidos para que não houvesse mais condenação.",
-"alternativaB": "Representa um contrato comercial entre os líderes da igreja e as autoridades romanas da época.",
-"alternativaC": "Representa uma metáfora da vossa dívida moral para com Deus por causa de vossos pecados.",
-"alternativaD": "Representa a lista de nomes de todos os pecadores que seriam perdoados através do sacrifício.",
-"alternativaE": "Representa as tradições orais dos fariseus que impediam o povo de compreender a graça divina.",
+"enunciado": "De acordo com o estudo de Terça-feira, qual o significado bíblico do termo grego 'teleios' utilizado nas orações de Epafras pelos colossenses? ",
+"alternativaA": "Refere-se a um estado de ausência absoluta de pecado alcançado por meio de rituais judaicos. ",
+"alternativaB": "Indica a posse de riquezas materiais como sinal da aprovação divina para o crente fiel. ",
+"alternativaC": "Significa a maturidade espiritual de alguém que desenvolve um caráter semelhante ao de Cristo. ",
+"alternativaD": "Refere-se ao conhecimento técnico das profecias sobre o fim do sistema comercial do Império. ",
+"alternativaE": "Significa a obediência cega aos líderes locais sem a necessidade de entendimento espiritual. ",
 "respostaCorreta": "C",
-"justificativa": "Uma das interpretações citadas é que o 'escrito de dívida' é uma metáfora da nossa dívida moral para com Deus por causa do pecado.",
+"justificativa": "O termo teleios pode significar maduro e refere-se ao desenvolvimento de um caráter semelhante ao de Cristo. ",
 "tempoSegundos": 45
 },
 {
-"enunciado": "No estudo de Quarta-feira, qual é a distinção que Paulo faz entre as práticas cerimoniais e a realidade que vós tendes em Cristo?",
-"alternativaA": "As práticas cerimoniais são a luz do mundo, enquanto Cristo é o guia para a eternidade futura.",
-"alternativaB": "As práticas cerimoniais são o corpo da igreja, enquanto Cristo é apenas a cabeça espiritual.",
-"alternativaC": "As práticas cerimoniais são verdades eternas, enquanto Cristo é o cumprimento parcial delas.",
-"alternativaD": "As práticas cerimoniais são sombras do que viria, enquanto a realidade (o corpo) é Cristo.",
-"alternativaE": "As práticas cerimoniais são ordens diretas de Cristo que devem ser seguidas por toda a vida.",
-"respostaCorreta": "D",
-"justificativa": "Baseado em Colossenses 2:17, o texto explica que os dias cerimoniais eram sombras que apontavam para Cristo.",
-"tempoSegundos": 30
-},
-{
-"enunciado": "De acordo com o estudo de Quarta-feira, por que o sábado do sétimo dia não é considerado uma 'sombra' que deveria ser abolida na cruz?",
-"alternativaA": "Porque ele foi instituído no Éden antes do pecado e antes do sistema de sacrifícios e tipos.",
-"alternativaB": "Porque os apóstolos fizeram um decreto especial para manter apenas este mandamento em vigor.",
-"alternativaC": "Porque a guarda do sábado é a única obra humana que pode garantir a salvação de qualquer pessoa.",
-"alternativaD": "Porque Jesus nunca mencionou o sábado em Seus ensinamentos, deixando-o como uma lei natural.",
-"alternativaE": "Porque o sábado foi criado exclusivamente para a igreja cristã e não para o povo de Israel antigo.",
+"enunciado": "Considerando o estudo de Terça-feira, como vós deveis compreender o termo 'completos' (plēroō) em relação à vontade de Deus? ",
+"alternativaA": "Significa estar totalmente convencido da promessa divina e preenchido por bênçãos espirituais. ",
+"alternativaB": "Refere-se ao cumprimento de uma lista exaustiva de obras de caridade para garantir a salvação. ",
+"alternativaC": "Indica a satisfação pessoal de ter alcançado todos os objetivos financeiros e sociais na terra. ",
+"alternativaD": "Significa atingir o limite máximo de conhecimento intelectual sobre as línguas originais da Bíblia. ",
+"alternativaE": "Representa o fim da necessidade de orar, pois o crente já teria recebido tudo o que precisava. ",
 "respostaCorreta": "A",
-"justificativa": "A lição destaca que o sábado foi instituído no Éden, antes do pecado e dos sacrifícios, portanto não era uma sombra a ser abolida.",
-"tempoSegundos": 45
+"justificativa": "Plēroō significa satisfazer plenamente ou estar totalmente convencido, sendo usado sobre a ação divina de preencher alguém. ",
+"tempoSegundos": 60
 },
 {
-"enunciado": "Segundo o estudo de Quinta-feira, por que vós não deveis estar sobrecarregados pela observância da lei cerimonial nos dias de hoje?",
-"alternativaA": "Porque ela foi considerada muito difícil de ser cumprida por pessoas que vivem na era moderna.",
-"alternativaB": "Porque ela cumpriu sua função de prefigurar a realidade que agora desfrutais em Jesus Cristo.",
-"alternativaC": "Porque os líderes da igreja atual decidiram que essas leis não são mais interessantes para nós.",
-"alternativaD": "Porque o cumprimento dessas leis exige o uso de recursos financeiros que a igreja não possui.",
-"alternativaE": "Porque a lei cerimonial foi escrita por homens maus que queriam escravizar o povo de Deus.",
-"respostaCorreta": "B",
-"justificativa": "O texto afirma que não precisamos estar sobrecarregados pela lei cerimonial porque ela prefigurava a realidade em Cristo e já cumpriu sua função.",
-"tempoSegundos": 30
-},
-{
-"enunciado": "Conforme o estudo de Quinta-feira, qual é o perigo de se considerar as práticas religiosas como algo que possui mérito para a vossa salvação?",
-"alternativaA": "O perigo de vós vos sentirdes inferiores àqueles que não praticam as mesmas tradições humanas.",
-"alternativaB": "O perigo de vós gastardes muito tempo com a igreja e esquecerdes de vossos compromissos civis.",
-"alternativaC": "O perigo de vós vos tornardes pessoas muito conhecidas e respeitadas por toda a sociedade atual.",
-"alternativaD": "O perigo de vós abandonardes a leitura da Bíblia para focar apenas em ajudar os pobres e necessitados.",
-"alternativaE": "O perigo de vós cairdes na armadilha da exaltação própria e de confiar em vossos próprios atos.",
-"respostaCorreta": "E",
-"justificativa": "O texto adverte contra o sentimento de superioridade e a ideia sutil de que práticas humanas teriam mérito para a salvação.",
-"tempoSegundos": 45
-},
-{
-"enunciado": "No estudo de Sexta-feira, qual é o efeito do trabalho da 'crítica superior' sobre a fé das pessoas na revelação divina da Bíblia?",
-"alternativaA": "Ela fortalece a confiança nas Escrituras ao explicar os textos de forma puramente acadêmica.",
-"alternativaB": "Ela incentiva a união entre as diferentes religiões ao focar apenas nos ensinos morais básicos.",
-"alternativaC": "Ela destrói a fé na Bíblia como revelação de Deus ao dissecar, conjecturar e reconstruir o texto.",
-"alternativaD": "Ela ajuda o seguidor de Cristo a compreender melhor as profecias sobre o tempo do fim do mundo.",
-"alternativaE": "Ela promove a liberdade de pensamento ao permitir que cada um crie sua própria versão da verdade.",
-"respostaCorreta": "C",
-"justificativa": "Ellen White afirma que o trabalho da crítica superior está destruindo a fé na Bíblia como revelação divina.",
-"tempoSegundos": 30
-},
-{
-"enunciado": "De acordo com o estudo de Sexta-feira, qual deve ser a vossa atitude diante de interpretações espiritualistas e raciocínios falazes sobre a Bíblia?",
-"alternativaA": "Vós deveis aceitá-las como novas formas de luz que Deus está enviando para a igreja moderna.",
-"alternativaB": "Vós deveis ignorá-las completamente e nunca discutir sobre religião com pessoas de outras fés.",
-"alternativaC": "Vós deveis buscar um meio termo entre a verdade bíblica e as novas descobertas da ciência atual.",
-"alternativaD": "Vós deveis fazer ouvir a vossa voz na clara afirmação das verdades eternas contidas nas Escrituras.",
-"alternativaE": "Vós deveis mudar vossas crenças para que a igreja seja aceita e respeitada pelos grandes filósofos.",
+"enunciado": "De acordo com o estudo de Quarta-feira, qual a diferença fundamental entre as trajetórias de Lucas e Demas no ministério de Paulo? ",
+"alternativaA": "Lucas era judeu e permaneceu leal, enquanto Demas era gentio e voltou para as práticas judaicas. ",
+"alternativaB": "Lucas amava a medicina e Demas amava a pregação, o que causou uma divisão ética na equipe. ",
+"alternativaC": "Ambos abandonaram Paulo durante o julgamento final para evitar a execução pelo imperador. ",
+"alternativaD": "Lucas permaneceu ao lado de Paulo, enquanto Demas abandonou o apóstolo por amar este mundo. ",
+"alternativaE": "Lucas focava na escrita do evangelho enquanto Demas focava no treinamento dos crentes leigos. ",
 "respostaCorreta": "D",
-"justificativa": "O texto de Ellen White exorta o seguidor de Cristo a não aceitar tais interpretações, mas a afirmar claramente as verdades eternas da Bíblia.",
+"justificativa": "Lucas permaneceu ao lado de Paulo até o fim, enquanto Demas amava mais este mundo presente e o abandonou. ",
 "tempoSegundos": 45
+},
+{
+"enunciado": "Conforme o estudo de Quarta-feira, quais são as três etapas da prescrição de Jesus para a igreja de Laodiceia para superar o materialismo? ",
+"alternativaA": "Contribuir financeiramente, estudar as profecias e construir templos maiores para a congregação. ",
+"alternativaB": "Afastar-se da sociedade, viver em comunidades isoladas e praticar o jejum perpétuo de carne. ",
+"alternativaC": "Arrepender-se dos pecados, abrir o coração a Jesus e obter o ouro da fé e do amor nas provas. ",
+"alternativaD": "Abandonar o trabalho secular, dedicar-se apenas à oração e recusar qualquer contato com gentios. ",
+"alternativaE": "Memorizar as epístolas de Paulo, evitar o uso de redes sociais e rejeitar a medicina de Lucas. ",
+"respostaCorreta": "C",
+"justificativa": "A prescrição envolve arrependimento, abrir o coração a Jesus e obter o ouro da fé e do amor. ",
+"tempoSegundos": 60
+},
+{
+"enunciado": "De acordo com o estudo de Quinta-feira, qual o propósito do ministério de julgamento de Cristo no santuário celestial para o Seu povo? ",
+"alternativaA": "Punir os crentes pelos pecados cometidos durante o período de ignorância antes da conversão. ",
+"alternativaB": "Aperfeiçoar o povo em toda boa obra e prepará-los para a vida no céu e a união futura. ",
+"alternativaC": "Garantir que apenas os judeus da circuncisão tenham acesso aos portões da Nova Jerusalém. ",
+"alternativaD": "Destruir a terra imediatamente para que o pecado não se espalhe para os outros planetas. ",
+"alternativaE": "Revelar os segredos financeiros das igrejas de Colossos e Laodiceia para todo o universo. ",
+"respostaCorreta": "B",
+"justificativa": "Através do julgamento no santuário, o povo é aperfeiçoado em toda boa obra e preparado para o céu. ",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Com base no estudo de Quinta-feira, por que a união total entre céu e terra só ocorrerá após o fim do julgamento milenar? ",
+"alternativaA": "Porque os anjos celestiais ainda não aceitam a presença de gentios convertidos no reino de Deus. ",
+"alternativaB": "Porque a terra precisa ser reconstruída pelos próprios seres humanos antes do retorno de Cristo. ",
+"alternativaC": "Porque as questões da controvérsia e o pecado devem ser resolvidos e destruídos para sempre. ",
+"alternativaD": "Porque Satanás deve ser perdoado no lago de fogo para que a harmonia cósmica seja restaurada. ",
+"alternativaE": "Porque o julgamento final depende da leitura da carta perdida que Paulo escreveu para Laodiceia. ",
+"respostaCorreta": "C",
+"justificativa": "Somente com o fim do pecado e a resolução de todas as questões é que o céu e a terra poderão ser unidos. ",
+"tempoSegundos": 60
+},
+{
+"enunciado": "De acordo com o estudo de Sexta-feira, o que vós deveis entender sobre a necessidade de escolher ativamente um lado no conflito espiritual? ",
+"alternativaA": "Não é necessário escolher, pois Deus salvará a todos no final, independentemente de alianças. ",
+"alternativaB": "Basta negligenciar a aliança com a luz para cair automaticamente sob o domínio de Satanás. ",
+"alternativaC": "A escolha só é importante para aqueles que ocupam cargos de liderança ou missão na igreja. ",
+"alternativaD": "A habitação de Cristo no coração ocorre de forma automática sem a necessidade de fé ou justiça. ",
+"alternativaE": "O domínio do mal só ocorre se escolhermos deliberadamente praticar crimes graves contra a lei. ",
+"respostaCorreta": "B",
+"justificativa": "O texto afirma que basta negligenciarmos aliar-nos ao reino da luz para que Satanás tome posse do coração. ",
+"tempoSegundos": 45
+},
+{
+"enunciado": "Considerando o estudo de Sexta-feira, qual a única defesa eficaz que vós possuís contra os efeitos profanos do amor-próprio e da tentação? ",
+"alternativaA": "A separação temporária de Satanás e o abandono de alguns maus hábitos por esforço próprio. ",
+"alternativaB": "O estudo intelectual profundo das táticas de ataque que o inimigo utiliza contra a mente. ",
+"alternativaC": "O isolamento social absoluto em regiões desertas para evitar o contato com a cultura mundana. ",
+"alternativaD": "A habitação de Cristo no coração por meio da fé em Sua justiça e conexão vital com Deus. ",
+"alternativaE": "A dependência das orações de colaboradores fiéis como Epafras sem a necessidade de entrega pessoal. ",
+"respostaCorreta": "D",
+"justificativa": "A única defesa contra o mal é a habitação de Cristo no coração pela fé e a conexão vital com Deus momento a momento. ",
+"tempoSegundos": 60
 }
 ]
 

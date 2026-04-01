@@ -16,10 +16,11 @@ function getInitials(name: string | null | undefined): string {
 }
 
 export const Navbar = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const { quizEmAndamento } = useQuizUI()
+  const isSessionLoading = status === 'loading'
 
-  if (!session) {
+  if (!session && !isSessionLoading) {
     return null
   }
 
@@ -42,32 +43,45 @@ export const Navbar = () => {
               priority
             />
           </div>
-          <span className="text-gray-700">
-            Olá, {session.user?.name?.split(' ')[0] || session.user?.email}
-          </span>
-          <Link
-            href="/perfil"
-            className="flex items-center gap-2 hover:opacity-90 transition-opacity"
-            aria-label="Ir para perfil"
-          >
-            {session.user?.image ? (
-              <Image
-                src={session.user.image}
-                alt=""
-                width={48}
-                height={48}
-                className="h-12 w-12 rounded-full object-cover border border-gray-200"
-                unoptimized
-              />
-            ) : (
-              <div
-                className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600"
-                aria-hidden
+          {isSessionLoading ? (
+            <div className="flex items-center gap-3" aria-hidden>
+              <span className="text-gray-700 flex items-center gap-2">
+                <span>Olá,</span>
+                <span className="h-5 w-24 rounded bg-gray-200 animate-pulse inline-block" />
+              </span>
+              <div className="h-12 w-12 rounded-full bg-gray-200 animate-pulse" />
+            </div>
+          ) : (
+            <>
+              <span className="text-gray-700">
+                Olá,{' '}
+                {session?.user?.name?.split(' ')[0] || session?.user?.email}
+              </span>
+              <Link
+                href="/perfil"
+                className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+                aria-label="Ir para perfil"
               >
-                {getInitials(session.user?.name)}
-              </div>
-            )}
-          </Link>
+                {session?.user?.image ? (
+                  <Image
+                    src={session.user.image}
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 rounded-full object-cover border border-gray-200"
+                    unoptimized
+                  />
+                ) : (
+                  <div
+                    className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600"
+                    aria-hidden
+                  >
+                    {getInitials(session?.user?.name)}
+                  </div>
+                )}
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </motion.nav>

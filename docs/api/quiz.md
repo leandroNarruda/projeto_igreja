@@ -63,7 +63,7 @@ Lista todos os quizzes criados.
 
 ### 2. Criar Quiz
 
-Cria um novo quiz (inicialmente inativo).
+Cria um novo quiz (inicialmente inativo), com opção de criar perguntas em lote na mesma requisição.
 
 **Endpoint**: `POST /api/quiz`
 
@@ -73,9 +73,24 @@ Cria um novo quiz (inicialmente inativo).
 
 ```json
 {
-  "tema": "string (obrigatório)"
+  "tema": "string (obrigatório)",
+  "perguntas": [
+    {
+      "enunciado": "string (obrigatório)",
+      "alternativaA": "string (obrigatório)",
+      "alternativaB": "string (obrigatório)",
+      "alternativaC": "string (obrigatório)",
+      "alternativaD": "string (obrigatório)",
+      "alternativaE": "string (obrigatório)",
+      "respostaCorreta": "A|B|C|D|E (obrigatório)",
+      "justificativa": "string (obrigatório)",
+      "tempoSegundos": "number (obrigatório, > 0)"
+    }
+  ]
 }
 ```
+
+`perguntas` é opcional. Quando omitido, o quiz é criado sem perguntas.
 
 #### Respostas
 
@@ -90,11 +105,12 @@ Cria um novo quiz (inicialmente inativo).
     "ativo": false,
     "createdAt": "2024-01-20T14:30:00.000Z",
     "updatedAt": "2024-01-20T14:30:00.000Z"
-  }
+  },
+  "totalPerguntasCriadas": 0
 }
 ```
 
-**400 Bad Request**
+**400 Bad Request** - Tema obrigatório
 
 ```json
 {
@@ -102,9 +118,35 @@ Cria um novo quiz (inicialmente inativo).
 }
 ```
 
+**400 Bad Request** - Campo `perguntas` inválido
+
+```json
+{
+  "error": "O campo perguntas deve ser um array"
+}
+```
+
+**400 Bad Request** - Validação das perguntas
+
+```json
+{
+  "error": "Erros de validação",
+  "detalhes": [
+    "Pergunta 1: Enunciado é obrigatório",
+    "Pergunta 1: Resposta correta deve ser A, B, C, D ou E"
+  ]
+}
+```
+
 **401 Unauthorized** - Não autenticado
 
 **403 Forbidden** - Não é admin
+
+#### Observações
+
+- A criação do quiz e das perguntas ocorre em **transação** (tudo ou nada)
+- `tempoSegundos` aceita número ou string numérica, desde que seja maior que `0`
+- `totalPerguntasCriadas` informa quantas perguntas foram incluídas no `POST /api/quiz`
 
 ---
 

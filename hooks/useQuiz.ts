@@ -106,11 +106,17 @@ export function useCriarQuiz() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (tema: string) => {
+    mutationFn: async (data: {
+      tema: string
+      perguntas?: Array<Record<string, unknown>>
+    }) => {
       const response = await fetch('/api/quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tema }),
+        body: JSON.stringify({
+          tema: data.tema,
+          perguntas: data.perguntas ?? [],
+        }),
       })
       if (!response.ok) {
         throw new Error('Erro ao criar quiz')

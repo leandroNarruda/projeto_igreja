@@ -6,12 +6,16 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 
 interface QuizFormProps {
-  onSubmit: (tema: string) => Promise<void>
+  onSubmit: (data: {
+    tema: string
+    perguntas: Array<Record<string, unknown>>
+  }) => Promise<void>
   onCancel?: () => void
 }
 
 export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
   const [tema, setTema] = useState('')
+  const [perguntasJson, setPerguntasJson] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -24,10 +28,27 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
       return
     }
 
+    let perguntas: Array<Record<string, unknown>> = []
+
+    if (perguntasJson.trim()) {
+      try {
+        const parsed = JSON.parse(perguntasJson)
+        if (!Array.isArray(parsed)) {
+          setError('O JSON deve estar no formato de array de perguntas')
+          return
+        }
+        perguntas = parsed as Array<Record<string, unknown>>
+      } catch {
+        setError('JSON inválido. Verifique a estrutura e tente novamente')
+        return
+      }
+    }
+
     setLoading(true)
     try {
-      await onSubmit(tema.trim())
+      await onSubmit({ tema: tema.trim(), perguntas })
       setTema('')
+      setPerguntasJson('')
     } catch (err) {
       setError('Erro ao criar quiz')
     } finally {
@@ -47,6 +68,23 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
             placeholder="Ex: Conhecimentos Bíblicos"
             error={error}
             disabled={loading}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="perguntas-json"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Perguntas em JSON (opcional)
+          </label>
+          <textarea
+            id="perguntas-json"
+            value={perguntasJson}
+            onChange={e => setPerguntasJson(e.target.value)}
+            placeholder='Cole aqui um array JSON de perguntas: [{"enunciado":"...","alternativaA":"...","alternativaB":"...","alternativaC":"...","alternativaD":"...","alternativaE":"...","respostaCorreta":"A","justificativa":"...","tempoSegundos":30}]'
+            disabled={loading}
+            rows={10}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
         </div>
         <div className="flex gap-2">

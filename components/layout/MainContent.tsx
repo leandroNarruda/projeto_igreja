@@ -9,11 +9,13 @@ interface MainContentProps {
 }
 
 export const MainContent = ({ children }: MainContentProps) => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const { quizEmAndamento } = useQuizUI()
+  const hasSessionLayout = !!session || status === 'loading'
 
   // Com quiz em andamento: sem padding (conteúdo ocupa tela inteira). Caso contrário, padding para navbar e footer fixos.
-  const paddingClass = session && !quizEmAndamento ? 'pt-16 pb-16' : 'pt-0 pb-0'
+  const paddingClass =
+    hasSessionLayout && !quizEmAndamento ? 'pt-16 pb-16' : 'pt-0 pb-0'
 
   return <main className={paddingClass}>{children}</main>
 }
