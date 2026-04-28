@@ -108,7 +108,7 @@ export default function HomePage() {
               </Link>
             </div>
             {classificacao.length > 0 && (
-              <div className="mt-8">
+              <div className="mt-8 bg-bg-card rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold text-accent mb-6 text-center">
                   Classificação
                 </h2>
@@ -315,7 +315,7 @@ export default function HomePage() {
             </p>
           </div>
           {classificacao.length > 0 && (
-            <div className="mt-8">
+            <div className="mt-8 bg-bg-card rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold text-accent mb-6 text-center">
                 Classificação
               </h2>
