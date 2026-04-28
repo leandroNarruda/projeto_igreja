@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { isAdmin } from '@/lib/permissions'
 
+export const dynamic = 'force-dynamic'
+
 const selectUser = {
   id: true,
   name: true,

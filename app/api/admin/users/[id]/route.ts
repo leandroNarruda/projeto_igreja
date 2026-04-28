@@ -4,6 +4,8 @@ import { isAdmin } from '@/lib/permissions'
 import { getServerSession } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 
+export const dynamic = 'force-dynamic'
+
 const selectUser = {
   id: true,
   name: true,
