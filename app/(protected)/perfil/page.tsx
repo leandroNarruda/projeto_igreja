@@ -196,14 +196,14 @@ export default function PerfilPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Perfil</h1>
+          <div className="bg-bg-card rounded-lg shadow-md p-6">
+            <h1 className="text-3xl font-bold text-accent mb-4">Perfil</h1>
 
             <div className="space-y-6">
-              <div className="border-b border-gray-200 pb-4">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              <div className="border-b border-primary/20 pb-4">
+                <h2 className="text-lg font-semibold text-accent mb-2">
                   Informações Pessoais
                 </h2>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-6">
@@ -213,11 +213,11 @@ export default function PerfilPage() {
                         <img
                           src={session.user.image}
                           alt="Avatar"
-                          className="h-24 w-24 rounded-full object-cover border-2 border-gray-200"
+                          className="h-24 w-24 rounded-full object-cover border-2 border-primary/20"
                         />
                       ) : (
                         <div
-                          className="h-24 w-24 rounded-full bg-gray-200 border-2 border-gray-200 flex items-center justify-center text-2xl font-semibold text-gray-600"
+                          className="h-24 w-24 rounded-full bg-primary/20 border-2 border-primary/20 flex items-center justify-center text-2xl font-semibold text-lavender"
                           aria-hidden
                         >
                           {initials}
@@ -242,14 +242,14 @@ export default function PerfilPage() {
                       </button>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700">
+                      <p className="text-sm font-medium text-lavender">
                         Foto de perfil
                       </p>
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
-                        className="text-sm text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                        className="text-sm text-primary hover:text-blue-800 disabled:opacity-50"
                       >
                         {uploading ? 'Enviando…' : 'Alterar foto'}
                       </button>
@@ -263,32 +263,32 @@ export default function PerfilPage() {
                 </div>
                 <div className="mt-4 space-y-2">
                   <div>
-                    <span className="text-sm text-gray-600">Nome:</span>
-                    <p className="text-gray-900 font-medium">
+                    <span className="text-sm text-lavender">Nome:</span>
+                    <p className="text-accent font-medium">
                       {session.user?.name}
                     </p>
                   </div>
                   {session.user?.socialName && (
                     <div>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-lavender">
                         Como quer ser chamado:
                       </span>
-                      <p className="text-gray-900 font-medium">
+                      <p className="text-accent font-medium">
                         {session.user.socialName}
                       </p>
                     </div>
                   )}
                   <div>
-                    <span className="text-sm text-gray-600">Email:</span>
-                    <p className="text-gray-900 font-medium">
+                    <span className="text-sm text-lavender">Email:</span>
+                    <p className="text-accent font-medium">
                       {session.user?.email}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="border-b border-gray-200 pb-4">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              <div className="border-b border-primary/20 pb-4">
+                <h2 className="text-lg font-semibold text-accent mb-2">
                   Configurações
                 </h2>
 
@@ -296,15 +296,15 @@ export default function PerfilPage() {
                   <div className="flex items-center justify-between py-3">
                     <div className="flex items-center gap-3">
                       {push.isSubscribed ? (
-                        <Bell className="h-5 w-5 text-blue-600" />
+                        <Bell className="h-5 w-5 text-primary" />
                       ) : (
                         <BellOff className="h-5 w-5 text-gray-400" />
                       )}
                       <div>
-                        <p className="text-sm font-medium text-gray-700">
+                        <p className="text-sm font-medium text-lavender">
                           Notificações push
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-lavender/50">
                           {push.state === 'denied'
                             ? 'Bloqueado nas configurações do navegador'
                             : push.isSubscribed
@@ -329,12 +329,12 @@ export default function PerfilPage() {
                         }
                         setPushLoading(false)
                       }}
-                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                        push.isSubscribed ? 'bg-blue-600' : 'bg-gray-200'
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                        push.isSubscribed ? 'bg-primary' : 'bg-primary/20'
                       }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-bg-card shadow ring-0 transition duration-200 ease-in-out ${
                           push.isSubscribed ? 'translate-x-5' : 'translate-x-0'
                         }`}
                       />
@@ -411,7 +411,7 @@ export default function PerfilPage() {
                 value={zoom}
                 onChange={e => setZoom(Number(e.target.value))}
                 disabled={uploading}
-                className="flex-1 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
+                className="flex-1 h-1 bg-bg-card/30 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-bg-card"
               />
               <span className="text-white text-sm">+</span>
             </div>
@@ -424,7 +424,7 @@ export default function PerfilPage() {
                 type="button"
                 onClick={handleCancelEditor}
                 disabled={uploading}
-                className="px-8 py-3 text-white font-semibold text-lg hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50"
+                className="px-8 py-3 text-white font-semibold text-lg hover:bg-bg-card/10 rounded-lg transition-colors disabled:opacity-50"
               >
                 Cancelar
               </button>

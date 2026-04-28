@@ -77,7 +77,7 @@ export const SocialNameModal: React.FC<SocialNameModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="bg-white rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden"
+              className="bg-bg-card border border-primary/40 rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden"
               onClick={e => e.stopPropagation()}
               role="dialog"
               aria-labelledby="social-name-title"
@@ -86,11 +86,11 @@ export const SocialNameModal: React.FC<SocialNameModalProps> = ({
               <form onSubmit={handleSubmit} className="p-6">
                 <h2
                   id="social-name-title"
-                  className="text-2xl font-bold text-gray-900 mb-2 text-center"
+                  className="text-2xl font-bold text-accent mb-2 text-center"
                 >
                   Como você quer ser chamado?
                 </h2>
-                <p className="text-gray-600 mb-6 text-center">
+                <p className="text-lavender mb-6 text-center">
                   Digite o nome que preferir para aparecer na aplicação.
                 </p>
                 <div className="mb-4">
@@ -106,7 +106,7 @@ export const SocialNameModal: React.FC<SocialNameModalProps> = ({
                   />
                 </div>
                 {error && (
-                  <p className="text-red-600 text-sm mb-4 text-center">
+                  <p className="text-danger text-sm mb-4 text-center">
                     {error}
                   </p>
                 )}

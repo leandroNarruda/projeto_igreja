@@ -58,7 +58,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
 
   return (
     <Card>
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Criar Novo Quiz</h3>
+      <h3 className="text-xl font-bold text-accent mb-4">Criar Novo Quiz</h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <Input
@@ -73,7 +73,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
         <div className="mb-4">
           <label
             htmlFor="perguntas-json"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-lavender mb-1"
           >
             Perguntas em JSON (opcional)
           </label>
@@ -84,7 +84,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
             placeholder='Cole aqui um array JSON de perguntas: [{"enunciado":"...","alternativaA":"...","alternativaB":"...","alternativaC":"...","alternativaD":"...","alternativaE":"...","respostaCorreta":"A","justificativa":"...","tempoSegundos":30}]'
             disabled={loading}
             rows={10}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full rounded-md border border-primary/35 px-3 py-2 text-sm text-accent placeholder:text-lavender/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-primary/10 disabled:cursor-not-allowed"
           />
         </div>
         <div className="flex gap-2">

@@ -74,7 +74,7 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-900 mb-1">
+        <label className="block text-sm font-medium text-accent mb-1">
           {label}
         </label>
       )}
@@ -89,17 +89,17 @@ export const Select: React.FC<SelectProps> = ({
           disabled={disabled}
           className={`
             w-full px-4 py-2 border rounded-lg
-            text-left text-gray-900 bg-white
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+            text-left text-accent bg-primary/10
+            focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
             flex items-center justify-between
-            ${error ? 'border-red-500' : 'border-gray-300'}
+            ${error ? 'border-danger' : 'border-primary/35'}
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            ${!selectedOption ? 'text-gray-500' : ''}
+            ${!selectedOption ? 'text-lavender/50' : ''}
           `}
         >
           <span className="truncate">{displayValue}</span>
           <svg
-            className={`w-4 h-4 text-gray-500 transition-transform flex-shrink-0 ml-2 ${
+            className={`w-4 h-4 text-lavender/50 transition-transform flex-shrink-0 ml-2 ${
               isOpen ? 'transform rotate-180' : ''
             }`}
             fill="none"
@@ -117,7 +117,7 @@ export const Select: React.FC<SelectProps> = ({
 
         {isOpen && (
           <div
-            className="absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-60 overflow-auto"
+            className="absolute w-full mt-1 bg-bg-card border border-primary/35 rounded-lg shadow-xl max-h-60 overflow-auto"
             style={{
               top: '100%',
               left: 0,
@@ -130,9 +130,9 @@ export const Select: React.FC<SelectProps> = ({
                 type="button"
                 onClick={() => handleSelect(option.value)}
                 className={`
-                  w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-50
+                  w-full px-4 py-2 text-left text-accent hover:bg-primary/10
                   transition-colors
-                  ${value === option.value ? 'bg-blue-100 font-medium' : ''}
+                  ${value === option.value ? 'bg-primary/20 font-medium' : ''}
                   first:rounded-t-lg last:rounded-b-lg
                 `}
               >
@@ -142,7 +142,7 @@ export const Select: React.FC<SelectProps> = ({
           </div>
         )}
       </div>
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-sm text-danger">{error}</p>}
     </div>
   )
 }

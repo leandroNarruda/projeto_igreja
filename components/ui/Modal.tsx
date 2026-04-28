@@ -76,11 +76,11 @@ export const Modal: React.FC<ModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
+              className="bg-bg-card border border-primary/40 rounded-lg shadow-xl max-w-md w-full p-6"
               onClick={e => e.stopPropagation()}
             >
-              <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>
-              <p className="text-gray-700 mb-6">{message}</p>
+              <h2 className="text-xl font-bold text-accent mb-4">{title}</h2>
+              <p className="text-lavender mb-6">{message}</p>
               <div className="flex gap-3 justify-end">
                 <Button variant="outline" onClick={onClose}>
                   {cancelText}

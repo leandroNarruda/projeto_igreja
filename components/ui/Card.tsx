@@ -28,7 +28,7 @@ export const Card: React.FC<CardProps> = ({
   const animationDelay = index !== undefined ? index * 0.1 : delay
 
   // Background padrão ou customizado
-  const backgroundClass = bgClassName || 'bg-white'
+  const backgroundClass = bgClassName || 'bg-bg-card'
   // Border padrão ou customizado
   const borderClass = borderClassName || ''
   // Padding padrão ou customizado

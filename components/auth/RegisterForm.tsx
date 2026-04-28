@@ -112,8 +112,8 @@ export const RegisterForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-md bg-white/30 backdrop-blur-sm">
-      <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">
+    <Card className="w-full max-w-md bg-bg-card/80 backdrop-blur-sm border border-primary/40">
+      <h2 className="text-2xl font-bold text-center mb-6 text-accent">
         Cadastro
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -150,7 +150,7 @@ export const RegisterForm = () => {
           placeholder="••••••••"
         />
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="bg-danger/10 border border-danger/30 text-danger px-4 py-3 rounded">
             {error}
           </div>
         )}
@@ -158,11 +158,11 @@ export const RegisterForm = () => {
           {loading ? 'Criando conta...' : 'Criar Conta'}
         </Button>
       </form>
-      <p className="mt-4 text-center text-sm text-gray-800">
+      <p className="mt-4 text-center text-sm text-lavender">
         Já tem uma conta?{' '}
         <a
           href="/login"
-          className="text-blue-700 hover:text-blue-800 hover:underline font-medium"
+          className="text-accent hover:text-accent/80 hover:underline font-medium"
         >
           Faça login
         </a>

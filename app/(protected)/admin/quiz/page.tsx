@@ -138,7 +138,7 @@ export default function AdminQuizPage() {
   if (quizSelecionado) {
     return (
       <PageTransition>
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-6">
               <Button
@@ -159,7 +159,7 @@ export default function AdminQuizPage() {
             </div>
 
             <div className="mt-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-accent mb-4">
                 Perguntas Cadastradas ({perguntas.length})
               </h2>
               <div className="space-y-4">
@@ -167,10 +167,10 @@ export default function AdminQuizPage() {
                   <Card key={pergunta.id} index={index}>
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        <h3 className="text-lg font-semibold text-accent mb-2">
                           {index + 1}. {pergunta.enunciado}
                         </h3>
-                        <div className="space-y-1 text-sm text-gray-700">
+                        <div className="space-y-1 text-sm text-lavender">
                           <p>
                             <span className="font-semibold">A)</span>{' '}
                             {pergunta.alternativaA}
@@ -192,7 +192,7 @@ export default function AdminQuizPage() {
                             {pergunta.alternativaE}
                           </p>
                         </div>
-                        <div className="mt-2 text-sm text-gray-600">
+                        <div className="mt-2 text-sm text-lavender">
                           <span className="font-semibold">
                             Resposta correta:
                           </span>{' '}
@@ -214,10 +214,10 @@ export default function AdminQuizPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
+            <h1 className="text-3xl font-bold text-accent">Quizzes</h1>
             <Button
               variant="primary"
               onClick={() => router.push('/admin/quiz/novo')}

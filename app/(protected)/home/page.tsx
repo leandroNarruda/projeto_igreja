@@ -80,7 +80,7 @@ export default function HomePage() {
           onClose={handleCloseWelcomeModal}
           videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
         />
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
           <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
             <div className="mb-8">
               <QuizResult
@@ -95,32 +95,63 @@ export default function HomePage() {
                 href="/eventos#classificacao-geral"
                 className="
                   inline-flex items-center gap-2 px-4 py-2.5
-                  text-blue-700 font-medium
-                  bg-blue-50 border border-blue-200 rounded-lg
-                  hover:bg-blue-100 hover:border-blue-300 hover:underline
+                  text-accent font-medium
+                  bg-primary/10 border border-primary/30 rounded-lg
+                  hover:bg-primary/20 hover:border-primary/50 hover:underline
                   transition-colors duration-200
                 "
               >
                 <Trophy className="size-5 shrink-0" aria-hidden />
-                <span className="underline decoration-blue-300 decoration-2 underline-offset-2">
+                <span className="underline decoration-primary/50 decoration-2 underline-offset-2">
                   Ver classificação geral do evento
                 </span>
               </Link>
             </div>
             {classificacao.length > 0 && (
               <div className="mt-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                <h2 className="text-2xl font-bold text-accent mb-6 text-center">
                   Classificação
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                   {classificacao.map(
                     (item: ClassificacaoItem, index: number) => {
                       const medalhas = ['🥇', '🥈', '🥉']
-                      const cores = [
-                        'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
-                        'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
-                        'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
+                      const podioThemes = [
+                        {
+                          card: 'bg-gradient-to-br from-amber-200 via-yellow-300 to-amber-500 border-amber-600 shadow-xl shadow-amber-500/40 ring-1 ring-amber-300/60',
+                          shine:
+                            'bg-gradient-to-tr from-transparent via-white/40 to-transparent',
+                          name: 'text-amber-950',
+                          label: 'text-amber-900',
+                          divider: 'border-amber-700/40',
+                          percent: 'text-amber-950',
+                          avatarFallback: 'bg-amber-900 text-amber-100',
+                          avatarBorder: 'border-amber-700/60',
+                        },
+                        {
+                          card: 'bg-gradient-to-br from-slate-100 via-zinc-300 to-slate-400 border-slate-500 shadow-xl shadow-slate-400/40 ring-1 ring-slate-200/60',
+                          shine:
+                            'bg-gradient-to-tr from-transparent via-white/50 to-transparent',
+                          name: 'text-slate-900',
+                          label: 'text-slate-800',
+                          divider: 'border-slate-600/40',
+                          percent: 'text-slate-900',
+                          avatarFallback: 'bg-slate-800 text-slate-100',
+                          avatarBorder: 'border-slate-600/60',
+                        },
+                        {
+                          card: 'bg-gradient-to-br from-orange-300 via-amber-600 to-orange-800 border-amber-800 shadow-xl shadow-orange-700/40 ring-1 ring-orange-400/60',
+                          shine:
+                            'bg-gradient-to-tr from-transparent via-white/25 to-transparent',
+                          name: 'text-orange-50',
+                          label: 'text-amber-100',
+                          divider: 'border-orange-200/40',
+                          percent: 'text-orange-50',
+                          avatarFallback: 'bg-orange-950 text-orange-100',
+                          avatarBorder: 'border-orange-200/50',
+                        },
                       ]
+                      const theme = index < 3 ? podioThemes[index] : null
                       return (
                         <motion.div
                           key={item.userId}
@@ -138,18 +169,26 @@ export default function HomePage() {
                             delay: index * 0.05,
                           }}
                           className={`
-                        p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
+                        relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
                         ${
-                          index < 3
-                            ? cores[index]
+                          theme
+                            ? `${theme.card}${index === 0 ? ' ring-2 ring-amber-400 ring-offset-2 ring-offset-bg-card' : ''}`
                             : item.userId === Number(session?.user?.id)
-                              ? 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-400 ring-2 ring-blue-400 ring-offset-2'
-                              : 'bg-white border-gray-300 hover:border-gray-400'
+                              ? 'bg-gradient-to-br from-primary/20 to-primary/30 border-primary ring-2 ring-primary ring-offset-2'
+                              : 'bg-bg-card border-primary/30 hover:border-primary/60'
                         }
                       `}
                         >
-                          <div className="text-center">
-                            <div className="text-4xl mb-3 text-gray-900">
+                          {theme && (
+                            <div
+                              aria-hidden
+                              className={`pointer-events-none absolute inset-0 ${theme.shine}`}
+                            />
+                          )}
+                          <div className="relative text-center">
+                            <div
+                              className={`text-4xl mb-3 ${theme ? 'drop-shadow-md' : 'text-accent'}`}
+                            >
                               {index < 3 ? medalhas[index] : `${item.posicao}º`}
                             </div>
                             <div className="flex items-center justify-center gap-2 mb-3">
@@ -159,17 +198,25 @@ export default function HomePage() {
                                   alt=""
                                   width={40}
                                   height={40}
-                                  className="h-10 w-10 rounded-full object-cover border-2 border-gray-300 shrink-0"
+                                  className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${theme ? theme.avatarBorder : 'border-primary/30'}`}
                                   unoptimized
                                 />
                               ) : (
-                                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-gray-600 border-2 border-gray-300 shrink-0">
+                                <div
+                                  className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${
+                                    theme
+                                      ? `${theme.avatarFallback} ${theme.avatarBorder}`
+                                      : 'bg-primary/20 text-lavender border-primary/30'
+                                  }`}
+                                >
                                   {getFirstLetter(
                                     item.social_name?.trim() || item.nome
                                   )}
                                 </div>
                               )}
-                              <h3 className="text-xl font-bold text-gray-900 truncate min-w-0">
+                              <h3
+                                className={`text-xl font-bold truncate min-w-0 ${theme ? theme.name : 'text-accent'}`}
+                              >
                                 {
                                   (item.social_name?.trim() || item.nome).split(
                                     ' '
@@ -177,7 +224,9 @@ export default function HomePage() {
                                 }
                               </h3>
                             </div>
-                            <div className="space-y-1 text-sm text-gray-600">
+                            <div
+                              className={`space-y-1 text-sm ${theme ? theme.label : 'text-lavender'}`}
+                            >
                               <div>
                                 <span className="font-semibold">Acertos:</span>{' '}
                                 {item.acertos}
@@ -192,8 +241,12 @@ export default function HomePage() {
                                   {item.nulos}
                                 </div>
                               )}
-                              <div className="pt-2 border-t border-gray-300">
-                                <span className="font-semibold text-lg text-gray-900">
+                              <div
+                                className={`pt-2 border-t ${theme ? theme.divider : 'border-primary/30'}`}
+                              >
+                                <span
+                                  className={`font-semibold text-lg ${theme ? theme.percent : 'text-accent'}`}
+                                >
                                   {item.porcentagem}%
                                 </span>
                               </div>
@@ -220,27 +273,27 @@ export default function HomePage() {
           onClose={handleCloseWelcomeModal}
           videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
         />
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
           <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 flex justify-center">
             <div className="text-center">
-              <p className="text-gray-600 text-lg mb-4">
+              <p className="text-lavender text-lg mb-4">
                 Não há quiz ativo no momento.
               </p>
-              <p className="text-gray-500 mb-4">
+              <p className="text-lavender/70 mb-4">
                 Aguarde um novo quiz ser disponibilizado.
               </p>
               <Link
                 href="/eventos#classificacao-geral"
                 className="
                   inline-flex items-center gap-2 px-4 py-2.5
-                  text-blue-700 font-medium
-                  bg-blue-50 border border-blue-200 rounded-lg
-                  hover:bg-blue-100 hover:border-blue-300 hover:underline
+                  text-accent font-medium
+                  bg-primary/10 border border-primary/30 rounded-lg
+                  hover:bg-primary/20 hover:border-primary/50 hover:underline
                   transition-colors duration-200
                 "
               >
                 <Trophy className="size-5 shrink-0" aria-hidden />
-                <span className="underline decoration-blue-300 decoration-2 underline-offset-2">
+                <span className="underline decoration-primary/50 decoration-2 underline-offset-2">
                   Ver classificação geral do evento
                 </span>
               </Link>
@@ -258,7 +311,7 @@ export default function HomePage() {
         onClose={handleCloseWelcomeModal}
         videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
       />
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex flex-col items-center justify-center mb-8">
             <button
@@ -267,7 +320,7 @@ export default function HomePage() {
                 relative overflow-hidden
                 px-12 py-6
                 text-2xl md:text-3xl font-bold text-white
-                bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
+                bg-gradient-to-r from-primary via-primary-hover to-orange
                 rounded-xl shadow-2xl
                 transform transition-all duration-300
                 hover:scale-105 hover:shadow-3xl
@@ -291,14 +344,14 @@ export default function HomePage() {
                 href="/eventos#classificacao-geral"
                 className="
                   inline-flex items-center gap-2 px-4 py-2.5
-                  text-blue-700 font-medium
-                  bg-blue-50 border border-blue-200 rounded-lg
-                  hover:bg-blue-100 hover:border-blue-300 hover:underline
+                  text-accent font-medium
+                  bg-primary/10 border border-primary/30 rounded-lg
+                  hover:bg-primary/20 hover:border-primary/50 hover:underline
                   transition-colors duration-200
                 "
               >
                 <Trophy className="size-5 shrink-0" aria-hidden />
-                <span className="underline decoration-blue-300 decoration-2 underline-offset-2">
+                <span className="underline decoration-primary/50 decoration-2 underline-offset-2">
                   Ver classificação geral do evento
                 </span>
               </Link>
@@ -306,7 +359,7 @@ export default function HomePage() {
           </div>
           {classificacao.length > 0 && (
             <div className="mt-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              <h2 className="text-2xl font-bold text-accent mb-6 text-center">
                 Classificação
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
@@ -314,7 +367,7 @@ export default function HomePage() {
                   const medalhas = ['🥇', '🥈', '🥉']
                   const cores = [
                     'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
-                    'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
+                    'bg-gradient-to-br from-lavender/10 to-lavender/20 border-lavender/40',
                     'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
                   ]
                   return (
@@ -335,7 +388,7 @@ export default function HomePage() {
                       }}
                       className={`
                         p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
-                        ${index < 3 ? cores[index] : 'bg-white border-gray-300 hover:border-gray-400'}
+                        ${index < 3 ? cores[index] : 'bg-bg-card border-primary/30 hover:border-primary/60'}
                       `}
                     >
                       <div className="text-center">
@@ -349,17 +402,17 @@ export default function HomePage() {
                               alt=""
                               width={40}
                               height={40}
-                              className="h-10 w-10 rounded-full object-cover border-2 border-gray-300 shrink-0"
+                              className="h-10 w-10 rounded-full object-cover border-2 border-primary/30 shrink-0"
                               unoptimized
                             />
                           ) : (
-                            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-gray-600 border-2 border-gray-300 shrink-0">
+                            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-base font-semibold text-lavender border-2 border-primary/30 shrink-0">
                               {getFirstLetter(
                                 item.social_name?.trim() || item.nome
                               )}
                             </div>
                           )}
-                          <h3 className="text-xl font-bold text-gray-900 truncate min-w-0">
+                          <h3 className="text-xl font-bold text-accent truncate min-w-0">
                             {
                               (item.social_name?.trim() || item.nome).split(
                                 ' '
@@ -367,7 +420,7 @@ export default function HomePage() {
                             }
                           </h3>
                         </div>
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-lavender">
                           <div>
                             <span className="font-semibold">Acertos:</span>{' '}
                             {item.acertos}
@@ -382,8 +435,8 @@ export default function HomePage() {
                               {item.nulos}
                             </div>
                           )}
-                          <div className="pt-2 border-t border-gray-300">
-                            <span className="font-semibold text-lg text-gray-900">
+                          <div className="pt-2 border-t border-primary/30">
+                            <span className="font-semibold text-lg text-accent">
                               {item.porcentagem}%
                             </span>
                           </div>

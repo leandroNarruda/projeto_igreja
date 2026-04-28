@@ -147,18 +147,18 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
         >
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-semibold text-gray-700">
+              <h3 className="text-lg font-semibold text-lavender">
                 Tempo restante
               </h3>
               <span
                 className={`text-2xl font-bold ${
-                  tempoRestante <= 10 ? 'text-red-600' : 'text-gray-900'
+                  tempoRestante <= 10 ? 'text-danger' : 'text-accent'
                 }`}
               >
                 {tempoRestante}s
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="w-full bg-primary/20 rounded-full h-3">
               <div
                 className={`h-3 rounded-full transition-all duration-300 ${corTempo}`}
                 style={{ width: `${porcentagemTempo}%` }}
@@ -167,7 +167,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
           </div>
 
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-accent mb-6">
               {pergunta.enunciado}
             </h2>
 
@@ -179,14 +179,14 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                 const isWrongChoice = showFeedback && isSelected && !isCorrect
 
                 let borderBgClasses =
-                  'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                  'border-primary/30 hover:border-primary/60 hover:bg-primary/5'
                 if (!showFeedback) {
-                  if (isSelected) borderBgClasses = 'border-blue-600 bg-blue-50'
+                  if (isSelected) borderBgClasses = 'border-primary bg-primary/10'
                 } else {
                   if (isCorrectAnswer)
-                    borderBgClasses = 'border-green-500 bg-green-50'
+                    borderBgClasses = 'border-success bg-success/10'
                   else if (isWrongChoice)
-                    borderBgClasses = 'border-red-500 bg-red-50'
+                    borderBgClasses = 'border-danger bg-danger/10'
                 }
 
                 return (
@@ -207,21 +207,21 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                         checked={isSelected}
                         onChange={() => handleAlternativaChange(alt.letra)}
                         disabled={respondida}
-                        className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
+                        className="mr-4 w-5 h-5 text-primary focus:ring-primary"
                       />
-                      <span className="font-semibold text-gray-900 mr-3">
+                      <span className="font-semibold text-accent mr-3">
                         {alt.letra})
                       </span>
-                      <span className="text-gray-700 flex-1">{alt.texto}</span>
+                      <span className="text-lavender flex-1">{alt.texto}</span>
                       {showFeedback && isCorrectAnswer && (
                         <Check
-                          className="flex-shrink-0 w-6 h-6 text-green-600"
+                          className="flex-shrink-0 w-6 h-6 text-success"
                           aria-hidden
                         />
                       )}
                       {showFeedback && isWrongChoice && (
                         <X
-                          className="flex-shrink-0 w-6 h-6 text-red-600"
+                          className="flex-shrink-0 w-6 h-6 text-danger"
                           aria-hidden
                         />
                       )}
@@ -229,7 +229,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                     {showFeedback &&
                       isCorrectAnswer &&
                       pergunta.justificativa?.trim() && (
-                        <p className="mt-2 ml-9 text-sm text-green-900 font-bold">
+                        <p className="mt-2 ml-9 text-sm text-success font-bold">
                           {pergunta.justificativa.trim()}
                         </p>
                       )}
@@ -246,19 +246,19 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                 <button
                   type="button"
                   onClick={handleAvançar}
-                  className="relative inline-flex items-center justify-center gap-2 w-52 px-8 py-4 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 overflow-hidden bg-violet-100 text-violet-900 shadow-lg shadow-violet-500/25 transition-shadow hover:shadow-violet-500/40"
+                  className="relative inline-flex items-center justify-center gap-2 w-52 px-8 py-4 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 overflow-hidden bg-primary/20 text-accent shadow-lg shadow-primary/25 transition-shadow hover:shadow-primary/40"
                 >
                   {/* Background inteiro que esvazia com o tempo */}
                   <span
-                    className="absolute inset-0 bg-violet-500 transition-[width] duration-1000 ease-linear"
+                    className="absolute inset-0 bg-primary transition-[width] duration-1000 ease-linear"
                     style={{ width: `${(tempoAvançar / 15) * 100}%` }}
                     aria-hidden
                   />
-                  <span className="relative z-10 font-semibold text-violet-900">
+                  <span className="relative z-10 font-semibold text-accent">
                     Próximo {tempoAvançar > 0 && `(${tempoAvançar}s)`}
                   </span>
                   <ChevronRight
-                    className="w-5 h-5 relative z-10 text-violet-900"
+                    className="w-5 h-5 relative z-10 text-accent"
                     aria-hidden
                   />
                 </button>

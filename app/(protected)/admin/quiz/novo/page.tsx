@@ -25,7 +25,7 @@ export default function AdminQuizNovoPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Button
@@ -37,8 +37,8 @@ export default function AdminQuizNovoPage() {
           </div>
 
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Novo Quiz</h1>
-            <p className="mt-1 text-sm text-gray-600">
+            <h1 className="text-3xl font-bold text-accent">Novo Quiz</h1>
+            <p className="mt-1 text-sm text-lavender">
               Preencha os dados para criar um novo quiz.
             </p>
           </div>

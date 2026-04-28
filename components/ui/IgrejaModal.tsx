@@ -103,10 +103,10 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
+              className="bg-bg-card border border-primary/40 rounded-lg shadow-xl max-w-md w-full p-6"
               onClick={e => e.stopPropagation()}
             >
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-bold text-accent mb-4">
                 A qual igreja você pertence?
               </h2>
 
@@ -116,8 +116,8 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
                     flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all
                     ${
                       igrejaSelecionada === 'Santa Tereza'
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-primary/30 hover:border-primary/60 hover:bg-primary/5'
                     }
                     ${loading ? 'opacity-60 cursor-not-allowed' : ''}
                   `}
@@ -129,9 +129,9 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
                     checked={igrejaSelecionada === 'Santa Tereza'}
                     onChange={() => setIgrejaSelecionada('Santa Tereza')}
                     disabled={loading}
-                    className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
+                    className="mr-4 w-5 h-5 text-primary focus:ring-primary"
                   />
-                  <span className="text-gray-700 font-medium">
+                  <span className="text-accent font-medium">
                     Santa Tereza
                   </span>
                 </label>
@@ -141,8 +141,8 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
                     flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all
                     ${
                       igrejaSelecionada === 'Outra'
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-primary/30 hover:border-primary/60 hover:bg-primary/5'
                     }
                     ${loading ? 'opacity-60 cursor-not-allowed' : ''}
                   `}
@@ -154,9 +154,9 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
                     checked={igrejaSelecionada === 'Outra'}
                     onChange={() => setIgrejaSelecionada('Outra')}
                     disabled={loading}
-                    className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
+                    className="mr-4 w-5 h-5 text-primary focus:ring-primary"
                   />
-                  <span className="text-gray-700 font-medium">Outra</span>
+                  <span className="text-accent font-medium">Outra</span>
                 </label>
               </div>
 
@@ -175,7 +175,7 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
               )}
 
               {error && igrejaSelecionada !== 'Outra' && (
-                <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                <div className="mb-4 bg-danger/10 border border-danger/30 text-danger px-4 py-3 rounded">
                   {error}
                 </div>
               )}

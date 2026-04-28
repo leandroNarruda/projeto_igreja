@@ -36,15 +36,15 @@ export default function EventosPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Seção de Apresentação do Evento */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="bg-bg-card rounded-lg shadow-md p-6 mb-8">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              <h1 className="text-4xl font-bold text-accent mb-4">
                 🎯 Evento de Quizzes Anual
               </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-lavender max-w-3xl mx-auto">
                 Um evento especial que vai durar o ano todo! Teste seus
                 conhecimentos semana a semana e concorra a prêmios incríveis.
               </p>
@@ -52,16 +52,16 @@ export default function EventosPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <Card
-                bgClassName="bg-gradient-to-br from-blue-50 to-blue-100"
-                borderClassName="border-2 border-blue-200"
+                bgClassName="bg-gradient-to-br from-primary/10 to-primary/20"
+                borderClassName="border-2 border-primary/30"
                 index={0}
                 useScrollReveal={true}
               >
                 <div className="text-4xl mb-3 text-center">📅</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2 text-center">
+                <h3 className="text-xl font-bold text-accent mb-2 text-center">
                   Duração
                 </h3>
-                <p className="text-gray-700 text-center">
+                <p className="text-lavender text-center">
                   O evento dura o ano todo, com quizzes semanais baseados na
                   lição da semana.
                 </p>
@@ -74,10 +74,10 @@ export default function EventosPage() {
                 useScrollReveal={true}
               >
                 <div className="text-4xl mb-3 text-center">📝</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2 text-center">
+                <h3 className="text-xl font-bold text-accent mb-2 text-center">
                   Formato
                 </h3>
-                <p className="text-gray-700 text-center">
+                <p className="text-lavender text-center">
                   Cada quiz possui 14 perguntas, sendo 2 perguntas para cada dia
                   da semana.
                 </p>
@@ -90,10 +90,10 @@ export default function EventosPage() {
                 useScrollReveal={true}
               >
                 <div className="text-4xl mb-3 text-center">🏆</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2 text-center">
+                <h3 className="text-xl font-bold text-accent mb-2 text-center">
                   Competição
                 </h3>
-                <p className="text-gray-700 text-center">
+                <p className="text-lavender text-center">
                   Participe de todos os quizzes e acumule pontos para subir na
                   classificação geral!
                 </p>
@@ -104,9 +104,9 @@ export default function EventosPage() {
           {/* Seção de Classificação Geral */}
           <div
             id="classificacao-geral"
-            className="bg-white rounded-lg shadow-md p-6"
+            className="bg-bg-card rounded-lg shadow-md p-6"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+            <h2 className="text-3xl font-bold text-accent mb-6 text-center">
               Classificação Geral
             </h2>
 
@@ -114,10 +114,10 @@ export default function EventosPage() {
               <Loading text="Carregando classificação..." fullScreen={false} />
             ) : classificacao.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">
+                <p className="text-lavender">
                   Ainda não há participantes na classificação geral.
                 </p>
-                <p className="text-gray-500 mt-2">
+                <p className="text-lavender/50 mt-2">
                   Participe dos quizzes para aparecer aqui!
                 </p>
               </div>
@@ -128,7 +128,7 @@ export default function EventosPage() {
                     const medalhas = ['🥇', '🥈', '🥉']
                     const cores = [
                       'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
-                      'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-400',
+                      'bg-gradient-to-br from-lavender/10 to-lavender/20 border-lavender/40',
                       'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
                     ]
 
@@ -153,44 +153,44 @@ export default function EventosPage() {
                       ${
                         index < 3
                           ? cores[index]
-                          : 'bg-white border-gray-300 hover:border-gray-400'
+                          : 'bg-bg-card border-primary/30 hover:border-gray-400'
                       }
                     `}
                       >
                         <div className="text-center">
                           <div
                             className={`text-5xl mb-3 ${
-                              index < 3 ? '' : 'text-gray-900 font-bold'
+                              index < 3 ? '' : 'text-accent font-bold'
                             }`}
                           >
                             {index < 3 ? medalhas[index] : `${item.posicao}º`}
                           </div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-3 truncate">
+                          <h3 className="text-xl font-bold text-accent mb-3 truncate">
                             {
                               (item.social_name?.trim() || item.nome).split(
                                 ' '
                               )[0]
                             }
                           </h3>
-                          <div className="space-y-2 text-sm text-gray-700">
-                            <div className="bg-white/50 rounded p-2">
-                              <div className="font-semibold text-gray-900">
+                          <div className="space-y-2 text-sm text-lavender">
+                            <div className="bg-bg-card/50 rounded p-2">
+                              <div className="font-semibold text-accent">
                                 Total de Acertos
                               </div>
-                              <div className="text-2xl font-bold text-blue-600">
+                              <div className="text-2xl font-bold text-primary">
                                 {item.totalAcertos}
                               </div>
                             </div>
-                            <div className="bg-white/50 rounded p-2">
-                              <div className="font-semibold text-gray-900">
+                            <div className="bg-bg-card/50 rounded p-2">
+                              <div className="font-semibold text-accent">
                                 Quizzes Respondidos
                               </div>
                               <div className="text-lg font-bold text-purple-600">
                                 {item.totalQuizzes}
                               </div>
                             </div>
-                            <div className="bg-white/50 rounded p-2">
-                              <div className="font-semibold text-gray-900">
+                            <div className="bg-bg-card/50 rounded p-2">
+                              <div className="font-semibold text-accent">
                                 Média de Acertos
                               </div>
                               <div className="text-lg font-bold text-green-600">

@@ -55,55 +55,55 @@ export default function AdminUsuariosPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl font-bold text-accent mb-6">
             Gerenciar usuários
           </h1>
 
           {users.length === 0 ? (
-            <p className="text-gray-600">Nenhum usuário cadastrado.</p>
+            <p className="text-lavender">Nenhum usuário cadastrado.</p>
           ) : (
             <>
-              <div className="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+              <div className="overflow-x-auto bg-bg-card rounded-lg shadow border border-primary/20">
+                <table className="min-w-full divide-y divide-primary/20">
+                  <thead className="bg-bg-base">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-lavender/50 uppercase">
                         Nome
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-lavender/50 uppercase">
                         E-mail
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-lavender/50 uppercase">
                         Igreja
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-lavender/50 uppercase">
                         Perfil
                       </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-right text-xs font-medium text-lavender/50 uppercase">
                         Ações
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-primary/20">
                     {users.map(user => (
-                      <tr key={user.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 text-sm text-gray-900">
+                      <tr key={user.id} className="hover:bg-bg-base">
+                        <td className="px-4 py-3 text-sm text-accent">
                           {user.name}
                           {user.social_name && (
-                            <span className="text-gray-500 block text-xs">
+                            <span className="text-lavender/50 block text-xs">
                               {user.social_name}
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">
+                        <td className="px-4 py-3 text-sm text-lavender">
                           {user.email}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-3 text-sm text-lavender">
                           {user.igreja ?? '—'}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-3 text-sm text-lavender">
                           {user.role}
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -132,7 +132,7 @@ export default function AdminUsuariosPage() {
 
               {totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-lavender">
                     Total: {total} usuário(s)
                   </p>
                   <div className="flex gap-2">
@@ -143,7 +143,7 @@ export default function AdminUsuariosPage() {
                     >
                       Anterior
                     </Button>
-                    <span className="px-2 py-1 text-sm text-gray-700">
+                    <span className="px-2 py-1 text-sm text-lavender">
                       {page} / {totalPages}
                     </span>
                     <Button

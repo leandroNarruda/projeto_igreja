@@ -18,17 +18,17 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
   return (
     <Card className="max-w-2xl mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Quiz: {tema}</h2>
-        <p className="text-gray-600">
+        <h2 className="text-3xl font-bold text-accent mb-2">Quiz: {tema}</h2>
+        <p className="text-lavender">
           {totalPerguntas} {totalPerguntas === 1 ? 'pergunta' : 'perguntas'}
         </p>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
+        <h3 className="text-xl font-semibold text-accent mb-4">
           Instruções:
         </h3>
-        <ul className="space-y-3 text-left text-gray-700">
+        <ul className="space-y-3 text-left text-lavender">
           <li className="flex items-start">
             <span className="mr-2">📝</span>
             <span>

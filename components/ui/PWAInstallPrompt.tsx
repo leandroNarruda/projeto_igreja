@@ -180,7 +180,7 @@ export function PWAInstallPrompt() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-white dark:bg-gray-900 rounded-xl shadow-xl max-w-sm w-full p-6 pointer-events-auto border border-gray-200 dark:border-gray-700"
+              className="bg-bg-card rounded-xl shadow-xl max-w-sm w-full p-6 pointer-events-auto border border-primary/40"
               onClick={e => e.stopPropagation()}
             >
               <div className="flex justify-center mb-4">
@@ -190,10 +190,10 @@ export function PWAInstallPrompt() {
                   className="w-16 h-16 rounded-2xl"
                 />
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white text-center mb-2">
+              <h2 className="text-xl font-bold text-accent text-center mb-2">
                 Instalar aplicativo
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-center text-sm mb-6">
+              <p className="text-lavender text-center text-sm mb-6">
                 Instale o Bom de lição no seu dispositivo para acesso rápido e
                 uso offline.
               </p>

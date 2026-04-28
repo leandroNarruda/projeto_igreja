@@ -80,11 +80,11 @@ export default function AdminUsuarioEditPage() {
   if (validId === null) {
     return (
       <PageTransition>
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8 px-4">
-          <p className="text-gray-600">ID inválido.</p>
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8 px-4">
+          <p className="text-lavender">ID inválido.</p>
           <Link
             href="/admin/usuarios"
-            className="text-blue-600 underline mt-2 inline-block"
+            className="text-primary underline mt-2 inline-block"
           >
             Voltar à lista
           </Link>
@@ -99,15 +99,15 @@ export default function AdminUsuarioEditPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">
+          <h1 className="text-2xl font-bold text-accent mb-6">
             Editar usuário
           </h1>
 
           <form
             onSubmit={handleSubmit}
-            className="space-y-4 bg-white p-6 rounded-lg shadow border border-gray-200"
+            className="space-y-4 bg-bg-card p-6 rounded-lg shadow border border-primary/20"
           >
             {success && (
               <p className="text-green-600 text-sm font-medium">
@@ -121,7 +121,7 @@ export default function AdminUsuarioEditPage() {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-lavender mb-1"
               >
                 Nome
               </label>
@@ -131,14 +131,14 @@ export default function AdminUsuarioEditPage() {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-primary/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-lavender mb-1"
               >
                 E-mail
               </label>
@@ -148,14 +148,14 @@ export default function AdminUsuarioEditPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-primary/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
 
             <div>
               <label
                 htmlFor="social_name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-lavender mb-1"
               >
                 Nome social
               </label>
@@ -164,14 +164,14 @@ export default function AdminUsuarioEditPage() {
                 type="text"
                 value={socialName}
                 onChange={e => setSocialName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-primary/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
 
             <div>
               <label
                 htmlFor="igreja"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-lavender mb-1"
               >
                 Igreja
               </label>
@@ -180,14 +180,14 @@ export default function AdminUsuarioEditPage() {
                 type="text"
                 value={igreja}
                 onChange={e => setIgreja(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-primary/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-lavender mb-1"
               >
                 Nova senha
               </label>
@@ -197,7 +197,7 @@ export default function AdminUsuarioEditPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Deixar em branco para não alterar"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-primary/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
 

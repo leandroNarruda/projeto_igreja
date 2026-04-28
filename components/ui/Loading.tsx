@@ -9,7 +9,7 @@ interface LoadingProps {
 
 export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
   const containerClasses = fullScreen
-    ? 'min-h-screen w-full bg-gray-50 flex items-center justify-center'
+    ? 'min-h-screen w-full bg-bg-base flex items-center justify-center'
     : 'flex items-center justify-center py-8'
 
   // Criar 12 bolinhas posicionadas em círculo (arredondado para evitar mismatch servidor/cliente)
@@ -57,9 +57,9 @@ export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="1" />
-                  <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#ec4899" stopOpacity="1" />
+                  <stop offset="0%" stopColor="#7e5686" stopOpacity="1" />
+                  <stop offset="50%" stopColor="#e8f9a2" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#f8a13f" stopOpacity="1" />
                 </linearGradient>
               </defs>
             </svg>
@@ -76,7 +76,7 @@ export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-lg" />
+              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-primary via-accent to-orange shadow-lg" />
             </div>
           ))}
 
@@ -91,7 +91,7 @@ export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
             />
           </div>
         </div>
-        {text && <p className="text-gray-600 text-lg font-medium">{text}</p>}
+        {text && <p className="text-lavender text-lg font-medium">{text}</p>}
       </div>
     </div>
   )

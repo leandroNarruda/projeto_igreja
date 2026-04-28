@@ -65,7 +65,7 @@ export const Footer = () => {
 
   return (
     <motion.footer
-      className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50"
+      className="fixed bottom-0 left-0 right-0 bg-bg-card shadow-lg border-t border-primary/20 z-50"
       initial={false}
       animate={{ y: quizEmAndamento ? '100%' : 0 }}
       transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
@@ -94,8 +94,8 @@ export const Footer = () => {
                   transition-all duration-200
                   ${
                     isActive
-                      ? 'text-blue-600'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'text-accent'
+                      : 'text-lavender hover:text-accent'
                   }
                 `}
                 aria-label={item.label}
@@ -113,17 +113,17 @@ export const Footer = () => {
                   <>
                     <Icon
                       size={24}
-                      className={isActive ? 'text-blue-600' : 'text-gray-600'}
+                      className={isActive ? 'text-accent' : 'text-lavender'}
                     />
                     <span
-                      className={`text-xs mt-1 font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}
+                      className={`text-xs mt-1 font-medium ${isActive ? 'text-accent' : 'text-lavender'}`}
                     >
                       {item.label}
                     </span>
                   </>
                 ) : null}
                 {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-full" />
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-accent rounded-t-full" />
                 )}
               </button>
             )

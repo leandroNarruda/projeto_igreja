@@ -8,7 +8,7 @@ export default function CadastroPage() {
   return (
     <PageTransition>
       <div
-        className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-0 px-4 sm:px-6 lg:px-8"
+        className="min-h-screen flex flex-col items-center justify-center bg-bg-base py-0 px-4 sm:px-6 lg:px-8"
         style={{
           backgroundImage: 'url(/images/backgrounds/background_2.jpeg)',
           backgroundSize: 'cover',

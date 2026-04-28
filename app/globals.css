@@ -2,21 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ─── Tokens de cor ──────────────────────────────────────────────────────────
+ *
+ * Formato: canais R G B separados por espaço (sem vírgulas).
+ * Isso permite que o Tailwind gere variantes de opacidade automaticamente,
+ * ex: bg-primary/20  →  rgb(var(--color-primary) / 0.2)
+ *
+ * Para adicionar tema claro no futuro, crie um bloco [data-theme="light"]
+ * aqui e troque os valores. No layout.tsx adicione data-theme={theme} ao <html>.
+ */
+
+/* ── Tema escuro (padrão) ─────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fundos         hex original */
+  --color-bg-base:   18 10 20;   /* #120a14 */
+  --color-bg-card:   26 13 34;   /* #1a0d22 */
+  --color-bg-deep:   14  7 24;   /* #0e0718 */
+
+  /* Marca */
+  --color-primary:        126 86 134;  /* #7e5686 */
+  --color-primary-hover:  154 106 164; /* #9a6aa4 */
+
+  /* Tipografia */
+  --color-accent:   232 249 162; /* #e8f9a2 — texto principal / títulos */
+  --color-lavender: 165 170 217; /* #a5aad9 — texto secundário */
+
+  /* Semânticas */
+  --color-orange:  248 161  63; /* #f8a13f */
+  --color-danger:  186  60  61; /* #ba3c3d */
+  --color-success:  74 222 128; /* #4ade80 */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/*
+ * ── Tema claro (exemplo para o futuro) ────────────────────────────────────
+ *
+ * [data-theme="light"] {
+ *   --color-bg-base:   255 255 255;
+ *   --color-bg-card:   245 245 245;
+ *   --color-bg-deep:   235 235 235;
+ *   --color-primary:        126 86 134;
+ *   --color-primary-hover:  154 106 164;
+ *   --color-accent:    23  23  23;
+ *   --color-lavender:  85  85 119;
+ *   --color-orange:   248 161  63;
+ *   --color-danger:   186  60  61;
+ *   --color-success:   22 163  74;
+ * }
+ */
 
 body {
-  color: var(--foreground);
-  background: #ffffff; /* Força fundo branco sempre */
+  color: rgb(var(--color-accent));
+  background: rgb(var(--color-bg-base));
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
 }

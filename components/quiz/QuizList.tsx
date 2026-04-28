@@ -33,7 +33,7 @@ export const QuizList: React.FC<QuizListProps> = ({
     <div className="space-y-4">
       {quizzes.length === 0 ? (
         <Card>
-          <p className="text-gray-600 text-center py-8">
+          <p className="text-lavender text-center py-8">
             Nenhum quiz cadastrado ainda.
           </p>
         </Card>
@@ -43,18 +43,18 @@ export const QuizList: React.FC<QuizListProps> = ({
             <div className="flex  flex-col gap-4">
               {quiz.ativo && (
                 <div className="flex-1 w-full text-right">
-                  <span className="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded">
+                  <span className="px-2 py-1 text-xs font-semibold text-success bg-success/10 rounded">
                     ATIVO
                   </span>
                 </div>
               )}
-              <h3 className="text-xl font-bold text-gray-900">{quiz.tema}</h3>
+              <h3 className="text-xl font-bold text-accent">{quiz.tema}</h3>
               <div className="flex w-full justify-between align-center">
-                <p className="text-gray-600">
+                <p className="text-lavender">
                   {quiz._count.perguntas}{' '}
                   {quiz._count.perguntas === 1 ? 'pergunta' : 'perguntas'}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-lavender/50">
                   Criado em:{' '}
                   {new Date(quiz.createdAt).toLocaleDateString('pt-BR')}
                 </p>
@@ -87,7 +87,7 @@ export const QuizList: React.FC<QuizListProps> = ({
                 <Button
                   variant="outline"
                   onClick={() => onDeletar(quiz.id)}
-                  className="text-sm text-red-600 hover:bg-red-50"
+                  className="text-sm text-danger hover:bg-danger/10"
                 >
                   Deletar
                 </Button>

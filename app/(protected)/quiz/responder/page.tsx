@@ -408,7 +408,7 @@ export default function ResponderQuizPage() {
   if (resultado) {
     return (
       <PageTransition>
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
           <div className="w-full px-4">
             <QuizResult
               total={resultado.total}
@@ -419,7 +419,7 @@ export default function ResponderQuizPage() {
             <div className="text-center mt-6">
               <button
                 onClick={() => router.push('/home')}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-6 py-2 bg-primary text-accent rounded-lg hover:bg-primary-hover"
               >
                 Voltar para Home
               </button>
@@ -433,7 +433,7 @@ export default function ResponderQuizPage() {
   if (mostrarInstrucoes) {
     return (
       <PageTransition>
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 flex items-center justify-center py-8">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
           <div className="w-full px-4">
             <QuizInstructions
               tema={quizAtivo.tema}
@@ -472,20 +472,20 @@ export default function ResponderQuizPage() {
         cancelText="Cancelar"
       />
       <PageTransition>
-        <div className="min-h-[calc(100vh-8rem)] bg-gray-50 py-8">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
           <div className="w-full px-4">
             <div className="max-w-3xl mx-auto mb-4">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-lavender">
                   Pergunta {indicePerguntaAtual + 1} de {todasPerguntas.length}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-lavender">
                   {Math.round(progresso)}%
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-primary/20 rounded-full h-2">
                 <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  className="bg-primary h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progresso}%` }}
                 />
               </div>

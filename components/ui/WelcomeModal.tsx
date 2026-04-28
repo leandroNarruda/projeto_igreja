@@ -97,7 +97,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="bg-white rounded-xl shadow-2xl max-w-lg w-full relative overflow-hidden max-h-[calc(100vh-2rem)] overflow-y-auto"
+              className="bg-bg-card border border-primary/40 rounded-xl shadow-2xl max-w-lg w-full relative overflow-hidden max-h-[calc(100vh-2rem)] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               {/* Botão de fechar */}
@@ -122,10 +122,10 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
 
               {/* Conteúdo do modal */}
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+                <h2 className="text-2xl font-bold text-accent mb-4 text-center">
                   Bem-vindo! 🎉
                 </h2>
-                <p className="text-gray-600 mb-6 text-center">
+                <p className="text-lavender mb-6 text-center">
                   Assista ao vídeo de boas-vindas
                 </p>
 
