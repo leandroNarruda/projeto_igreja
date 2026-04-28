@@ -13,8 +13,16 @@ for (const size of sizes) {
   console.log(`✓ ${size}x${size}`)
 }
 
+const BG = { r: 18, g: 10, b: 20, alpha: 1 } // #120a14
 for (const size of [192, 512]) {
-  await sharp(src).resize(size, size).toFile(`${out}/logo-bom-de-licao-${size}-maskable.png`)
+  const inner = Math.round(size * 0.6)
+  const logo = await sharp(src)
+    .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .toBuffer()
+  await sharp({ create: { width: size, height: size, channels: 4, background: BG } })
+    .composite([{ input: logo, gravity: 'center' }])
+    .png()
+    .toFile(`${out}/logo-bom-de-licao-${size}-maskable.png`)
   console.log(`✓ ${size}x${size} maskable`)
 }
 

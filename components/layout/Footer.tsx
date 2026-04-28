@@ -2,9 +2,8 @@
 
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Home, Calendar, User, Settings } from 'lucide-react'
+import { Home, Calendar, User, Settings, BookOpen } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
@@ -41,7 +40,7 @@ export const Footer = () => {
       label: 'Minha ES',
       path: 'https://es.minhaes.org/quizgeral/2/633509E6-457A-4302-9D56-46CC7523CFE5',
       external: true,
-      imageSrc: '/images/logo-minha-es.png',
+      icon: BookOpen,
     },
     ...(isAdmin && !isSessionLoading
       ? [
@@ -99,15 +98,7 @@ export const Footer = () => {
                 aria-label={item.label}
                 type="button"
               >
-                {item.imageSrc ? (
-                  <Image
-                    src={item.imageSrc}
-                    alt=""
-                    width={110}
-                    height={30}
-                    className="h-8 w-auto object-contain"
-                  />
-                ) : Icon ? (
+                {Icon ? (
                   <>
                     <Icon
                       size={24}
