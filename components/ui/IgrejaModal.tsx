@@ -131,9 +131,7 @@ export const IgrejaModal: React.FC<IgrejaModalProps> = ({
                     disabled={loading}
                     className="mr-4 w-5 h-5 text-primary focus:ring-primary"
                   />
-                  <span className="text-accent font-medium">
-                    Santa Tereza
-                  </span>
+                  <span className="text-accent font-medium">Santa Tereza</span>
                 </label>
 
                 <label

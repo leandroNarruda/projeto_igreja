@@ -116,9 +116,12 @@ export default function HomePage() {
                   {classificacao.map(
                     (item: ClassificacaoItem, index: number) => {
                       const medalhas = ['🥇', '🥈', '🥉']
-                      const podioClass = index < 3
-                        ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
-                        : null
+                      const podioClass =
+                        index < 3
+                          ? ['podio-gold', 'podio-silver', 'podio-bronze'][
+                              index
+                            ]
+                          : null
                       return (
                         <motion.div
                           key={item.userId}
@@ -144,7 +147,9 @@ export default function HomePage() {
                           }`}
                         >
                           <div className="relative text-center">
-                            <div className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}>
+                            <div
+                              className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+                            >
                               {index < 3 ? medalhas[index] : `${item.posicao}º`}
                             </div>
                             <div className="flex items-center justify-center gap-2 mb-3">
@@ -158,13 +163,17 @@ export default function HomePage() {
                                   unoptimized
                                 />
                               ) : (
-                                <div className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}>
+                                <div
+                                  className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
+                                >
                                   {getFirstLetter(
                                     item.social_name?.trim() || item.nome
                                   )}
                                 </div>
                               )}
-                              <h3 className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                              <h3
+                                className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
                                 {
                                   (item.social_name?.trim() || item.nome).split(
                                     ' '
@@ -172,7 +181,9 @@ export default function HomePage() {
                                 }
                               </h3>
                             </div>
-                            <div className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}>
+                            <div
+                              className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                            >
                               <div>
                                 <span className="font-semibold">Acertos:</span>{' '}
                                 {item.acertos}
@@ -187,8 +198,12 @@ export default function HomePage() {
                                   {item.nulos}
                                 </div>
                               )}
-                              <div className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}>
-                                <span className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                              <div
+                                className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
+                              >
+                                <span
+                                  className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
                                   {item.porcentagem}%
                                 </span>
                               </div>
@@ -307,9 +322,10 @@ export default function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {classificacao.map((item: ClassificacaoItem, index: number) => {
                   const medalhas = ['🥇', '🥈', '🥉']
-                  const podioClass = index < 3
-                    ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
-                    : null
+                  const podioClass =
+                    index < 3
+                      ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
+                      : null
                   return (
                     <motion.div
                       key={item.userId}
@@ -327,11 +343,14 @@ export default function HomePage() {
                         delay: index * 0.05,
                       }}
                       className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
-                        podioClass ?? 'bg-bg-card border-primary/30 hover:border-primary/60'
+                        podioClass ??
+                        'bg-bg-card border-primary/30 hover:border-primary/60'
                       }`}
                     >
                       <div className="relative text-center">
-                        <div className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}>
+                        <div
+                          className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+                        >
                           {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
                         <div className="flex items-center justify-center gap-2 mb-3">
@@ -345,13 +364,17 @@ export default function HomePage() {
                               unoptimized
                             />
                           ) : (
-                            <div className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}>
+                            <div
+                              className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
+                            >
                               {getFirstLetter(
                                 item.social_name?.trim() || item.nome
                               )}
                             </div>
                           )}
-                          <h3 className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                          <h3
+                            className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
+                          >
                             {
                               (item.social_name?.trim() || item.nome).split(
                                 ' '
@@ -359,7 +382,9 @@ export default function HomePage() {
                             }
                           </h3>
                         </div>
-                        <div className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}>
+                        <div
+                          className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                        >
                           <div>
                             <span className="font-semibold">Acertos:</span>{' '}
                             {item.acertos}
@@ -374,8 +399,12 @@ export default function HomePage() {
                               {item.nulos}
                             </div>
                           )}
-                          <div className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}>
-                            <span className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                          <div
+                            className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
+                          >
+                            <span
+                              className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                            >
                               {item.porcentagem}%
                             </span>
                           </div>

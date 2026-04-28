@@ -57,7 +57,9 @@ export default function EventosPage() {
                 index={0}
                 useScrollReveal={true}
               >
-                <div className="text-4xl mb-3 text-center drop-shadow-lg">📅</div>
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">
+                  📅
+                </div>
                 <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
                   Duração
                 </h3>
@@ -73,7 +75,9 @@ export default function EventosPage() {
                 index={1}
                 useScrollReveal={true}
               >
-                <div className="text-4xl mb-3 text-center drop-shadow-lg">📝</div>
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">
+                  📝
+                </div>
                 <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
                   Formato
                 </h3>
@@ -89,7 +93,9 @@ export default function EventosPage() {
                 index={2}
                 useScrollReveal={true}
               >
-                <div className="text-4xl mb-3 text-center drop-shadow-lg">🏆</div>
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">
+                  🏆
+                </div>
                 <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
                   Competição
                 </h3>
@@ -126,9 +132,10 @@ export default function EventosPage() {
                 {classificacao.map(
                   (item: ClassificacaoGeralItem, index: number) => {
                     const medalhas = ['🥇', '🥈', '🥉']
-                    const podioClass = index < 3
-                      ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
-                      : null
+                    const podioClass =
+                      index < 3
+                        ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
+                        : null
 
                     return (
                       <motion.div
@@ -147,42 +154,61 @@ export default function EventosPage() {
                           delay: index * 0.05,
                         }}
                         className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
-                          podioClass ?? 'bg-bg-card border-primary/30 hover:border-gray-400'
+                          podioClass ??
+                          'bg-bg-card border-primary/30 hover:border-gray-400'
                         }`}
                       >
                         <div className="relative text-center">
-                          <div className={`text-5xl mb-3 ${!podioClass ? 'text-accent font-bold' : 'drop-shadow-md'}`}>
+                          <div
+                            className={`text-5xl mb-3 ${!podioClass ? 'text-accent font-bold' : 'drop-shadow-md'}`}
+                          >
                             {index < 3 ? medalhas[index] : `${item.posicao}º`}
                           </div>
-                          <h3 className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                          <h3
+                            className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}
+                          >
                             {
                               (item.social_name?.trim() || item.nome).split(
                                 ' '
                               )[0]
                             }
                           </h3>
-                          <div className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}>
+                          <div
+                            className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                          >
                             <div className="bg-black/10 rounded p-2">
-                              <div className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                              <div
+                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
                                 Total de Acertos
                               </div>
-                              <div className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}>
+                              <div
+                                className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}
+                              >
                                 {item.totalAcertos}
                               </div>
                             </div>
                             <div className="bg-black/10 rounded p-2">
-                              <div className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                              <div
+                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
                                 Quizzes Respondidos
                               </div>
-                              <div className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}>
+                              <div
+                                className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}
+                              >
                                 {item.totalQuizzes}
                               </div>
                             </div>
                             <div className="bg-black/10 rounded p-2">
-                              <div className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}>
+                              <div
+                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
                                 Média de Acertos
                               </div>
-                              <div className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}>
+                              <div
+                                className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}
+                              >
                                 {item.mediaPorcentagem}%
                               </div>
                             </div>

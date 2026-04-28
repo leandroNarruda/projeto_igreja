@@ -92,9 +92,7 @@ export const PerguntaForm: React.FC<PerguntaFormProps> = ({
 
   return (
     <Card>
-      <h3 className="text-xl font-bold text-accent mb-4">
-        Adicionar Pergunta
-      </h3>
+      <h3 className="text-xl font-bold text-accent mb-4">Adicionar Pergunta</h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <Input

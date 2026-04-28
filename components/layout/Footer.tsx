@@ -93,9 +93,7 @@ export const Footer = () => {
                   flex-1 h-full
                   transition-all duration-200
                   ${
-                    isActive
-                      ? 'text-accent'
-                      : 'text-lavender hover:text-accent'
+                    isActive ? 'text-accent' : 'text-lavender hover:text-accent'
                   }
                 `}
                 aria-label={item.label}

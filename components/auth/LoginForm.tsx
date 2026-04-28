@@ -42,9 +42,7 @@ export const LoginForm = () => {
 
   return (
     <Card className="w-full max-w-md bg-bg-card/80 backdrop-blur-sm border border-primary/40">
-      <h2 className="text-2xl font-bold text-center mb-6 text-accent">
-        Login
-      </h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-accent">Login</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Email"

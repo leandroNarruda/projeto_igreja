@@ -10,9 +10,7 @@ export default function AdminPage() {
     <PageTransition>
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-accent mb-8">
-            Administração
-          </h1>
+          <h1 className="text-3xl font-bold text-accent mb-8">Administração</h1>
           <div className="grid gap-6 sm:grid-cols-2">
             <Link href="/admin/quiz" className="block">
               <Card className="cursor-pointer hover:shadow-md transition-shadow h-full">

@@ -181,7 +181,8 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                 let borderBgClasses =
                   'border-primary/30 hover:border-primary/60 hover:bg-primary/5'
                 if (!showFeedback) {
-                  if (isSelected) borderBgClasses = 'border-primary bg-primary/10'
+                  if (isSelected)
+                    borderBgClasses = 'border-primary bg-primary/10'
                 } else {
                   if (isCorrectAnswer)
                     borderBgClasses = 'border-success bg-success/10'

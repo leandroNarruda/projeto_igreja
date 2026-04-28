@@ -25,9 +25,7 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xl font-semibold text-accent mb-4">
-          Instruções:
-        </h3>
+        <h3 className="text-xl font-semibold text-accent mb-4">Instruções:</h3>
         <ul className="space-y-3 text-left text-lavender">
           <li className="flex items-start">
             <span className="mr-2">📝</span>

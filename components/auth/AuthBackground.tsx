@@ -9,19 +9,25 @@ export function AuthBackground() {
 
       <motion.div
         className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full opacity-40 blur-3xl"
-        style={{ background: 'radial-gradient(circle, #7e5686 0%, transparent 70%)' }}
+        style={{
+          background: 'radial-gradient(circle, #7e5686 0%, transparent 70%)',
+        }}
         animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
         transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="absolute top-1/3 -right-40 w-[600px] h-[600px] rounded-full opacity-30 blur-3xl"
-        style={{ background: 'radial-gradient(circle, #9a6aa4 0%, transparent 70%)' }}
+        style={{
+          background: 'radial-gradient(circle, #9a6aa4 0%, transparent 70%)',
+        }}
         animate={{ x: [0, -50, 0], y: [0, -60, 0] }}
         transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="absolute -bottom-40 left-1/4 w-[450px] h-[450px] rounded-full opacity-25 blur-3xl"
-        style={{ background: 'radial-gradient(circle, #e8f9a2 0%, transparent 70%)' }}
+        style={{
+          background: 'radial-gradient(circle, #e8f9a2 0%, transparent 70%)',
+        }}
         animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
         transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
       />
