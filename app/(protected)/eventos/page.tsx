@@ -52,48 +52,48 @@ export default function EventosPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <Card
-                bgClassName="bg-gradient-to-br from-primary/10 to-primary/20"
-                borderClassName="border-2 border-primary/30"
+                bgClassName="bg-gradient-to-br from-violet-900/60 via-purple-800/40 to-primary/30"
+                borderClassName="border border-violet-500/40 shadow-[0_0_24px_rgba(126,86,134,0.35)]"
                 index={0}
                 useScrollReveal={true}
               >
-                <div className="text-4xl mb-3 text-center">📅</div>
-                <h3 className="text-xl font-bold text-accent mb-2 text-center">
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">📅</div>
+                <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
                   Duração
                 </h3>
-                <p className="text-lavender text-center">
+                <p className="text-lavender/90 text-center text-sm leading-relaxed">
                   O evento dura o ano todo, com quizzes semanais baseados na
                   lição da semana.
                 </p>
               </Card>
 
               <Card
-                bgClassName="bg-gradient-to-br from-purple-50 to-purple-100"
-                borderClassName="border-2 border-purple-200"
+                bgClassName="bg-gradient-to-br from-indigo-900/60 via-blue-800/40 to-cyan-900/30"
+                borderClassName="border border-cyan-500/40 shadow-[0_0_24px_rgba(6,182,212,0.25)]"
                 index={1}
                 useScrollReveal={true}
               >
-                <div className="text-4xl mb-3 text-center">📝</div>
-                <h3 className="text-xl font-bold text-accent mb-2 text-center">
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">📝</div>
+                <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
                   Formato
                 </h3>
-                <p className="text-lavender text-center">
+                <p className="text-lavender/90 text-center text-sm leading-relaxed">
                   Cada quiz possui 14 perguntas, sendo 2 perguntas para cada dia
                   da semana.
                 </p>
               </Card>
 
               <Card
-                bgClassName="bg-gradient-to-br from-green-50 to-green-100"
-                borderClassName="border-2 border-green-200"
+                bgClassName="bg-gradient-to-br from-emerald-900/60 via-teal-800/40 to-green-900/30"
+                borderClassName="border border-emerald-500/40 shadow-[0_0_24px_rgba(16,185,129,0.25)]"
                 index={2}
                 useScrollReveal={true}
               >
-                <div className="text-4xl mb-3 text-center">🏆</div>
-                <h3 className="text-xl font-bold text-accent mb-2 text-center">
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">🏆</div>
+                <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
                   Competição
                 </h3>
-                <p className="text-lavender text-center">
+                <p className="text-lavender/90 text-center text-sm leading-relaxed">
                   Participe de todos os quizzes e acumule pontos para subir na
                   classificação geral!
                 </p>
@@ -126,11 +126,9 @@ export default function EventosPage() {
                 {classificacao.map(
                   (item: ClassificacaoGeralItem, index: number) => {
                     const medalhas = ['🥇', '🥈', '🥉']
-                    const cores = [
-                      'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
-                      'bg-gradient-to-br from-lavender/10 to-lavender/20 border-lavender/40',
-                      'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
-                    ]
+                    const podioClass = index < 3
+                      ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
+                      : null
 
                     return (
                       <motion.div
@@ -148,52 +146,43 @@ export default function EventosPage() {
                           duration: 0.4,
                           delay: index * 0.05,
                         }}
-                        className={`
-                      p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
-                      ${
-                        index < 3
-                          ? cores[index]
-                          : 'bg-bg-card border-primary/30 hover:border-gray-400'
-                      }
-                    `}
+                        className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                          podioClass ?? 'bg-bg-card border-primary/30 hover:border-gray-400'
+                        }`}
                       >
-                        <div className="text-center">
-                          <div
-                            className={`text-5xl mb-3 ${
-                              index < 3 ? '' : 'text-accent font-bold'
-                            }`}
-                          >
+                        <div className="relative text-center">
+                          <div className={`text-5xl mb-3 ${!podioClass ? 'text-accent font-bold' : 'drop-shadow-md'}`}>
                             {index < 3 ? medalhas[index] : `${item.posicao}º`}
                           </div>
-                          <h3 className="text-xl font-bold text-accent mb-3 truncate">
+                          <h3 className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}>
                             {
                               (item.social_name?.trim() || item.nome).split(
                                 ' '
                               )[0]
                             }
                           </h3>
-                          <div className="space-y-2 text-sm text-lavender">
-                            <div className="bg-bg-card/50 rounded p-2">
-                              <div className="font-semibold text-accent">
+                          <div className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}>
+                            <div className="bg-black/10 rounded p-2">
+                              <div className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}>
                                 Total de Acertos
                               </div>
-                              <div className="text-2xl font-bold text-primary">
+                              <div className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}>
                                 {item.totalAcertos}
                               </div>
                             </div>
-                            <div className="bg-bg-card/50 rounded p-2">
-                              <div className="font-semibold text-accent">
+                            <div className="bg-black/10 rounded p-2">
+                              <div className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}>
                                 Quizzes Respondidos
                               </div>
-                              <div className="text-lg font-bold text-purple-600">
+                              <div className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}>
                                 {item.totalQuizzes}
                               </div>
                             </div>
-                            <div className="bg-bg-card/50 rounded p-2">
-                              <div className="font-semibold text-accent">
+                            <div className="bg-black/10 rounded p-2">
+                              <div className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}>
                                 Média de Acertos
                               </div>
-                              <div className="text-lg font-bold text-green-600">
+                              <div className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}>
                                 {item.mediaPorcentagem}%
                               </div>
                             </div>

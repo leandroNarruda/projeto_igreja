@@ -25,8 +25,8 @@ function buildPayload(payload: PushPayload): string {
     body: payload.body,
     url: payload.url ?? '/',
     tag: payload.tag,
-    icon: payload.icon ?? '/images/logos/logo_192.png',
-    badge: payload.badge ?? '/images/logos/logo_96.png',
+    icon: payload.icon ?? '/images/logos/logo-bom-de-licao.png',
+    badge: payload.badge ?? '/images/logos/logo-bom-de-licao.png',
     data: payload.data,
   })
 }

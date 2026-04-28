@@ -116,42 +116,9 @@ export default function HomePage() {
                   {classificacao.map(
                     (item: ClassificacaoItem, index: number) => {
                       const medalhas = ['🥇', '🥈', '🥉']
-                      const podioThemes = [
-                        {
-                          card: 'bg-gradient-to-br from-amber-200 via-yellow-300 to-amber-500 border-amber-600 shadow-xl shadow-amber-500/40 ring-1 ring-amber-300/60',
-                          shine:
-                            'bg-gradient-to-tr from-transparent via-white/40 to-transparent',
-                          name: 'text-amber-950',
-                          label: 'text-amber-900',
-                          divider: 'border-amber-700/40',
-                          percent: 'text-amber-950',
-                          avatarFallback: 'bg-amber-900 text-amber-100',
-                          avatarBorder: 'border-amber-700/60',
-                        },
-                        {
-                          card: 'bg-gradient-to-br from-slate-100 via-zinc-300 to-slate-400 border-slate-500 shadow-xl shadow-slate-400/40 ring-1 ring-slate-200/60',
-                          shine:
-                            'bg-gradient-to-tr from-transparent via-white/50 to-transparent',
-                          name: 'text-slate-900',
-                          label: 'text-slate-800',
-                          divider: 'border-slate-600/40',
-                          percent: 'text-slate-900',
-                          avatarFallback: 'bg-slate-800 text-slate-100',
-                          avatarBorder: 'border-slate-600/60',
-                        },
-                        {
-                          card: 'bg-gradient-to-br from-orange-300 via-amber-600 to-orange-800 border-amber-800 shadow-xl shadow-orange-700/40 ring-1 ring-orange-400/60',
-                          shine:
-                            'bg-gradient-to-tr from-transparent via-white/25 to-transparent',
-                          name: 'text-orange-50',
-                          label: 'text-amber-100',
-                          divider: 'border-orange-200/40',
-                          percent: 'text-orange-50',
-                          avatarFallback: 'bg-orange-950 text-orange-100',
-                          avatarBorder: 'border-orange-200/50',
-                        },
-                      ]
-                      const theme = index < 3 ? podioThemes[index] : null
+                      const podioClass = index < 3
+                        ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
+                        : null
                       return (
                         <motion.div
                           key={item.userId}
@@ -168,27 +135,16 @@ export default function HomePage() {
                             duration: 0.4,
                             delay: index * 0.05,
                           }}
-                          className={`
-                        relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
-                        ${
-                          theme
-                            ? `${theme.card}${index === 0 ? ' ring-2 ring-amber-400 ring-offset-2 ring-offset-bg-card' : ''}`
-                            : item.userId === Number(session?.user?.id)
-                              ? 'bg-gradient-to-br from-primary/20 to-primary/30 border-primary ring-2 ring-primary ring-offset-2'
-                              : 'bg-bg-card border-primary/30 hover:border-primary/60'
-                        }
-                      `}
+                          className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                            podioClass
+                              ? podioClass
+                              : item.userId === Number(session?.user?.id)
+                                ? 'bg-gradient-to-br from-primary/20 to-primary/30 border-primary ring-2 ring-primary ring-offset-2'
+                                : 'bg-bg-card border-primary/30 hover:border-primary/60'
+                          }`}
                         >
-                          {theme && (
-                            <div
-                              aria-hidden
-                              className={`pointer-events-none absolute inset-0 ${theme.shine}`}
-                            />
-                          )}
                           <div className="relative text-center">
-                            <div
-                              className={`text-4xl mb-3 ${theme ? 'drop-shadow-md' : 'text-accent'}`}
-                            >
+                            <div className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}>
                               {index < 3 ? medalhas[index] : `${item.posicao}º`}
                             </div>
                             <div className="flex items-center justify-center gap-2 mb-3">
@@ -198,25 +154,17 @@ export default function HomePage() {
                                   alt=""
                                   width={40}
                                   height={40}
-                                  className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${theme ? theme.avatarBorder : 'border-primary/30'}`}
+                                  className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
                                   unoptimized
                                 />
                               ) : (
-                                <div
-                                  className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${
-                                    theme
-                                      ? `${theme.avatarFallback} ${theme.avatarBorder}`
-                                      : 'bg-primary/20 text-lavender border-primary/30'
-                                  }`}
-                                >
+                                <div className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}>
                                   {getFirstLetter(
                                     item.social_name?.trim() || item.nome
                                   )}
                                 </div>
                               )}
-                              <h3
-                                className={`text-xl font-bold truncate min-w-0 ${theme ? theme.name : 'text-accent'}`}
-                              >
+                              <h3 className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}>
                                 {
                                   (item.social_name?.trim() || item.nome).split(
                                     ' '
@@ -224,9 +172,7 @@ export default function HomePage() {
                                 }
                               </h3>
                             </div>
-                            <div
-                              className={`space-y-1 text-sm ${theme ? theme.label : 'text-lavender'}`}
-                            >
+                            <div className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}>
                               <div>
                                 <span className="font-semibold">Acertos:</span>{' '}
                                 {item.acertos}
@@ -241,12 +187,8 @@ export default function HomePage() {
                                   {item.nulos}
                                 </div>
                               )}
-                              <div
-                                className={`pt-2 border-t ${theme ? theme.divider : 'border-primary/30'}`}
-                              >
-                                <span
-                                  className={`font-semibold text-lg ${theme ? theme.percent : 'text-accent'}`}
-                                >
+                              <div className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}>
+                                <span className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}>
                                   {item.porcentagem}%
                                 </span>
                               </div>
@@ -365,11 +307,9 @@ export default function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {classificacao.map((item: ClassificacaoItem, index: number) => {
                   const medalhas = ['🥇', '🥈', '🥉']
-                  const cores = [
-                    'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-400',
-                    'bg-gradient-to-br from-lavender/10 to-lavender/20 border-lavender/40',
-                    'bg-gradient-to-br from-orange-100 to-orange-200 border-orange-400',
-                  ]
+                  const podioClass = index < 3
+                    ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
+                    : null
                   return (
                     <motion.div
                       key={item.userId}
@@ -386,13 +326,12 @@ export default function HomePage() {
                         duration: 0.4,
                         delay: index * 0.05,
                       }}
-                      className={`
-                        p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105
-                        ${index < 3 ? cores[index] : 'bg-bg-card border-primary/30 hover:border-primary/60'}
-                      `}
+                      className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                        podioClass ?? 'bg-bg-card border-primary/30 hover:border-primary/60'
+                      }`}
                     >
-                      <div className="text-center">
-                        <div className="text-4xl mb-3">
+                      <div className="relative text-center">
+                        <div className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}>
                           {index < 3 ? medalhas[index] : `${item.posicao}º`}
                         </div>
                         <div className="flex items-center justify-center gap-2 mb-3">
@@ -402,17 +341,17 @@ export default function HomePage() {
                               alt=""
                               width={40}
                               height={40}
-                              className="h-10 w-10 rounded-full object-cover border-2 border-primary/30 shrink-0"
+                              className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
                               unoptimized
                             />
                           ) : (
-                            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-base font-semibold text-lavender border-2 border-primary/30 shrink-0">
+                            <div className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}>
                               {getFirstLetter(
                                 item.social_name?.trim() || item.nome
                               )}
                             </div>
                           )}
-                          <h3 className="text-xl font-bold text-accent truncate min-w-0">
+                          <h3 className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}>
                             {
                               (item.social_name?.trim() || item.nome).split(
                                 ' '
@@ -420,7 +359,7 @@ export default function HomePage() {
                             }
                           </h3>
                         </div>
-                        <div className="space-y-1 text-sm text-lavender">
+                        <div className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}>
                           <div>
                             <span className="font-semibold">Acertos:</span>{' '}
                             {item.acertos}
@@ -435,8 +374,8 @@ export default function HomePage() {
                               {item.nulos}
                             </div>
                           )}
-                          <div className="pt-2 border-t border-primary/30">
-                            <span className="font-semibold text-lg text-accent">
+                          <div className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}>
+                            <span className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}>
                               {item.porcentagem}%
                             </span>
                           </div>

@@ -23,33 +23,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      {
-        url: '/images/logos/logo_192_opaque.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
+      { url: '/images/logos/logo-bom-de-licao-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/images/logos/logo-bom-de-licao-512.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      {
-        url: '/images/logos/logo_152_opaque.png',
-        sizes: '152x152',
-        type: 'image/png',
-      },
-      {
-        url: '/images/logos/logo_192_opaque.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        url: '/images/logos/logo_512_opaque.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
-        url: '/images/logos/logo_1024_opaque.png',
-        sizes: '1024x1024',
-        type: 'image/png',
-      },
+      { url: '/images/logos/logo-bom-de-licao-152.png', sizes: '152x152', type: 'image/png' },
+      { url: '/images/logos/logo-bom-de-licao-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/images/logos/logo-bom-de-licao-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/images/logos/logo-bom-de-licao-1024.png', sizes: '1024x1024', type: 'image/png' },
     ],
   },
   other: {

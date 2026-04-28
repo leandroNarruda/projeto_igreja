@@ -2,19 +2,19 @@ const CACHE_NAME = 'projeto-igreja-v5';
 const VERSION_URL = '/version.json';
 const STATIC_ASSETS = [
   '/',
-  '/images/logos/logo_192.png',
-  '/images/logos/logo_512.png',
-  '/images/logos/logo_72_opaque.png',
-  '/images/logos/logo_96_opaque.png',
-  '/images/logos/logo_128_opaque.png',
-  '/images/logos/logo_144_opaque.png',
-  '/images/logos/logo_152_opaque.png',
-  '/images/logos/logo_192_opaque.png',
-  '/images/logos/logo_384_opaque.png',
-  '/images/logos/logo_512_opaque.png',
-  '/images/logos/logo_1024_opaque.png',
-  '/images/logos/logo_192_maskable.png',
-  '/images/logos/logo_512_maskable.png',
+  '/images/logos/logo-bom-de-licao.png',
+  '/images/logos/logo-bom-de-licao-full.png',
+  '/images/logos/logo-bom-de-licao-72.png',
+  '/images/logos/logo-bom-de-licao-96.png',
+  '/images/logos/logo-bom-de-licao-128.png',
+  '/images/logos/logo-bom-de-licao-144.png',
+  '/images/logos/logo-bom-de-licao-152.png',
+  '/images/logos/logo-bom-de-licao-192.png',
+  '/images/logos/logo-bom-de-licao-384.png',
+  '/images/logos/logo-bom-de-licao-512.png',
+  '/images/logos/logo-bom-de-licao-1024.png',
+  '/images/logos/logo-bom-de-licao-192-maskable.png',
+  '/images/logos/logo-bom-de-licao-512-maskable.png',
   '/images/backgrounds/background_1.jpeg',
   '/manifest.json'
 ];
@@ -141,8 +141,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body || '',
-    icon: data.icon || '/images/logos/logo_192.png',
-    badge: data.badge || '/images/logos/logo_96.png',
+    icon: data.icon || '/images/logos/logo-bom-de-licao.png',
+    badge: data.badge || '/images/logos/logo-bom-de-licao.png',
     tag: data.tag || 'default',
     renotify: true,
     requireInteraction: true,

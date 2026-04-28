@@ -185,7 +185,7 @@ export function PWAInstallPrompt() {
             >
               <div className="flex justify-center mb-4">
                 <img
-                  src="/images/logos/logo_192.png"
+                  src="/images/logos/logo-bom-de-licao.png"
                   alt=""
                   className="w-16 h-16 rounded-2xl"
                 />

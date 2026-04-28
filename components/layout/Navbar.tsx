@@ -35,11 +35,11 @@ export const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center h-16">
             <Image
-              src="/images/logos/logo_192.png"
+              src="/images/logos/logo-bom-de-licao-full.png"
               alt="Logo"
               width={160}
-              height={56}
-              className="h-full w-auto object-contain"
+              height={48}
+              className="h-12 w-auto object-contain"
               priority
             />
           </div>

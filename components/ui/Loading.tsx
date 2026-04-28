@@ -83,7 +83,7 @@ export const Loading = ({ text, fullScreen = true }: LoadingProps) => {
           {/* Logo centralizada e estática */}
           <div className="relative z-10">
             <Image
-              src="/images/logos/logo_192.png"
+              src="/images/logos/logo-bom-de-licao.png"
               alt="Logo"
               width={120}
               height={120}
