@@ -94,17 +94,23 @@ export default function HomePage() {
               <Link
                 href="/eventos#classificacao-geral"
                 className="
-                  inline-flex items-center gap-2 px-4 py-2.5
-                  text-accent font-medium
-                  bg-primary/10 border border-primary/30 rounded-lg
-                  hover:bg-primary/20 hover:border-primary/50 hover:underline
-                  transition-colors duration-200
+                  group relative inline-flex items-center gap-2.5
+                  px-6 py-3 rounded-full
+                  bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500
+                  text-white font-semibold tracking-wide
+                  shadow-lg shadow-orange-500/30
+                  hover:shadow-xl hover:shadow-pink-500/40 hover:-translate-y-0.5
+                  active:translate-y-0
+                  transition-all duration-300
+                  ring-1 ring-white/30
                 "
               >
-                <Trophy className="size-5 shrink-0" aria-hidden />
-                <span className="underline decoration-primary/50 decoration-2 underline-offset-2">
-                  Ver classificação geral do evento
-                </span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.2s_ease-in-out] pointer-events-none" />
+                <Trophy
+                  className="size-5 shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] group-hover:rotate-[-8deg] group-hover:scale-110 transition-transform"
+                  aria-hidden
+                />
+                <span className="relative">Ver classificação geral</span>
               </Link>
             </div>
             {classificacao.length > 0 && (
@@ -242,17 +248,23 @@ export default function HomePage() {
               <Link
                 href="/eventos#classificacao-geral"
                 className="
-                  inline-flex items-center gap-2 px-4 py-2.5
-                  text-accent font-medium
-                  bg-primary/10 border border-primary/30 rounded-lg
-                  hover:bg-primary/20 hover:border-primary/50 hover:underline
-                  transition-colors duration-200
+                  group relative inline-flex items-center gap-2.5
+                  px-6 py-3 rounded-full
+                  bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500
+                  text-white font-semibold tracking-wide
+                  shadow-lg shadow-orange-500/30
+                  hover:shadow-xl hover:shadow-pink-500/40 hover:-translate-y-0.5
+                  active:translate-y-0
+                  transition-all duration-300
+                  ring-1 ring-white/30
                 "
               >
-                <Trophy className="size-5 shrink-0" aria-hidden />
-                <span className="underline decoration-primary/50 decoration-2 underline-offset-2">
-                  Ver classificação geral do evento
-                </span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.2s_ease-in-out] pointer-events-none" />
+                <Trophy
+                  className="size-5 shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] group-hover:rotate-[-8deg] group-hover:scale-110 transition-transform"
+                  aria-hidden
+                />
+                <span className="relative">Ver classificação geral</span>
               </Link>
             </div>
           </div>
@@ -300,17 +312,23 @@ export default function HomePage() {
               <Link
                 href="/eventos#classificacao-geral"
                 className="
-                  inline-flex items-center gap-2 px-4 py-2.5
-                  text-accent font-medium
-                  bg-primary/10 border border-primary/30 rounded-lg
-                  hover:bg-primary/20 hover:border-primary/50 hover:underline
-                  transition-colors duration-200
+                  group relative inline-flex items-center gap-2.5
+                  px-6 py-3 rounded-full
+                  bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500
+                  text-white font-semibold tracking-wide
+                  shadow-lg shadow-orange-500/30
+                  hover:shadow-xl hover:shadow-pink-500/40 hover:-translate-y-0.5
+                  active:translate-y-0
+                  transition-all duration-300
+                  ring-1 ring-white/30
                 "
               >
-                <Trophy className="size-5 shrink-0" aria-hidden />
-                <span className="underline decoration-primary/50 decoration-2 underline-offset-2">
-                  Ver classificação geral do evento
-                </span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.2s_ease-in-out] pointer-events-none" />
+                <Trophy
+                  className="size-5 shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] group-hover:rotate-[-8deg] group-hover:scale-110 transition-transform"
+                  aria-hidden
+                />
+                <span className="relative">Ver classificação geral</span>
               </Link>
             </p>
           </div>
