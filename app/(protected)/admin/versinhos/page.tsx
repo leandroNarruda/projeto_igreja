@@ -100,7 +100,8 @@ export default function VersinhosAdminPage() {
     "alternativaC": "Texto da alternativa C",
     "alternativaD": "Texto da alternativa D",
     "alternativaE": "Texto da alternativa E",
-    "respostaCorreta": "A"
+    "respostaCorreta": "A",
+    "ranking": 1
   }
 ]`}
             </pre>

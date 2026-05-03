@@ -10,6 +10,7 @@ type VersinhoInput = {
   alternativaD: string
   alternativaE: string
   respostaCorreta: string
+  ranking?: number
 }
 
 const RESPOSTAS_VALIDAS = ['A', 'B', 'C', 'D', 'E']
@@ -32,6 +33,9 @@ function validarVersinho(v: VersinhoInput, index: number) {
   }
   if (v.respostaCorreta && !RESPOSTAS_VALIDAS.includes(v.respostaCorreta.toUpperCase())) {
     erros.push(`respostaCorreta deve ser A, B, C, D ou E`)
+  }
+  if (v.ranking !== undefined && (!Number.isInteger(v.ranking) || v.ranking < 0)) {
+    erros.push(`ranking deve ser um número inteiro não negativo`)
   }
   return erros.length > 0 ? { index, erros } : null
 }
@@ -77,6 +81,7 @@ export async function POST(request: Request) {
       alternativaD: v.alternativaD.trim(),
       alternativaE: v.alternativaE.trim(),
       respostaCorreta: v.respostaCorreta.trim().toUpperCase(),
+      ranking: v.ranking ?? 0,
     })),
     skipDuplicates: true,
   })
