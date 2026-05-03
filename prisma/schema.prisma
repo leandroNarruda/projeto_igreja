@@ -136,6 +136,19 @@ model ResultadoQuiz {
   @@index([quizId, acertos])
 }
 
+model Versinho {
+  id              Int      @id @default(autoincrement())
+  verso           String
+  alternativaA    String
+  alternativaB    String
+  alternativaC    String
+  alternativaD    String
+  alternativaE    String
+  respostaCorreta String   // "A" | "B" | "C" | "D" | "E"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 model WebPushSubscription {
   id        Int      @id @default(autoincrement())
   userId    Int
