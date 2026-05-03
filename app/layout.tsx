@@ -6,6 +6,7 @@ import { SessionProvider } from '@/components/providers/SessionProvider'
 import { QueryProvider } from '@/components/providers/QueryProvider'
 import { QuizUIProvider } from '@/components/providers/QuizUIProvider'
 import { Navbar } from '@/components/layout/Navbar'
+import { SideDrawer } from '@/components/layout/SideDrawer'
 import { Footer } from '@/components/layout/Footer'
 import { MainContent } from '@/components/layout/MainContent'
 import { PWAInstallPrompt } from '@/components/ui/PWAInstallPrompt'
@@ -82,6 +83,7 @@ export default function RootLayout({
           <QueryProvider>
             <QuizUIProvider>
               <Navbar />
+              <SideDrawer />
               <MainContent>{children}</MainContent>
               <Footer />
               <PWAInstallPrompt />

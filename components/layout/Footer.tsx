@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Home, Calendar, User, Settings, BookOpen } from 'lucide-react'
+import { Home, User, Settings } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
@@ -27,20 +27,9 @@ export const Footer = () => {
       icon: Home,
     },
     {
-      label: 'Eventos',
-      path: '/eventos',
-      icon: Calendar,
-    },
-    {
       label: 'Perfil',
       path: '/perfil',
       icon: User,
-    },
-    {
-      label: 'Minha ES',
-      path: 'https://es.minhaes.org/quizgeral/2/633509E6-457A-4302-9D56-46CC7523CFE5',
-      external: true,
-      icon: BookOpen,
     },
     ...(isAdmin && !isSessionLoading
       ? [

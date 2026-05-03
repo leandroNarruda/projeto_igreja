@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { Menu } from 'lucide-react'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
 function getInitials(name: string | null | undefined): string {
@@ -17,7 +18,7 @@ function getInitials(name: string | null | undefined): string {
 
 export const Navbar = () => {
   const { data: session, status } = useSession()
-  const { quizEmAndamento } = useQuizUI()
+  const { quizEmAndamento, setDrawerAberto } = useQuizUI()
   const isSessionLoading = status === 'loading'
 
   if (!session && !isSessionLoading) {
@@ -33,7 +34,15 @@ export const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center h-16">
+          <div className="flex items-center gap-3 h-16">
+            <button
+              type="button"
+              onClick={() => setDrawerAberto(true)}
+              className="text-lavender hover:text-accent transition-colors p-1"
+              aria-label="Abrir menu"
+            >
+              <Menu size={24} />
+            </button>
             <Image
               src="/images/logos/logo-bom-de-licao-full.png"
               alt="Logo"
