@@ -14,9 +14,9 @@ Lista todos os usuários com paginação.
 
 #### Query params
 
-| Parâmetro | Tipo   | Default | Descrição        |
-|-----------|--------|---------|------------------|
-| `page`    | number | 1       | Página atual     |
+| Parâmetro | Tipo   | Default | Descrição                  |
+| --------- | ------ | ------- | -------------------------- |
+| `page`    | number | 1       | Página atual               |
 | `limit`   | number | 20      | Itens por página (máx. 50) |
 
 #### Respostas
@@ -138,13 +138,13 @@ Todos os campos são opcionais. Envie apenas os que deseja alterar.
 }
 ```
 
-| Campo        | Regras                                                                 |
-|--------------|------------------------------------------------------------------------|
-| `name`       | Obrigatório se enviado; não pode ser vazio                             |
-| `email`      | Obrigatório se enviado; não pode ser vazio; deve ser único (exceto o próprio usuário) |
-| `social_name`| Opcional; string ou `null` para limpar                                 |
-| `igreja`     | Opcional; string ou `null` para limpar                                 |
-| `password`   | Opcional; se enviado e não vazio, será hasheado (bcrypt) e atualizado; em branco = não altera |
+| Campo         | Regras                                                                                        |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| `name`        | Obrigatório se enviado; não pode ser vazio                                                    |
+| `email`       | Obrigatório se enviado; não pode ser vazio; deve ser único (exceto o próprio usuário)         |
+| `social_name` | Opcional; string ou `null` para limpar                                                        |
+| `igreja`      | Opcional; string ou `null` para limpar                                                        |
+| `password`    | Opcional; se enviado e não vazio, será hasheado (bcrypt) e atualizado; em branco = não altera |
 
 #### Respostas
 

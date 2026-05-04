@@ -29,6 +29,7 @@ MCP_DATABASE_URL_PRODUCTION="postgresql://..."
 ```
 
 **Importante**:
+
 - Use usuários de banco com **permissões somente leitura** para maior segurança
 - Para produção, considere um usuário ainda mais restrito
 - O arquivo `.env.mcp` já está no `.gitignore`
@@ -62,6 +63,7 @@ Se o MCP estiver funcionando, ele usará a ferramenta `db_query` ou `db_schema_i
 Executa queries `SELECT` no banco de dados.
 
 **Parâmetros**:
+
 - `env`: Ambiente (`local`, `staging`, `production`) - padrão: `local`
 - `sql`: Query SQL SELECT
 - `params`: Array de parâmetros para query parametrizada (opcional)
@@ -82,6 +84,7 @@ Mostre as perguntas do quiz com id 5
 ```
 
 **Regras de segurança**:
+
 - Apenas `SELECT` é permitido (incluindo CTEs que terminem em SELECT)
 - Comandos bloqueados: `INSERT`, `UPDATE`, `DELETE`, `DROP`, `CREATE`, `ALTER`, `TRUNCATE`, `GRANT`, `REVOKE`
 - Apenas uma query por vez (sem `;` no meio)
@@ -92,6 +95,7 @@ Mostre as perguntas do quiz com id 5
 Gera SQL parametrizado para operações de escrita **sem executar**.
 
 **Parâmetros**:
+
 - `env`: Ambiente de referência (`local`, `staging`, `production`)
 - `operation`: Tipo de operação (`insert`, `update`, `delete`)
 - `table`: Nome da tabela
@@ -114,6 +118,7 @@ Gere SQL para deletar a pergunta com id=10
 ```
 
 **Saída**:
+
 ```json
 {
   "sql": "INSERT INTO \"User\" (\"name\", \"email\") VALUES ($1, $2) RETURNING \"id\";",
@@ -123,6 +128,7 @@ Gere SQL para deletar a pergunta com id=10
 ```
 
 **Regras de segurança**:
+
 - **Nunca executa** o SQL gerado
 - UPDATE e DELETE exigem `where` (evita operações em massa acidentais)
 - SQL é parametrizado (proteção contra SQL injection)
@@ -132,6 +138,7 @@ Gere SQL para deletar a pergunta com id=10
 Retorna informações sobre tabelas, colunas, tipos e constraints do banco.
 
 **Parâmetros**:
+
 - `env`: Ambiente (`local`, `staging`, `production`) - padrão: `local`
 - `schema`: Schema do banco (padrão: `public`)
 
@@ -150,6 +157,7 @@ Quais colunas a tabela Quiz possui?
 ```
 
 **Saída**:
+
 ```json
 {
   "schema": "public",
@@ -177,16 +185,19 @@ Quais colunas a tabela Quiz possui?
 ### Consultas Simples
 
 **Contar registros**:
+
 ```
 Quantos usuários existem no banco local?
 ```
 
 **Listar com filtro**:
+
 ```
 Mostre os 5 quizzes ativos
 ```
 
 **Joins**:
+
 ```
 Liste as perguntas do quiz "Novo Testamento" com suas alternativas
 ```
@@ -194,11 +205,13 @@ Liste as perguntas do quiz "Novo Testamento" com suas alternativas
 ### Consultas com Parâmetros
 
 **Buscar por ID**:
+
 ```
 Mostre os dados do usuário com id 10
 ```
 
 **Buscar por condição**:
+
 ```
 Liste todos os resultados do usuário com email "maria@exemplo.com"
 ```
@@ -206,16 +219,19 @@ Liste todos os resultados do usuário com email "maria@exemplo.com"
 ### Geração de SQL de Escrita
 
 **INSERT**:
+
 ```
 Gere SQL para inserir um quiz com tema "Antigo Testamento"
 ```
 
 **UPDATE**:
+
 ```
 Gere SQL para ativar o quiz com id 5
 ```
 
 **DELETE**:
+
 ```
 Gere SQL para deletar o resultado de quiz do usuário 10 no quiz 5
 ```
@@ -223,11 +239,13 @@ Gere SQL para deletar o resultado de quiz do usuário 10 no quiz 5
 ### Inspeção de Schema
 
 **Listar tabelas**:
+
 ```
 Quais são todas as tabelas do banco?
 ```
 
 **Ver estrutura**:
+
 ```
 Mostre as colunas da tabela RespostaUsuario
 ```
@@ -235,16 +253,19 @@ Mostre as colunas da tabela RespostaUsuario
 ## Ambientes
 
 ### Local (Desenvolvimento)
+
 - Timeout: 30 segundos
 - Limite de linhas: 500
 - Use para desenvolvimento e testes
 
 ### Staging (Homologação)
+
 - Timeout: 30 segundos
 - Limite de linhas: 500
 - Use para validar queries antes de produção
 
 ### Production (Produção)
+
 - Timeout: 10 segundos
 - Limite de linhas: 200
 - **Use com extremo cuidado**
@@ -290,6 +311,7 @@ O servidor MCP loga informações estruturadas no stderr:
 ```
 
 Para ver logs durante desenvolvimento:
+
 1. Abra o DevTools do Cursor (Help → Toggle Developer Tools)
 2. Vá na aba Console
 3. Logs do MCP aparecem com prefixo `[prisma-db]`
@@ -301,6 +323,7 @@ Para ver logs durante desenvolvimento:
 **Causa**: Variável de ambiente não definida
 
 **Solução**:
+
 1. Verifique se `.env.mcp` existe
 2. Confirme que a variável `MCP_DATABASE_URL_<ENV>` está preenchida
 3. Reinicie o Cursor
@@ -310,6 +333,7 @@ Para ver logs durante desenvolvimento:
 **Causa**: Tentativa de executar escrita via `db_query`
 
 **Solução**: Use `db_generate_write_sql` para gerar o SQL, depois execute manualmente via:
+
 - Prisma Studio
 - psql
 - Cliente SQL de sua preferência
@@ -323,6 +347,7 @@ Para ver logs durante desenvolvimento:
 ### MCP não aparece no Cursor
 
 **Soluções**:
+
 1. Verifique se `.cursor/mcp.json` existe
 2. Reinicie completamente o Cursor
 3. Verifique se `npm run mcp:dev` funciona manualmente

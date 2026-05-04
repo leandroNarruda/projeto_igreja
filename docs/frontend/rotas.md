@@ -38,18 +38,21 @@ Acessíveis sem autenticação. Se o usuário já estiver logado, é redireciona
 **Tipo de acesso**: Público (redireciona para `/home` se já autenticado)
 
 **Componentes principais**:
+
 - Formulário de login (email + senha)
 - Link para `/cadastro`
 
 **Dados consumidos**: Nenhum (API)
 
 **Fluxo**:
+
 1. Usuário insere email e senha
 2. Frontend chama `signIn('credentials', { email, password })`
 3. NextAuth autentica e cria sessão
 4. Redireciona para `/home`
 
 **Estado erro**:
+
 - Credenciais inválidas: Exibe mensagem de erro
 
 ---
@@ -63,18 +66,22 @@ Acessíveis sem autenticação. Se o usuário já estiver logado, é redireciona
 **Tipo de acesso**: Público (redireciona para `/home` se já autenticado)
 
 **Componentes principais**:
+
 - Formulário de registro (nome, email, senha, igreja opcional)
 - Link para `/login`
 
-**Dados consumidos**: 
+**Dados consumidos**:
+
 - `POST /api/auth/register` ou `POST /api/auth/register/igreja`
 
 **Fluxo**:
+
 1. Usuário preenche formulário
 2. Frontend envia dados para `/api/auth/register`
 3. Se sucesso, redireciona para `/login`
 
 **Estado erro**:
+
 - Email já em uso: Exibe mensagem de erro
 - Campos inválidos: Validação client-side
 
@@ -93,6 +100,7 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 **Tipo de acesso**: Protegido (USER ou ADMIN)
 
 **Componentes principais**:
+
 - Botão "Responder Quiz da semana"
 - `QuizResult` (se já respondeu)
 - Classificação do quiz ativo
@@ -100,19 +108,23 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 - `WelcomeModal` (modal de boas-vindas na primeira visita)
 
 **Dados consumidos**:
+
 - `GET /api/quiz/ativo` - Busca quiz ativo e verifica se já respondeu
 - `GET /api/quiz/{id}/classificacao` - Ranking do quiz
 
 **Fluxo**:
+
 1. Carrega quiz ativo
 2. Se já respondeu: Exibe resultado + classificação
 3. Se não respondeu: Exibe botão para responder
 4. Se não há quiz ativo: Exibe mensagem
 
 **Estado vazio**:
+
 - Sem quiz ativo: "Não há quiz ativo no momento. Aguarde..."
 
 **Estado erro**:
+
 - Erro ao carregar: Exibe mensagem de erro
 
 ---
@@ -126,21 +138,25 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 **Tipo de acesso**: Protegido (USER ou ADMIN)
 
 **Componentes principais**:
+
 - Avatar do usuário (com upload)
 - Informações pessoais (nome, email, nome social)
 - Botão de logout
 
 **Dados consumidos**:
+
 - `POST /api/user/avatar` - Upload de avatar
 - `PATCH /api/user/me` - Atualizar nome social (futuro)
 - Session do NextAuth (dados do usuário)
 
 **Fluxo**:
+
 1. Exibe dados da sessão
 2. Permite upload de avatar (click no ícone de câmera)
 3. Botão "Sair da conta" faz logout
 
 **Estado erro**:
+
 - Erro no upload: Exibe mensagem de erro abaixo do avatar
 
 ---
@@ -154,21 +170,26 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 **Tipo de acesso**: Protegido (USER ou ADMIN)
 
 **Componentes principais**:
+
 - Seção de classificação geral (top 10)
 - Informações sobre o evento
 
 **Dados consumidos**:
+
 - `GET /api/quiz/classificacao-geral` - Ranking geral
 
 **Fluxo**:
+
 1. Carrega classificação geral
 2. Exibe top 10 usuários com total de acertos e média de porcentagem
 3. Destaca posição do usuário atual
 
 **Estado vazio**:
+
 - Nenhum quiz respondido ainda: Mensagem "Nenhum resultado ainda"
 
 **Estado erro**:
+
 - Erro ao carregar: Exibe mensagem de erro
 
 ---
@@ -182,17 +203,20 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 **Tipo de acesso**: Protegido (USER ou ADMIN)
 
 **Componentes principais**:
+
 - Instruções antes de iniciar
 - Perguntas com timer
 - Feedback após resposta
 - Resultado final
 
 **Dados consumidos**:
+
 - `GET /api/quiz/ativo` - Verifica quiz ativo e se já respondeu
 - `GET /api/quiz/{id}/perguntas` - Busca perguntas
 - `POST /api/quiz/resposta` - Envia respostas
 
 **Fluxo**:
+
 1. Verifica se há quiz ativo e se usuário já respondeu
 2. Se já respondeu: Exibe resultado
 3. Se não respondeu: Exibe instruções
@@ -206,9 +230,11 @@ Requerem autenticação. Se o usuário não estiver logado, redireciona para `/l
 7. Exibe resultado (acertos, erros, porcentagem)
 
 **Estado vazio**:
+
 - Sem quiz ativo: Redireciona para `/home` com mensagem
 
 **Estado erro**:
+
 - Já respondeu: Exibe resultado (não permite responder novamente)
 - Erro ao carregar: Redireciona para `/home`
 
@@ -227,6 +253,7 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 **Tipo de acesso**: Protegido (ADMIN)
 
 **Componentes principais**:
+
 - Dois cards/links: "Gerenciar quizzes" → `/admin/quiz`, "Gerenciar usuários" → `/admin/usuarios`
 
 **Dados consumidos**: Nenhum (apenas navegação)
@@ -244,18 +271,21 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 **Tipo de acesso**: Protegido (ADMIN)
 
 **Componentes principais**:
+
 - `QuizList` - Lista de quizzes com ações
 - Botão `+ Novo` para navegar para `/admin/quiz/novo`
 - Botão para adicionar perguntas
 - Link "Voltar ao painel" para `/admin`
 
 **Dados consumidos**:
+
 - `GET /api/quiz` - Lista todos os quizzes
 - `PUT /api/quiz/{id}` - Atualizar quiz (ativar/desativar)
 - `DELETE /api/quiz/{id}` - Deletar quiz
 - `GET /api/quiz/{id}/perguntas?admin=true` - Listar perguntas (admin)
 
 **Fluxo**:
+
 1. Exibe lista de quizzes
 2. Admin pode: abrir criação, ativar/desativar, deletar, adicionar perguntas
 3. Ao clicar "Adicionar perguntas": estado interno mostra formulário e lista de perguntas (mesmo arquivo)
@@ -275,18 +305,22 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 **Tipo de acesso**: Protegido (ADMIN)
 
 **Componentes principais**:
+
 - `QuizForm` com campos de tema e `Perguntas em JSON (opcional)`
 - Botão "Voltar para Quizzes"
 
 **Dados consumidos**:
+
 - `POST /api/quiz` - Criar quiz com ou sem perguntas em lote
 
 **Fluxo**:
+
 1. Admin acessa `/admin/quiz/novo`
 2. Informa tema e, opcionalmente, cola array JSON de perguntas
 3. Ao salvar com sucesso, retorna para `/admin/quiz`
 
 **Estado erro**:
+
 - JSON inválido no formulário
 - Erros de validação retornados pela API (campos obrigatórios das perguntas)
 
@@ -331,6 +365,7 @@ Requerem autenticação + role `ADMIN`. Se o usuário não for admin, redirecion
 **Tipo de acesso**: Protegido (ADMIN)
 
 **Dados consumidos**:
+
 - `GET /api/admin/users/[id]` - Carregar dados do usuário
 - `PATCH /api/admin/users/[id]` - Salvar alterações
 
@@ -358,16 +393,16 @@ export const config = {
 
 ### Regras de Redirecionamento
 
-| Rota | Condição | Redirecionamento |
-|------|----------|------------------|
-| `/login`, `/cadastro` | Usuário autenticado | → `/home` |
-| `/home` | Usuário não autenticado | → `/login?callbackUrl=/home` |
-| `/quiz` ou `/quiz/` | Usuário é ADMIN | → `/admin/quiz` |
-| `/quiz` (exceto `/quiz/responder`) | Usuário não autenticado | → `/login?callbackUrl=/quiz` |
-| `/quiz` (exceto `/quiz/responder`) | Usuário não é ADMIN | → `/home` |
-| `/quiz/responder` | Usuário não autenticado | → `/login?callbackUrl=/quiz/responder` |
-| `/admin/*` | Usuário não autenticado | → `/login?callbackUrl=/admin/...` |
-| `/admin/*` | Usuário não é ADMIN | → `/home` |
+| Rota                               | Condição                | Redirecionamento                       |
+| ---------------------------------- | ----------------------- | -------------------------------------- |
+| `/login`, `/cadastro`              | Usuário autenticado     | → `/home`                              |
+| `/home`                            | Usuário não autenticado | → `/login?callbackUrl=/home`           |
+| `/quiz` ou `/quiz/`                | Usuário é ADMIN         | → `/admin/quiz`                        |
+| `/quiz` (exceto `/quiz/responder`) | Usuário não autenticado | → `/login?callbackUrl=/quiz`           |
+| `/quiz` (exceto `/quiz/responder`) | Usuário não é ADMIN     | → `/home`                              |
+| `/quiz/responder`                  | Usuário não autenticado | → `/login?callbackUrl=/quiz/responder` |
+| `/admin/*`                         | Usuário não autenticado | → `/login?callbackUrl=/admin/...`      |
+| `/admin/*`                         | Usuário não é ADMIN     | → `/home`                              |
 
 ---
 
@@ -378,6 +413,7 @@ export const config = {
 **Arquivo**: `app/(protected)/layout.tsx`
 
 Links disponíveis (footer):
+
 - **Home** → `/home`
 - **Eventos** → `/eventos`
 - **Perfil** → `/perfil`
@@ -443,29 +479,29 @@ graph TD
 
 ## Resumo de Integrações API por Página
 
-| Página | APIs Consumidas |
-|--------|-----------------|
-| `/` | Nenhuma (redireciona) |
-| `/login` | NextAuth (signIn) |
-| `/cadastro` | `POST /api/auth/register` |
-| `/home` | `GET /api/quiz/ativo`, `GET /api/quiz/{id}/classificacao` |
-| `/perfil` | `POST /api/user/avatar`, Session |
-| `/eventos` | `GET /api/quiz/classificacao-geral` |
-| `/quiz/responder` | `GET /api/quiz/ativo`, `GET /api/quiz/{id}/perguntas`, `POST /api/quiz/resposta` |
-| `/admin/quiz` (admin) | `GET /api/quiz`, `PUT /api/quiz/{id}`, `DELETE /api/quiz/{id}`, `POST /api/quiz/{id}/perguntas`, `GET /api/quiz/{id}/perguntas?admin=true` |
-| `/admin/quiz/novo` (admin) | `POST /api/quiz` |
+| Página                     | APIs Consumidas                                                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/`                        | Nenhuma (redireciona)                                                                                                                      |
+| `/login`                   | NextAuth (signIn)                                                                                                                          |
+| `/cadastro`                | `POST /api/auth/register`                                                                                                                  |
+| `/home`                    | `GET /api/quiz/ativo`, `GET /api/quiz/{id}/classificacao`                                                                                  |
+| `/perfil`                  | `POST /api/user/avatar`, Session                                                                                                           |
+| `/eventos`                 | `GET /api/quiz/classificacao-geral`                                                                                                        |
+| `/quiz/responder`          | `GET /api/quiz/ativo`, `GET /api/quiz/{id}/perguntas`, `POST /api/quiz/resposta`                                                           |
+| `/admin/quiz` (admin)      | `GET /api/quiz`, `PUT /api/quiz/{id}`, `DELETE /api/quiz/{id}`, `POST /api/quiz/{id}/perguntas`, `GET /api/quiz/{id}/perguntas?admin=true` |
+| `/admin/quiz/novo` (admin) | `POST /api/quiz`                                                                                                                           |
 
 ---
 
 ## Componentes Compartilhados Entre Páginas
 
-| Componente | Usado em |
-|------------|----------|
-| `Navbar` | Todas as rotas protegidas |
-| `PageTransition` | Todas as páginas |
-| `Loading` | Todas as páginas (estado de loading) |
-| `WelcomeModal` | `/home` |
-| `QuizResult` | `/home`, `/quiz/responder` |
+| Componente       | Usado em                             |
+| ---------------- | ------------------------------------ |
+| `Navbar`         | Todas as rotas protegidas            |
+| `PageTransition` | Todas as páginas                     |
+| `Loading`        | Todas as páginas (estado de loading) |
+| `WelcomeModal`   | `/home`                              |
+| `QuizResult`     | `/home`, `/quiz/responder`           |
 
 ---
 

@@ -11,35 +11,35 @@ graph TB
     subgraph Cliente
         Browser[Navegador]
     end
-    
+
     subgraph NextJS[Next.js Application]
         subgraph AppRouter[App Router]
             AuthPages[Páginas Auth<br/>login, cadastro]
             ProtectedPages[Páginas Protegidas<br/>home, perfil, eventos, quiz/responder]
             AdminPages[Área Admin<br/>/admin, /admin/quiz, /admin/usuarios]
         end
-        
+
         subgraph APIRoutes[API Routes]
             AuthAPI[/api/auth]
             QuizAPI[/api/quiz]
             UserAPI[/api/user]
             AdminAPI[/api/admin/users]
         end
-        
+
         Middleware[Middleware<br/>Proteção de Rotas]
     end
-    
+
     subgraph Auth[NextAuth.js]
         AuthConfig[Configuração]
         JWT[JWT Strategy]
         Session[Gerenciamento de Sessão]
     end
-    
+
     subgraph Database[PostgreSQL]
         PrismaORM[Prisma ORM]
         Tables[Tabelas:<br/>User, Quiz, Pergunta,<br/>RespostaUsuario, ResultadoQuiz]
     end
-    
+
     Browser --> Middleware
     Middleware --> AuthPages
     Middleware --> ProtectedPages
@@ -58,11 +58,13 @@ graph TB
 **Localização**: `app/`
 
 Estrutura baseada em grupos de rotas:
+
 - `(auth)/` - Páginas públicas de autenticação
 - `(protected)/` - Páginas que requerem login (home, perfil, eventos, quiz/responder, admin)
 - `(protected)/admin/` - Área administrativa (dashboard em `/admin`, quizzes em `/admin/quiz`, usuários em `/admin/usuarios`)
 
 **Responsabilidades**:
+
 - Renderização de páginas (SSR/CSR)
 - Gerenciamento de estado do cliente
 - Formulários e validações
@@ -73,12 +75,14 @@ Estrutura baseada em grupos de rotas:
 **Localização**: `app/api/`
 
 Endpoints REST organizados por domínio:
+
 - `/api/auth/*` - Autenticação e registro
 - `/api/quiz/*` - CRUD de quizzes e perguntas
 - `/api/user/*` - Perfil e configurações do usuário autenticado
 - `/api/admin/users` - Listagem e edição de usuários (apenas ADMIN)
 
 **Responsabilidades**:
+
 - Lógica de negócio
 - Validação de dados
 - Comunicação com banco de dados
@@ -97,7 +101,7 @@ sequenceDiagram
     participant NextAuth
     participant Prisma
     participant Database
-    
+
     User->>LoginPage: Insere email e senha
     LoginPage->>NextAuth: Envia credenciais
     NextAuth->>Prisma: Busca usuário por email
@@ -116,6 +120,7 @@ sequenceDiagram
 ```
 
 **Características**:
+
 - Strategy: JWT (stateless)
 - Provider: Credentials (email + senha)
 - Senha: Hash bcrypt (salt rounds: 10)
@@ -126,12 +131,14 @@ sequenceDiagram
 **Localização**: `middleware.ts`
 
 **Responsabilidades**:
+
 - Verificar autenticação antes de acessar rotas protegidas
 - Redirecionar usuários não autenticados para `/login`
 - Redirecionar usuários autenticados que acessam `/login` para `/home`
 - Controlar acesso de admin a rotas de gerenciamento de quiz
 
 **Rotas Monitoradas**:
+
 - `/home/*` - Requer autenticação
 - `/admin/*` - Requer autenticação + role ADMIN
 - `/quiz/*` - Requer autenticação + role ADMIN (exceto `/quiz/responder`)
@@ -155,7 +162,7 @@ erDiagram
     Quiz ||--o{ RespostaUsuario : recebe
     Quiz ||--o{ ResultadoQuiz : gera
     Pergunta ||--o{ RespostaUsuario : recebe
-    
+
     User {
         int id PK
         string name
@@ -168,7 +175,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
-    
+
     Quiz {
         int id PK
         string tema
@@ -176,7 +183,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
-    
+
     Pergunta {
         int id PK
         int quizId FK
@@ -190,7 +197,7 @@ erDiagram
         string justificativa
         int tempoSegundos
     }
-    
+
     RespostaUsuario {
         int id PK
         int userId FK
@@ -199,7 +206,7 @@ erDiagram
         string alternativaEscolhida
         datetime createdAt
     }
-    
+
     ResultadoQuiz {
         int id PK
         int userId FK
@@ -216,26 +223,36 @@ erDiagram
 ### Entidades Principais
 
 #### User
+
 Armazena dados de autenticação e perfil.
+
 - **Roles**: `USER`, `ADMIN`, `MODERATOR`
 - **Campos opcionais**: `social_name`, `igreja`, `avatar_url`
 
 #### Quiz
+
 Representa um conjunto de perguntas sobre um tema.
+
 - **Status**: `ativo` (apenas 1 pode estar ativo por vez)
 
 #### Pergunta
+
 Questão de múltipla escolha (5 alternativas: A-E).
+
 - **Tempo**: Limite em segundos para resposta
 - **Justificativa**: Explicação da resposta correta
 
 #### RespostaUsuario
+
 Registro de cada resposta individual.
+
 - **Constraint**: Um usuário só pode responder cada pergunta uma vez
 - **Null**: `alternativaEscolhida` pode ser null (não respondeu a tempo)
 
 #### ResultadoQuiz
+
 Resumo consolidado das respostas de um usuário em um quiz.
+
 - **Calculado**: Após envio de todas as respostas
 - **Usado para**: Rankings e estatísticas
 
@@ -247,13 +264,13 @@ sequenceDiagram
     participant P as Página /quiz/responder
     participant API as API Quiz
     participant DB as Database
-    
+
     U->>P: Acessa página
     P->>API: GET /api/quiz/ativo
     API->>DB: Busca quiz ativo
     DB-->>API: Quiz + verifica se já respondeu
     API-->>P: Quiz data + jaRespondeu
-    
+
     alt Já respondeu
         P-->>U: Exibe resultado
     else Novo quiz
@@ -263,13 +280,13 @@ sequenceDiagram
         API->>DB: Busca perguntas do quiz
         DB-->>API: Lista de perguntas
         API-->>P: Perguntas (sem respostaCorreta)
-        
+
         loop Para cada pergunta
             P-->>U: Exibe pergunta + timer
             U->>P: Seleciona alternativa
             P->>P: Armazena resposta localmente
         end
-        
+
         P->>API: POST /api/quiz/resposta
         Note over P,API: Envia todas as respostas
         API->>DB: Salva RespostaUsuario
@@ -307,6 +324,7 @@ sequenceDiagram
 ### Verificação de Sessão
 
 Em rotas protegidas:
+
 1. Middleware verifica cookie de sessão
 2. Se não existe, redireciona para `/login`
 3. Se existe, decodifica JWT
@@ -316,18 +334,21 @@ Em rotas protegidas:
 ## Segurança
 
 ### Autenticação
+
 - ✅ Senhas hasheadas com bcrypt (10 rounds)
 - ✅ JWT tokens assinados (NEXTAUTH_SECRET)
 - ✅ Cookies HTTP-only (proteção contra XSS)
 - ✅ Validação de sessão no servidor
 
 ### Autorização
+
 - ✅ Middleware verifica autenticação antes de renderizar
 - ✅ APIs verificam sessão em cada request
 - ✅ Controle de acesso baseado em roles (RBAC)
 - ✅ Validação de ownership (usuário só acessa seus dados)
 
 ### Validação de Dados
+
 - ✅ Validação no frontend (UX)
 - ✅ Validação no backend (segurança)
 - ✅ Prisma schema constraints (integridade)
@@ -335,12 +356,14 @@ Em rotas protegidas:
 ## Performance
 
 ### Otimizações Implementadas
+
 - Server-Side Rendering (SSR) para SEO
 - API Routes com `dynamic = 'force-dynamic'` onde necessário
 - Índices no banco de dados (userId, quizId, ativo)
 - Prisma connection pooling
 
 ### Pontos de Atenção
+
 - Quiz ativo: Cache pode ser implementado (atualmente força dynamic)
 - Avatar upload: Usa Vercel Blob Storage
 - Rankings: Query otimizada com índice em `acertos`
@@ -362,6 +385,7 @@ BLOB_READ_WRITE_TOKEN=<vercel-blob-token>
 ## Deployment
 
 A aplicação é otimizada para deploy na Vercel:
+
 - Build automático via Git
 - Migrações Prisma no build (`prisma generate`)
 - Variáveis de ambiente no painel Vercel

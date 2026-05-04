@@ -5,11 +5,13 @@ Servidor MCP para consultar o banco de dados PostgreSQL via chat no Cursor.
 ## Setup Rápido
 
 1. **Configurar variáveis de ambiente**:
+
    ```bash
    cp ../.env.mcp.example ../.env.mcp
    ```
-   
+
    Edite `.env.mcp` e adicione a URL do banco local:
+
    ```env
    MCP_DATABASE_URL_LOCAL="postgresql://user:pass@localhost:5432/projeto_igreja"
    ```
@@ -24,6 +26,7 @@ Servidor MCP para consultar o banco de dados PostgreSQL via chat no Cursor.
 ## Documentação Completa
 
 Ver [`docs/mcp/prisma-mcp.md`](../docs/mcp/prisma-mcp.md) para:
+
 - Guia completo de uso
 - Todas as ferramentas disponíveis
 - Exemplos práticos

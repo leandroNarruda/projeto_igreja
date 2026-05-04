@@ -92,11 +92,11 @@ Faz upload de uma imagem de avatar para o usuário autenticado.
 
 #### Validações
 
-| Validação | Valor |
-|-----------|-------|
-| Tamanho máximo | 5 MB |
-| Formatos aceitos | JPEG, PNG, WebP |
-| Processamento | Redimensionado para 256x256px, convertido para JPEG com qualidade 80% |
+| Validação        | Valor                                                                 |
+| ---------------- | --------------------------------------------------------------------- |
+| Tamanho máximo   | 5 MB                                                                  |
+| Formatos aceitos | JPEG, PNG, WebP                                                       |
+| Processamento    | Redimensionado para 256x256px, convertido para JPEG com qualidade 80% |
 
 #### Respostas
 
@@ -170,7 +170,7 @@ sequenceDiagram
     participant F as Frontend
     participant API as /api/user/me
     participant DB as Database
-    
+
     U->>F: Edita nome social
     F->>API: PATCH {social_name}
     API->>API: Valida (não vazio, string)
@@ -191,7 +191,7 @@ sequenceDiagram
     participant Sharp as Sharp (Image Processing)
     participant Blob as Vercel Blob Storage
     participant DB as Database
-    
+
     U->>F: Seleciona imagem
     F->>API: POST multipart/form-data
     API->>API: Valida tipo e tamanho
@@ -199,14 +199,14 @@ sequenceDiagram
     Sharp-->>API: Buffer processado
     API->>Blob: Upload imagem
     Blob-->>API: URL pública
-    
+
     API->>DB: Busca avatar_url atual
     DB-->>API: avatar_url antigo
-    
+
     alt Avatar antigo existe no Blob
         API->>Blob: DELETE avatar antigo
     end
-    
+
     API->>DB: UPDATE user SET avatar_url
     DB-->>API: Sucesso
     API-->>F: {avatarUrl}
@@ -412,8 +412,8 @@ A biblioteca **Sharp** é usada para otimizar imagens antes do upload:
 
 ```typescript
 await sharp(inputBuffer)
-  .resize(256, 256, { fit: 'cover' })  // Redimensiona para 256x256
-  .jpeg({ quality: 80 })               // Converte para JPEG com qualidade 80%
+  .resize(256, 256, { fit: 'cover' }) // Redimensiona para 256x256
+  .jpeg({ quality: 80 }) // Converte para JPEG com qualidade 80%
   .toBuffer()
 ```
 

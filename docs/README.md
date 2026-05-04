@@ -5,9 +5,11 @@ Bem-vindo à documentação técnica do Projeto Igreja, uma plataforma completa 
 ## Índice
 
 ### 📐 [Arquitetura](./arquitetura.md)
+
 Visão geral da arquitetura do sistema, fluxos principais e estrutura de camadas.
 
 ### 🔌 API (Backend)
+
 - [Visão Geral das APIs](./api/README.md)
 - [Autenticação](./api/auth.md) - Registro, login e gestão de sessões
 - [Quiz](./api/quiz.md) - Gerenciamento e resposta de quizzes
@@ -15,20 +17,22 @@ Visão geral da arquitetura do sistema, fluxos principais e estrutura de camadas
 - [Admin](./api/admin.md) - APIs de administração (listar e editar usuários)
 
 ### 🎨 Frontend
+
 - [Visão Geral do Frontend](./frontend/README.md)
 - [Rotas e Páginas](./frontend/rotas.md) - Mapeamento de todas as rotas
 
 ### 🔧 Ferramentas de Desenvolvimento
+
 - [Prisma MCP Server](./mcp/prisma-mcp.md) - Consultar banco de dados via chat no Cursor
 
 ## Navegação Rápida
 
-| Seção | Descrição |
-|-------|-----------|
-| **Setup** | Veja o [README principal](../README.md) para instruções de instalação |
-| **Modelo de Dados** | Consulte [arquitetura.md](./arquitetura.md#modelo-de-dados) |
-| **Autenticação** | Veja [api/auth.md](./api/auth.md) e [arquitetura.md](./arquitetura.md#autenticação) |
-| **Rotas Protegidas** | Consulte [frontend/rotas.md](./frontend/rotas.md#rotas-protegidas) |
+| Seção                | Descrição                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| **Setup**            | Veja o [README principal](../README.md) para instruções de instalação               |
+| **Modelo de Dados**  | Consulte [arquitetura.md](./arquitetura.md#modelo-de-dados)                         |
+| **Autenticação**     | Veja [api/auth.md](./api/auth.md) e [arquitetura.md](./arquitetura.md#autenticação) |
+| **Rotas Protegidas** | Consulte [frontend/rotas.md](./frontend/rotas.md#rotas-protegidas)                  |
 
 ## Stack Tecnológico
 
@@ -59,6 +63,7 @@ docs/
 ## Convenções
 
 ### Códigos de Status HTTP
+
 - `200 OK` - Requisição bem-sucedida
 - `201 Created` - Recurso criado com sucesso
 - `400 Bad Request` - Dados inválidos ou faltando
@@ -67,6 +72,7 @@ docs/
 - `500 Internal Server Error` - Erro do servidor
 
 ### Tipos de Usuário
+
 - `USER` - Usuário padrão (pode responder quizzes)
 - `ADMIN` - Administrador (pode criar e gerenciar quizzes)
 - `MODERATOR` - Moderador (futuro)
@@ -74,6 +80,7 @@ docs/
 ## Contribuindo com a Documentação
 
 Ao adicionar novos recursos:
+
 1. Documente os endpoints em `api/[domínio].md`
 2. Adicione rotas de páginas em `frontend/rotas.md`
 3. Atualize diagramas em `arquitetura.md` se necessário

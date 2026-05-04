@@ -48,6 +48,7 @@ lib/
 ### (auth) - Rotas Públicas
 
 Páginas acessíveis sem autenticação:
+
 - `/login`
 - `/cadastro`
 
@@ -56,6 +57,7 @@ Páginas acessíveis sem autenticação:
 ### (protected) - Rotas Protegidas
 
 Páginas que requerem autenticação:
+
 - `/home` - Dashboard principal
 - `/perfil` - Perfil do usuário
 - `/eventos` - Classificação geral
@@ -97,11 +99,11 @@ await signOut({ callbackUrl: '/login' })
 
 ### Estados de Sessão
 
-| Status | Significado | UI |
-|--------|-------------|-----|
-| `loading` | Carregando sessão | Exibir loading |
-| `authenticated` | Usuário autenticado | Exibir conteúdo |
-| `unauthenticated` | Não autenticado | Redirecionar para login |
+| Status            | Significado         | UI                      |
+| ----------------- | ------------------- | ----------------------- |
+| `loading`         | Carregando sessão   | Exibir loading          |
+| `authenticated`   | Usuário autenticado | Exibir conteúdo         |
+| `unauthenticated` | Não autenticado     | Redirecionar para login |
 
 ## React Query (TanStack Query)
 
@@ -127,6 +129,7 @@ const queryClient = new QueryClient({
 **Localização**: `hooks/useQuiz.ts`
 
 Queries (GET):
+
 - `useQuizAtivo()` - Busca quiz ativo
 - `useQuizzes()` - Lista todos os quizzes (admin)
 - `usePerguntas(quizId, admin)` - Busca perguntas
@@ -134,6 +137,7 @@ Queries (GET):
 - `useClassificacaoGeral()` - Ranking geral
 
 Mutations (POST/PUT/DELETE):
+
 - `useCriarQuiz()` - Criar novo quiz
 - `useAtualizarQuiz()` - Atualizar quiz
 - `useDeletarQuiz()` - Deletar quiz
@@ -228,16 +232,19 @@ Classes customizadas e temas configurados para o projeto.
 ### Padrões de Estilo
 
 **Containers**:
+
 ```tsx
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 ```
 
 **Cards**:
+
 ```tsx
 <div className="bg-white rounded-lg shadow-md p-6">
 ```
 
 **Botões Primários**:
+
 ```tsx
 <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
 ```

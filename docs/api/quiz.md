@@ -272,12 +272,12 @@ Cria uma ou mais perguntas para um quiz.
 [
   {
     "enunciado": "...",
-    "alternativaA": "...",
+    "alternativaA": "..."
     // ... outros campos
   },
   {
     "enunciado": "...",
-    "alternativaA": "...",
+    "alternativaA": "..."
     // ... outros campos
   }
 ]
@@ -313,7 +313,9 @@ Cria uma ou mais perguntas para um quiz.
 ```json
 {
   "message": "5 pergunta(s) criada(s) com sucesso",
-  "perguntas": [ /* array de perguntas */ ],
+  "perguntas": [
+    /* array de perguntas */
+  ],
   "total": 5
 }
 ```
@@ -776,31 +778,31 @@ sequenceDiagram
     participant F as Frontend
     participant API as API
     participant DB as Database
-    
+
     U->>F: Acessa /quiz/responder
     F->>API: GET /api/quiz/ativo
     API->>DB: Busca quiz ativo + verifica se respondeu
     DB-->>API: Quiz + status
     API-->>F: quiz, jaRespondeu, resultado
-    
+
     alt Já respondeu
         F-->>U: Exibe resultado
     else Novo quiz
         F-->>U: Exibe instruções
         U->>F: Clica "Iniciar"
-        
+
         F->>API: GET /api/quiz/{id}/perguntas
         API->>DB: Busca perguntas
         DB-->>API: Perguntas
         API->>API: Embaralha perguntas
         API-->>F: Perguntas (com respostaCorreta)
-        
+
         loop Para cada pergunta
             F-->>U: Mostra pergunta + timer
             U->>F: Seleciona alternativa
             F->>F: Armazena localmente
         end
-        
+
         F->>API: POST /api/quiz/resposta
         API->>DB: Salva RespostaUsuario (transação)
         API->>DB: Calcula e salva ResultadoQuiz
@@ -832,7 +834,7 @@ sequenceDiagram
 - **Acertos**: alternativa escolhida === respostaCorreta
 - **Erros**: alternativa escolhida !== respostaCorreta
 - **Nulos**: alternativa escolhida === null
-- **Porcentagem**: (acertos / total) * 100
+- **Porcentagem**: (acertos / total) \* 100
 
 ### Rankings
 

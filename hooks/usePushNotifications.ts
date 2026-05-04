@@ -47,15 +47,18 @@ export function usePushNotifications() {
       registration: ServiceWorkerRegistration,
       perm: NotificationPermission
     ) => {
-      registration.pushManager.getSubscription().then(subscription => {
-        setState(
-          subscription
-            ? 'subscribed'
-            : perm === 'granted'
-              ? 'unsubscribed'
-              : 'prompt'
-        )
-      }).catch(() => setState('prompt'))
+      registration.pushManager
+        .getSubscription()
+        .then(subscription => {
+          setState(
+            subscription
+              ? 'subscribed'
+              : perm === 'granted'
+                ? 'unsubscribed'
+                : 'prompt'
+          )
+        })
+        .catch(() => setState('prompt'))
     }
 
     let readyTimeout: ReturnType<typeof setTimeout> | undefined

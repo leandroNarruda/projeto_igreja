@@ -20,7 +20,12 @@ export const Footer = () => {
     return null
   }
 
-  const navigationItems = [
+  const navigationItems: {
+    label: string
+    path: string
+    icon: typeof Home
+    external?: boolean
+  }[] = [
     {
       label: 'Home',
       path: '/home',

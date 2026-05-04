@@ -145,6 +145,7 @@ Este README contém informações básicas de setup. Para documentação complet
 ## 📝 Funcionalidades
 
 ### Autenticação e Perfil
+
 - ✅ Cadastro de usuários com email e senha
 - ✅ Login com sessão JWT persistente
 - ✅ Proteção de rotas com middleware NextAuth
@@ -153,6 +154,7 @@ Este README contém informações básicas de setup. Para documentação complet
 - ✅ Logout
 
 ### Sistema de Quiz
+
 - ✅ Gerenciamento de quizzes (admin)
 - ✅ Quiz de múltipla escolha (5 alternativas)
 - ✅ Timer por pergunta
@@ -162,6 +164,7 @@ Este README contém informações básicas de setup. Para documentação complet
 - ✅ Apenas um quiz ativo por vez
 
 ### Interface
+
 - ✅ Design responsivo com Tailwind CSS
 - ✅ Animações com Framer Motion
 - ✅ Componentes reutilizáveis

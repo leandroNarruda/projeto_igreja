@@ -25,17 +25,21 @@ Não é necessário enviar headers de autenticação manualmente. O cookie de se
 ## Domínios da API
 
 ### [Autenticação](./auth.md)
+
 Rotas de registro e autenticação de usuários.
 
 **Endpoints principais**:
+
 - `POST /api/auth/register` - Registrar novo usuário
 - `POST /api/auth/register/igreja` - Registrar com igreja
 - NextAuth endpoints (login, logout, session)
 
 ### [Quiz](./quiz.md)
+
 Gerenciamento completo de quizzes e respostas.
 
 **Endpoints principais**:
+
 - `GET /api/quiz` - Listar quizzes (admin)
 - `POST /api/quiz` - Criar quiz (admin)
 - `GET /api/quiz/ativo` - Buscar quiz ativo
@@ -46,9 +50,11 @@ Gerenciamento completo de quizzes e respostas.
 - `GET /api/quiz/classificacao-geral` - Ranking geral
 
 ### [Usuário](./user.md)
+
 Perfil e configurações do usuário.
 
 **Endpoints principais**:
+
 - `PATCH /api/user/me` - Atualizar nome social
 - `POST /api/user/avatar` - Upload de avatar
 
@@ -91,23 +97,25 @@ Opcionalmente com detalhes:
 
 ## Códigos de Status HTTP
 
-| Código | Significado | Quando usar |
-|--------|-------------|-------------|
-| `200` | OK | Operação bem-sucedida (GET, PATCH, DELETE) |
-| `201` | Created | Recurso criado com sucesso (POST) |
-| `400` | Bad Request | Dados inválidos ou faltando |
-| `401` | Unauthorized | Não autenticado (sem sessão) |
-| `403` | Forbidden | Sem permissão (ex: não é admin) |
-| `404` | Not Found | Recurso não encontrado |
-| `500` | Internal Server Error | Erro do servidor |
+| Código | Significado           | Quando usar                                |
+| ------ | --------------------- | ------------------------------------------ |
+| `200`  | OK                    | Operação bem-sucedida (GET, PATCH, DELETE) |
+| `201`  | Created               | Recurso criado com sucesso (POST)          |
+| `400`  | Bad Request           | Dados inválidos ou faltando                |
+| `401`  | Unauthorized          | Não autenticado (sem sessão)               |
+| `403`  | Forbidden             | Sem permissão (ex: não é admin)            |
+| `404`  | Not Found             | Recurso não encontrado                     |
+| `500`  | Internal Server Error | Erro do servidor                           |
 
 ## Controle de Acesso
 
 ### Rotas Públicas
+
 - `POST /api/auth/register`
 - `POST /api/auth/register/igreja`
 
 ### Rotas Autenticadas (USER ou ADMIN)
+
 - `GET /api/quiz/ativo`
 - `GET /api/quiz/{id}/perguntas`
 - `POST /api/quiz/resposta`
@@ -118,6 +126,7 @@ Opcionalmente com detalhes:
 - `POST /api/user/avatar`
 
 ### Rotas de Admin (apenas ADMIN)
+
 - `GET /api/quiz`
 - `POST /api/quiz`
 - `GET /api/quiz/{id}` (detalhes)
@@ -137,6 +146,7 @@ Por padrão, Next.js API Routes aceitam apenas requisições do mesmo domínio. 
 Atualmente não implementado. Endpoints que retornam listas trazem todos os registros.
 
 **Endpoints que podem se beneficiar de paginação**:
+
 - `GET /api/quiz` (lista de quizzes)
 - `GET /api/quiz/{id}/classificacao` (ranking)
 
@@ -145,6 +155,7 @@ Atualmente não implementado. Endpoints que retornam listas trazem todos os regi
 Atualmente não há versionamento de API. Todas as rotas estão em `/api/*`.
 
 Para futuras versões, considere:
+
 - `/api/v1/*`
 - `/api/v2/*`
 

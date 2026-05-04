@@ -69,15 +69,15 @@ O `middleware.ts` protege todas as rotas em `/home`, `/admin`, `/quiz`:
 
 ## Banco de dados — modelos principais
 
-| Modelo | Descrição |
-|--------|-----------|
-| `User` | Usuário com `role: Role` (USER, ADMIN, MODERATOR) |
-| `Quiz` | Quiz semanal com campo `ativo: Boolean` (só um pode estar ativo) |
-| `Pergunta` | Pergunta do quiz: 5 alternativas A–E + `respostaCorreta` + `justificativa` + `tempoSegundos` |
-| `RespostaUsuario` | Resposta do usuário a uma pergunta de um quiz específico |
-| `ResultadoQuiz` | Resultado consolidado: acertos, erros, nulos, porcentagem |
-| `Versinho` | Versinho bíblico para quiz: 5 alternativas, `respostaCorreta`, `ranking` (popularidade) |
-| `WebPushSubscription` | Endpoint + chaves p256dh/auth para Web Push |
+| Modelo                | Descrição                                                                                    |
+| --------------------- | -------------------------------------------------------------------------------------------- |
+| `User`                | Usuário com `role: Role` (USER, ADMIN, MODERATOR)                                            |
+| `Quiz`                | Quiz semanal com campo `ativo: Boolean` (só um pode estar ativo)                             |
+| `Pergunta`            | Pergunta do quiz: 5 alternativas A–E + `respostaCorreta` + `justificativa` + `tempoSegundos` |
+| `RespostaUsuario`     | Resposta do usuário a uma pergunta de um quiz específico                                     |
+| `ResultadoQuiz`       | Resultado consolidado: acertos, erros, nulos, porcentagem                                    |
+| `Versinho`            | Versinho bíblico para quiz: 5 alternativas, `respostaCorreta`, `ranking` (popularidade)      |
+| `WebPushSubscription` | Endpoint + chaves p256dh/auth para Web Push                                                  |
 
 ## Padrões de código
 
@@ -93,15 +93,15 @@ O `middleware.ts` protege todas as rotas em `/home`, `/admin`, `/quiz`:
 
 Usar sempre as classes Tailwind mapeadas para CSS variables — nunca hardcode hex:
 
-| Classe | Uso |
-|--------|-----|
-| `bg-bg-base` | Fundo principal da página |
-| `bg-bg-card` / `bg-bg-deep` | Fundo de cards e seções profundas |
-| `text-accent` | Títulos e textos de destaque |
-| `text-lavender` | Textos secundários, labels, links |
+| Classe                        | Uso                                     |
+| ----------------------------- | --------------------------------------- |
+| `bg-bg-base`                  | Fundo principal da página               |
+| `bg-bg-card` / `bg-bg-deep`   | Fundo de cards e seções profundas       |
+| `text-accent`                 | Títulos e textos de destaque            |
+| `text-lavender`               | Textos secundários, labels, links       |
 | `text-primary` / `bg-primary` | Cor principal da marca (botões, ícones) |
-| `text-danger` / `bg-danger` | Erros e ações destrutivas |
-| `text-success` / `bg-success` | Feedbacks positivos |
+| `text-danger` / `bg-danger`   | Erros e ações destrutivas               |
+| `text-success` / `bg-success` | Feedbacks positivos                     |
 
 ## Realtime (Ably)
 

@@ -199,7 +199,7 @@ sequenceDiagram
     participant Frontend
     participant API
     participant Database
-    
+
     User->>Frontend: Preenche formulário
     Frontend->>API: POST /api/auth/register
     API->>API: Valida dados
@@ -225,7 +225,7 @@ sequenceDiagram
     participant Frontend
     participant NextAuth
     participant Database
-    
+
     User->>Frontend: Email + senha
     Frontend->>NextAuth: signIn('credentials')
     NextAuth->>Database: Busca usuário por email
@@ -376,30 +376,30 @@ export function LoginForm() {
 
 ### Registro
 
-| Campo | Validação |
-|-------|-----------|
-| `name` | Obrigatório, string não vazia |
-| `email` | Obrigatório, único, formato de email |
+| Campo      | Validação                                     |
+| ---------- | --------------------------------------------- |
+| `name`     | Obrigatório, string não vazia                 |
+| `email`    | Obrigatório, único, formato de email          |
 | `password` | Obrigatório, mínimo recomendado: 6 caracteres |
-| `igreja` | Opcional, string |
+| `igreja`   | Opcional, string                              |
 
 ### Login
 
-| Campo | Validação |
-|-------|-----------|
-| `email` | Obrigatório, deve existir no banco |
+| Campo      | Validação                              |
+| ---------- | -------------------------------------- |
+| `email`    | Obrigatório, deve existir no banco     |
 | `password` | Obrigatório, deve corresponder ao hash |
 
 ---
 
 ## Erros Comuns
 
-| Erro | Causa | Solução |
-|------|-------|---------|
-| `Email já está em uso` | Tentativa de registrar email duplicado | Use outro email ou faça login |
-| `Todos os campos são obrigatórios` | Campos `name`, `email` ou `password` faltando | Preencha todos os campos |
-| `CredentialsSignin` (NextAuth) | Email ou senha incorretos | Verifique as credenciais |
-| `Configuration` (NextAuth) | `NEXTAUTH_SECRET` não configurado | Configure a variável de ambiente |
+| Erro                               | Causa                                         | Solução                          |
+| ---------------------------------- | --------------------------------------------- | -------------------------------- |
+| `Email já está em uso`             | Tentativa de registrar email duplicado        | Use outro email ou faça login    |
+| `Todos os campos são obrigatórios` | Campos `name`, `email` ou `password` faltando | Preencha todos os campos         |
+| `CredentialsSignin` (NextAuth)     | Email ou senha incorretos                     | Verifique as credenciais         |
+| `Configuration` (NextAuth)         | `NEXTAUTH_SECRET` não configurado             | Configure a variável de ambiente |
 
 ---
 

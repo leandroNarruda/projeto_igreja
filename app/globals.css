@@ -16,22 +16,22 @@
 /* ── Tema escuro (padrão) ─────────────────────────────────────────────────── */
 :root {
   /* Fundos         hex original */
-  --color-bg-base:   18 10 20;   /* #120a14 */
-  --color-bg-card:   26 13 34;   /* #1a0d22 */
-  --color-bg-deep:   14  7 24;   /* #0e0718 */
+  --color-bg-base: 18 10 20; /* #120a14 */
+  --color-bg-card: 26 13 34; /* #1a0d22 */
+  --color-bg-deep: 14 7 24; /* #0e0718 */
 
   /* Marca */
-  --color-primary:        126 86 134;  /* #7e5686 */
-  --color-primary-hover:  154 106 164; /* #9a6aa4 */
+  --color-primary: 126 86 134; /* #7e5686 */
+  --color-primary-hover: 154 106 164; /* #9a6aa4 */
 
   /* Tipografia */
-  --color-accent:   232 249 162; /* #e8f9a2 — texto principal / títulos */
+  --color-accent: 232 249 162; /* #e8f9a2 — texto principal / títulos */
   --color-lavender: 165 170 217; /* #a5aad9 — texto secundário */
 
   /* Semânticas */
-  --color-orange:  248 161  63; /* #f8a13f */
-  --color-danger:  186  60  61; /* #ba3c3d */
-  --color-success:  74 222 128; /* #4ade80 */
+  --color-orange: 248 161 63; /* #f8a13f */
+  --color-danger: 186 60 61; /* #ba3c3d */
+  --color-success: 74 222 128; /* #4ade80 */
 }
 
 /*
@@ -174,7 +174,13 @@ body {
 /* ── Cards do pódio ───────────────────────────────────────────────────────── */
 
 .podio-gold {
-  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 40%, #f59e0b 70%, #d97706 100%);
+  background: linear-gradient(
+    135deg,
+    #fde68a 0%,
+    #fbbf24 40%,
+    #f59e0b 70%,
+    #d97706 100%
+  );
   border-color: #b45309 !important;
   box-shadow: 0 8px 32px rgba(217, 119, 6, 0.45);
   outline: 2px solid #fbbf24;
@@ -184,16 +190,37 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.5) 50%, transparent 80%);
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 80%
+  );
   pointer-events: none;
 }
-.podio-gold .podio-name    { color: #451a03 !important; }
-.podio-gold .podio-label   { color: #78350f !important; }
-.podio-gold .podio-divider { border-color: #92400e !important; }
-.podio-gold .podio-avatar  { background: #451a03 !important; color: #fef3c7 !important; border-color: #92400e !important; }
+.podio-gold .podio-name {
+  color: #451a03 !important;
+}
+.podio-gold .podio-label {
+  color: #78350f !important;
+}
+.podio-gold .podio-divider {
+  border-color: #92400e !important;
+}
+.podio-gold .podio-avatar {
+  background: #451a03 !important;
+  color: #fef3c7 !important;
+  border-color: #92400e !important;
+}
 
 .podio-silver {
-  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 35%, #94a3b8 70%, #64748b 100%);
+  background: linear-gradient(
+    135deg,
+    #f1f5f9 0%,
+    #cbd5e1 35%,
+    #94a3b8 70%,
+    #64748b 100%
+  );
   border-color: #64748b !important;
   box-shadow: 0 8px 32px rgba(100, 116, 139, 0.4);
 }
@@ -201,16 +228,37 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.55) 50%, transparent 80%);
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
   pointer-events: none;
 }
-.podio-silver .podio-name    { color: #0f172a !important; }
-.podio-silver .podio-label   { color: #1e293b !important; }
-.podio-silver .podio-divider { border-color: #475569 !important; }
-.podio-silver .podio-avatar  { background: #1e293b !important; color: #f1f5f9 !important; border-color: #475569 !important; }
+.podio-silver .podio-name {
+  color: #0f172a !important;
+}
+.podio-silver .podio-label {
+  color: #1e293b !important;
+}
+.podio-silver .podio-divider {
+  border-color: #475569 !important;
+}
+.podio-silver .podio-avatar {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
 
 .podio-bronze {
-  background: linear-gradient(135deg, #c2804a 0%, #a0522d 35%, #7c3a1e 65%, #4a1e0a 100%);
+  background: linear-gradient(
+    135deg,
+    #c2804a 0%,
+    #a0522d 35%,
+    #7c3a1e 65%,
+    #4a1e0a 100%
+  );
   border-color: #7c3a1e !important;
   box-shadow: 0 8px 32px rgba(124, 58, 30, 0.5);
 }
@@ -218,10 +266,25 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%);
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 80%
+  );
   pointer-events: none;
 }
-.podio-bronze .podio-name    { color: #fff7ed !important; }
-.podio-bronze .podio-label   { color: #fed7aa !important; }
-.podio-bronze .podio-divider { border-color: rgba(254, 215, 170, 0.4) !important; }
-.podio-bronze .podio-avatar  { background: #431407 !important; color: #fed7aa !important; border-color: rgba(254, 215, 170, 0.5) !important; }
+.podio-bronze .podio-name {
+  color: #fff7ed !important;
+}
+.podio-bronze .podio-label {
+  color: #fed7aa !important;
+}
+.podio-bronze .podio-divider {
+  border-color: rgba(254, 215, 170, 0.4) !important;
+}
+.podio-bronze .podio-avatar {
+  background: #431407 !important;
+  color: #fed7aa !important;
+  border-color: rgba(254, 215, 170, 0.5) !important;
+}

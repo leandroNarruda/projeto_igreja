@@ -21,20 +21,18 @@ export function useRankingRealtime(quizId: number | null) {
     const onQuizUpdate = (message: { data?: unknown }) => {
       const data = message.data as { classificacao?: unknown[] } | undefined
       if (data?.classificacao) {
-        queryClient.setQueryData(
-          ['quiz', quizId, 'classificacao'],
-          () => ({ classificacao: data.classificacao })
-        )
+        queryClient.setQueryData(['quiz', quizId, 'classificacao'], () => ({
+          classificacao: data.classificacao,
+        }))
       }
     }
 
     const onGeralUpdate = (message: { data?: unknown }) => {
       const data = message.data as { classificacao?: unknown[] } | undefined
       if (data?.classificacao) {
-        queryClient.setQueryData(
-          ['quiz', 'classificacao-geral'],
-          () => ({ classificacao: data.classificacao })
-        )
+        queryClient.setQueryData(['quiz', 'classificacao-geral'], () => ({
+          classificacao: data.classificacao,
+        }))
       }
     }
 
@@ -61,10 +59,9 @@ export function useRankingGeralRealtime() {
     const onGeralUpdate = (message: { data?: unknown }) => {
       const data = message.data as { classificacao?: unknown[] } | undefined
       if (data?.classificacao) {
-        queryClient.setQueryData(
-          ['quiz', 'classificacao-geral'],
-          () => ({ classificacao: data.classificacao })
-        )
+        queryClient.setQueryData(['quiz', 'classificacao-geral'], () => ({
+          classificacao: data.classificacao,
+        }))
       }
     }
 
