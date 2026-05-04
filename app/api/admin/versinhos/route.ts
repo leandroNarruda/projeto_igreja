@@ -31,10 +31,16 @@ function validarVersinho(v: VersinhoInput, index: number) {
       erros.push(`campo "${campo}" ausente ou vazio`)
     }
   }
-  if (v.respostaCorreta && !RESPOSTAS_VALIDAS.includes(v.respostaCorreta.toUpperCase())) {
+  if (
+    v.respostaCorreta &&
+    !RESPOSTAS_VALIDAS.includes(v.respostaCorreta.toUpperCase())
+  ) {
     erros.push(`respostaCorreta deve ser A, B, C, D ou E`)
   }
-  if (v.ranking !== undefined && (!Number.isInteger(v.ranking) || v.ranking < 0)) {
+  if (
+    v.ranking !== undefined &&
+    (!Number.isInteger(v.ranking) || v.ranking < 0)
+  ) {
     erros.push(`ranking deve ser um número inteiro não negativo`)
   }
   return erros.length > 0 ? { index, erros } : null
@@ -53,7 +59,10 @@ export async function POST(request: Request) {
   }
 
   if (!Array.isArray(dados)) {
-    return NextResponse.json({ error: 'O JSON deve ser um array de versinhos' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'O JSON deve ser um array de versinhos' },
+      { status: 400 }
+    )
   }
 
   const erros: { index: number; erros: string[] }[] = []
@@ -69,11 +78,14 @@ export async function POST(request: Request) {
   }
 
   if (validos.length === 0) {
-    return NextResponse.json({ error: 'Nenhum versinho válido encontrado', erros }, { status: 400 })
+    return NextResponse.json(
+      { error: 'Nenhum versinho válido encontrado', erros },
+      { status: 400 }
+    )
   }
 
   const { count } = await prisma.versinho.createMany({
-    data: validos.map((v) => ({
+    data: validos.map(v => ({
       verso: v.verso.trim(),
       alternativaA: v.alternativaA.trim(),
       alternativaB: v.alternativaB.trim(),
@@ -107,5 +119,10 @@ export async function GET(request: Request) {
     }),
   ])
 
-  return NextResponse.json({ versinhos, total, page, totalPages: Math.ceil(total / limit) })
+  return NextResponse.json({
+    versinhos,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  })
 }

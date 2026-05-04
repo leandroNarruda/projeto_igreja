@@ -32,7 +32,7 @@ export default function VersinhosAdminPage() {
     setParseError(null)
 
     const reader = new FileReader()
-    reader.onload = (ev) => {
+    reader.onload = ev => {
       try {
         const parsed = JSON.parse(ev.target?.result as string)
         if (!Array.isArray(parsed)) {
@@ -45,7 +45,9 @@ export default function VersinhosAdminPage() {
         setPreview(parsed.length)
         setParseError(null)
       } catch {
-        setParseError('Arquivo inválido. Certifique-se de que é um JSON bem formatado.')
+        setParseError(
+          'Arquivo inválido. Certifique-se de que é um JSON bem formatado.'
+        )
         setRawData(null)
         setPreview(null)
       }
@@ -90,9 +92,11 @@ export default function VersinhosAdminPage() {
           </p>
 
           <Card className="p-6 mb-6">
-            <h2 className="text-lg font-semibold text-accent mb-4">Formato esperado</h2>
+            <h2 className="text-lg font-semibold text-accent mb-4">
+              Formato esperado
+            </h2>
             <pre className="text-xs bg-bg-surface rounded p-3 overflow-x-auto text-lavender">
-{`[
+              {`[
   {
     "verso": "João 3:16",
     "alternativaA": "Texto da alternativa A",
@@ -116,7 +120,9 @@ export default function VersinhosAdminPage() {
               <span className="text-accent font-medium">
                 {fileName ? fileName : 'Selecionar arquivo JSON'}
               </span>
-              <span className="text-xs text-lavender">Clique para escolher ou arraste o arquivo</span>
+              <span className="text-xs text-lavender">
+                Clique para escolher ou arraste o arquivo
+              </span>
               <input
                 ref={inputRef}
                 id="json-upload"
@@ -153,10 +159,14 @@ export default function VersinhosAdminPage() {
 
           {result && (
             <Card className="p-6 mt-6">
-              <h2 className="text-lg font-semibold text-accent mb-3">Resultado da importação</h2>
+              <h2 className="text-lg font-semibold text-accent mb-3">
+                Resultado da importação
+              </h2>
               <div className="flex items-center gap-2 text-green-400 mb-3">
                 <CheckCircle className="w-5 h-5" />
-                <span className="font-medium">{result.inseridos} versinho(s) inserido(s) com sucesso.</span>
+                <span className="font-medium">
+                  {result.inseridos} versinho(s) inserido(s) com sucesso.
+                </span>
               </div>
               {result.erros.length > 0 && (
                 <div>
@@ -164,9 +174,11 @@ export default function VersinhosAdminPage() {
                     {result.erros.length} registro(s) com erro:
                   </p>
                   <ul className="space-y-1">
-                    {result.erros.map((e) => (
+                    {result.erros.map(e => (
                       <li key={e.index} className="text-xs text-lavender">
-                        <span className="text-red-400 font-medium">Linha {e.index + 1}:</span>{' '}
+                        <span className="text-red-400 font-medium">
+                          Linha {e.index + 1}:
+                        </span>{' '}
                         {e.erros.join(', ')}
                       </li>
                     ))}

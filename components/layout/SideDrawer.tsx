@@ -107,7 +107,9 @@ export const SideDrawer = () => {
                     <Icon size={20} />
                     <span>{item.label}</span>
                     {item.external && (
-                      <span className="ml-auto text-xs text-lavender/50">↗</span>
+                      <span className="ml-auto text-xs text-lavender/50">
+                        ↗
+                      </span>
                     )}
                     {isActive && (
                       <div className="ml-auto w-1 h-5 bg-accent rounded-full" />

@@ -16,7 +16,12 @@ export function QuizUIProvider({ children }: { children: ReactNode }) {
   const [drawerAberto, setDrawerAberto] = useState(false)
   return (
     <QuizUIContext.Provider
-      value={{ quizEmAndamento, setQuizEmAndamento, drawerAberto, setDrawerAberto }}
+      value={{
+        quizEmAndamento,
+        setQuizEmAndamento,
+        drawerAberto,
+        setDrawerAberto,
+      }}
     >
       {children}
     </QuizUIContext.Provider>
