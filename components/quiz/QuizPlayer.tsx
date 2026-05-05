@@ -22,12 +22,14 @@ interface QuizPlayerProps {
   quizId: number
   pergunta: Pergunta
   onAnswer: (alternativa: string | null) => void
+  autoAdvance?: boolean
 }
 
 export const QuizPlayer: React.FC<QuizPlayerProps> = ({
   quizId,
   pergunta,
   onAnswer,
+  autoAdvance = false,
 }) => {
   const [tempoRestante, setTempoRestante] = useState(pergunta.tempoSegundos)
   const [alternativaSelecionada, setAlternativaSelecionada] = useState<
@@ -56,6 +58,10 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
 
     if (tempoRestante <= 0) {
       setRespondida(true)
+      if (autoAdvance && !avancou) {
+        setAvancou(true)
+        onAnswer(null)
+      }
       return
     }
 
@@ -63,6 +69,10 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
       setTempoRestante(prev => {
         if (prev <= 1) {
           setRespondida(true)
+          if (autoAdvance && !avancou) {
+            setAvancou(true)
+            onAnswer(null)
+          }
           return 0
         }
         return prev - 1
@@ -76,6 +86,10 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
     if (respondida) return
     setAlternativaSelecionada(alternativa)
     setRespondida(true)
+    if (autoAdvance) {
+      setAvancou(true)
+      onAnswer(alternativa)
+    }
   }
 
   const handleAvançar = () => {

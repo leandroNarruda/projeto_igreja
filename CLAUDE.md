@@ -42,10 +42,14 @@ app/
 │   │   ├── quiz/         # Gerenciamento de quizzes
 │   │   ├── usuarios/     # Gerenciamento de usuários
 │   │   └── versinhos/    # Import de versinhos bíblicos (JSON upload)
-│   └── home/             # Página principal do usuário
+│   ├── home/             # Página principal do usuário (quiz semanal)
+│   ├── eventos/          # Apresentação dos eventos (acordeões)
+│   └── versinhos/        # Quiz de versinhos + ranking
+│       └── responder/    # Player do quiz de versinhos
 └── api/
     ├── auth/             # NextAuth + registro
-    ├── quiz/             # CRUD de quizzes e perguntas, ranking
+    ├── quiz/             # CRUD de quizzes e perguntas, ranking (quiz semanal)
+    ├── versinhos/        # quiz (lote), responder, classificacao
     ├── admin/            # users, versinhos (requerem isAdmin())
     ├── push/             # Web Push subscribe/unsubscribe/send
     ├── realtime/         # Token Ably
@@ -54,10 +58,10 @@ app/
 
 ## Proteção de rotas
 
-O `middleware.ts` protege todas as rotas em `/home`, `/admin`, `/quiz`:
+O `middleware.ts` protege todas as rotas em `/home`, `/admin`, `/quiz`, `/versinhos`:
 
 - `/login`, `/cadastro` → redireciona para `/home` se já autenticado
-- `/home/*` → redireciona para `/login` se não autenticado
+- `/home/*` e `/versinhos/*` → redireciona para `/login` se não autenticado
 - `/admin/*` e `/quiz/*` (exceto `/quiz/responder`) → exige `token.role === 'ADMIN'`, redireciona para `/home` se não for admin
 - `/quiz` e `/quiz/` → redireciona para `/admin/quiz`
 
@@ -77,7 +81,18 @@ O `middleware.ts` protege todas as rotas em `/home`, `/admin`, `/quiz`:
 | `RespostaUsuario`     | Resposta do usuário a uma pergunta de um quiz específico                                     |
 | `ResultadoQuiz`       | Resultado consolidado: acertos, erros, nulos, porcentagem                                    |
 | `Versinho`            | Versinho bíblico para quiz: 5 alternativas, `respostaCorreta`, `ranking` (popularidade)      |
+| `VersinhoProgresso`   | Progresso enxuto do quiz de versinhos: 1 linha por usuário (`userId @unique`, `acertos Int`) |
 | `WebPushSubscription` | Endpoint + chaves p256dh/auth para Web Push                                                  |
+
+## Quiz de Versinhos
+
+Fluxo paralelo ao quiz semanal, mas com persistência muito mais enxuta — em vez de gravar resposta por resposta, armazena apenas um contador acumulado de acertos por usuário em `VersinhoProgresso`.
+
+- **Lote**: 10 versinhos por rodada, ordenados por `Versinho.id ASC` (do mais fácil ao mais difícil).
+- **Janela atual** (server-side): `base = floor(acertos / 10) * 10`. O lote enviado é `findMany({ orderBy: { id: 'asc' }, skip: base, take: 10 })`.
+- **Avanço**: ao responder, `novoAcertos = max(acertos, base + acertosDaRodada)`. Só avança o lote ao gabaritar (10/10). Se acertou menos, fica no mesmo lote, mas registra o melhor desempenho até então (sem regredir).
+- **Endpoints**: `GET /api/versinhos/quiz` (lote, sem `respostaCorreta`), `POST /api/versinhos/responder` (valida set de IDs do lote, calcula acertos comparando com gabarito server-side), `GET /api/versinhos/classificacao` (top 10 por `acertos DESC`, desempate por `updatedAt ASC`).
+- **Front**: `app/(protected)/versinhos/responder/page.tsx` reutiliza `QuizInstructions`/`QuizPlayer`/`QuizResult` com prop `autoAdvance` (avança imediatamente após o clique, sem feedback de gabarito). Hooks em `hooks/useVersinhos.ts`. Card flipável de ranking em `components/versinhos/RankingCard.tsx` (níveis com gradiente e progresso por nível).
 
 ## Padrões de código
 

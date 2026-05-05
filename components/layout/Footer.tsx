@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Home, User, Settings } from 'lucide-react'
+import { Home, User, Settings, BookOpen } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
@@ -25,11 +25,18 @@ export const Footer = () => {
     path: string
     icon: typeof Home
     external?: boolean
+    badge?: string
   }[] = [
     {
       label: 'Home',
       path: '/home',
       icon: Home,
+    },
+    {
+      label: 'Versinhos',
+      path: '/versinhos',
+      icon: BookOpen,
+      badge: 'Novo',
     },
     {
       label: 'Perfil',
@@ -94,10 +101,17 @@ export const Footer = () => {
               >
                 {Icon ? (
                   <>
-                    <Icon
-                      size={24}
-                      className={isActive ? 'text-accent' : 'text-lavender'}
-                    />
+                    <div className="relative">
+                      <Icon
+                        size={24}
+                        className={isActive ? 'text-accent' : 'text-lavender'}
+                      />
+                      {item.badge && (
+                        <span className="absolute -top-1.5 -right-3 px-1.5 py-0.5 text-[9px] font-bold leading-none rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 text-white shadow-md ring-1 ring-white/30">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
                     <span
                       className={`text-xs mt-1 font-medium ${isActive ? 'text-accent' : 'text-lavender'}`}
                     >

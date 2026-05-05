@@ -19,7 +19,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Rotas protegidas que requerem autenticação
-  if (request.nextUrl.pathname.startsWith('/home')) {
+  if (
+    request.nextUrl.pathname.startsWith('/home') ||
+    request.nextUrl.pathname.startsWith('/versinhos')
+  ) {
     if (!sessionToken) {
       const loginUrl = new URL('/login', request.url)
       loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname)
@@ -116,6 +119,7 @@ export const config = {
     '/home/:path*',
     '/admin/:path*',
     '/quiz/:path*',
+    '/versinhos/:path*',
     '/login',
     '/cadastro',
   ],

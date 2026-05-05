@@ -54,9 +54,9 @@ export const Navbar = () => {
             <Image
               src="/images/logos/logo-bom-de-licao.png"
               alt="Logo"
-              width={48}
-              height={48}
-              className="sm:hidden h-12 w-auto object-contain"
+              width={40}
+              height={40}
+              className="sm:hidden h-10 w-auto object-contain"
               priority
             />
           </div>

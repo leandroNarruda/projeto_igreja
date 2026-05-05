@@ -1,56 +1,152 @@
 'use client'
 
-import { useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { useClassificacaoGeral } from '@/hooks/useQuiz'
-import { useRankingGeralRealtime } from '@/hooks/useRankingRealtime'
-import { Loading } from '@/components/ui/Loading'
+import { useState, ReactNode } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { Card } from '@/components/ui/Card'
 
-interface ClassificacaoGeralItem {
-  posicao: number
-  userId: number
-  nome: string
-  social_name?: string | null
-  email: string
-  totalAcertos: number
-  totalQuizzes: number
-  mediaPorcentagem: number
+interface AccordionProps {
+  title: string
+  emoji: string
+  open: boolean
+  onToggle: () => void
+  children: ReactNode
+}
+
+function Accordion({ title, emoji, open, onToggle, children }: AccordionProps) {
+  return (
+    <div className="bg-bg-card rounded-lg shadow-md overflow-hidden">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="w-full flex items-center justify-between gap-4 p-6 text-left hover:bg-primary/5 transition-colors"
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="text-3xl drop-shadow-lg shrink-0">{emoji}</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-accent truncate">
+            {title}
+          </h2>
+        </div>
+        <ChevronDown
+          className={`size-6 text-lavender shrink-0 transition-transform duration-300 ${
+            open ? 'rotate-180' : ''
+          }`}
+          aria-hidden
+        />
+      </button>
+      <div
+        className={`grid transition-[grid-template-rows] duration-500 ease-out ${
+          open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="px-6 pb-6">{children}</div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function EventosPage() {
-  const { data, isLoading } = useClassificacaoGeral()
-  const classificacao = data?.classificacao || []
-  useRankingGeralRealtime()
+  const [openId, setOpenId] = useState<'versinhos' | 'sabatina' | null>(
+    'versinhos'
+  )
 
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      window.location.hash === '#classificacao-geral'
-    ) {
-      const el = document.getElementById('classificacao-geral')
-      el?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [])
+  const toggle = (id: 'versinhos' | 'sabatina') =>
+    setOpenId(curr => (curr === id ? null : id))
 
   return (
     <PageTransition>
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Seção de Apresentação do Evento */}
-          <div className="bg-bg-card rounded-lg shadow-md p-6 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <Accordion
+            title="Quiz de Versinhos Bíblicos"
+            emoji="📖"
+            open={openId === 'versinhos'}
+            onToggle={() => toggle('versinhos')}
+          >
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-accent mb-4">
-                🎯 Evento de Quizzes Anual
-              </h1>
               <p className="text-xl text-lavender max-w-3xl mx-auto">
-                Um evento especial que vai durar o ano todo! Teste seus
-                conhecimentos semana a semana e concorra a prêmios incríveis.
+                Decore versículos bíblicos de um jeito divertido! Acerte e suba
+                de nível, mostrando seu conhecimento das Escrituras.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card
+                bgClassName="bg-gradient-to-br from-emerald-900/60 via-teal-800/40 to-cyan-900/30"
+                borderClassName="border border-emerald-500/40 shadow-[0_0_24px_rgba(16,185,129,0.25)]"
+                index={0}
+                useScrollReveal={true}
+              >
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">
+                  🎯
+                </div>
+                <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
+                  Como funciona
+                </h3>
+                <p className="text-lavender/90 text-center text-sm leading-relaxed">
+                  A cada rodada você recebe 10 versículos. Para cada um, escolha
+                  entre 5 alternativas qual é a referência bíblica correta. 30
+                  segundos por pergunta.
+                </p>
+              </Card>
+
+              <Card
+                bgClassName="bg-gradient-to-br from-indigo-900/60 via-blue-800/40 to-purple-900/30"
+                borderClassName="border border-indigo-500/40 shadow-[0_0_24px_rgba(99,102,241,0.25)]"
+                index={1}
+                useScrollReveal={true}
+              >
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">
+                  📈
+                </div>
+                <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
+                  Progresso por nível
+                </h3>
+                <p className="text-lavender/90 text-center text-sm leading-relaxed">
+                  Os versos vão do mais fácil ao mais difícil. Você só avança
+                  para o próximo lote quando gabaritar a rodada atual. Errou?
+                  Tente quantas vezes quiser.
+                </p>
+              </Card>
+
+              <Card
+                bgClassName="bg-gradient-to-br from-amber-900/60 via-orange-800/40 to-pink-900/30"
+                borderClassName="border border-amber-500/40 shadow-[0_0_24px_rgba(245,158,11,0.25)]"
+                index={2}
+                useScrollReveal={true}
+              >
+                <div className="text-4xl mb-3 text-center drop-shadow-lg">
+                  🏅
+                </div>
+                <h3 className="text-xl font-bold text-accent mb-2 text-center tracking-wide">
+                  Níveis e ranking
+                </h3>
+                <p className="text-lavender/90 text-center text-sm leading-relaxed">
+                  Conforme acerta, você sobe de nível — Semente, Discípulo,
+                  Estudante, Profeta, Lenda Bíblica… e dispute o pódio do
+                  ranking acumulado.
+                </p>
+              </Card>
+            </div>
+          </Accordion>
+
+          <Accordion
+            title="Quizzes da Escola Sabatina"
+            emoji="🎯"
+            open={openId === 'sabatina'}
+            onToggle={() => toggle('sabatina')}
+          >
+            <div className="text-center mb-8">
+              <p className="text-xl text-lavender max-w-3xl mx-auto">
+                Um evento especial que vai durar o ano todo! Teste seus
+                conhecimentos semanalmente, com base no estudo da lição.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card
                 bgClassName="bg-gradient-to-br from-violet-900/60 via-purple-800/40 to-primary/30"
                 borderClassName="border border-violet-500/40 shadow-[0_0_24px_rgba(126,86,134,0.35)]"
@@ -105,122 +201,7 @@ export default function EventosPage() {
                 </p>
               </Card>
             </div>
-          </div>
-
-          {/* Seção de Classificação Geral */}
-          <div
-            id="classificacao-geral"
-            className="bg-bg-card rounded-lg shadow-md p-6"
-          >
-            <h2 className="text-3xl font-bold text-accent mb-6 text-center">
-              Classificação Geral
-            </h2>
-
-            {isLoading ? (
-              <Loading text="Carregando classificação..." fullScreen={false} />
-            ) : classificacao.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-lavender">
-                  Ainda não há participantes na classificação geral.
-                </p>
-                <p className="text-lavender/50 mt-2">
-                  Participe dos quizzes para aparecer aqui!
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                {classificacao.map(
-                  (item: ClassificacaoGeralItem, index: number) => {
-                    const medalhas = ['🥇', '🥈', '🥉']
-                    const podioClass =
-                      index < 3
-                        ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
-                        : null
-
-                    return (
-                      <motion.div
-                        key={item.userId}
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        whileInView={{
-                          opacity: 1,
-                          scale: index === 0 ? 1.05 : 1,
-                          y: 0,
-                        }}
-                        viewport={{ once: true, margin: '-50px' }}
-                        transition={{
-                          type: 'tween',
-                          ease: 'easeOut',
-                          duration: 0.4,
-                          delay: index * 0.05,
-                        }}
-                        className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
-                          podioClass ??
-                          'bg-bg-card border-primary/30 hover:border-gray-400'
-                        }`}
-                      >
-                        <div className="relative text-center">
-                          <div
-                            className={`text-5xl mb-3 ${!podioClass ? 'text-accent font-bold' : 'drop-shadow-md'}`}
-                          >
-                            {index < 3 ? medalhas[index] : `${item.posicao}º`}
-                          </div>
-                          <h3
-                            className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}
-                          >
-                            {
-                              (item.social_name?.trim() || item.nome).split(
-                                ' '
-                              )[0]
-                            }
-                          </h3>
-                          <div
-                            className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
-                          >
-                            <div className="bg-black/10 rounded p-2">
-                              <div
-                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
-                              >
-                                Total de Acertos
-                              </div>
-                              <div
-                                className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}
-                              >
-                                {item.totalAcertos}
-                              </div>
-                            </div>
-                            <div className="bg-black/10 rounded p-2">
-                              <div
-                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
-                              >
-                                Quizzes Respondidos
-                              </div>
-                              <div
-                                className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}
-                              >
-                                {item.totalQuizzes}
-                              </div>
-                            </div>
-                            <div className="bg-black/10 rounded p-2">
-                              <div
-                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
-                              >
-                                Média de Acertos
-                              </div>
-                              <div
-                                className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}
-                              >
-                                {item.mediaPorcentagem}%
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )
-                  }
-                )}
-              </div>
-            )}
-          </div>
+          </Accordion>
         </div>
       </div>
     </PageTransition>

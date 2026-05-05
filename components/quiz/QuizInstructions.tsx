@@ -5,20 +5,24 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 
 interface QuizInstructionsProps {
-  tema: string
+  tema?: string
+  titulo?: string
   totalPerguntas: number
   onStart: () => void
 }
 
 export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
   tema,
+  titulo,
   totalPerguntas,
   onStart,
 }) => {
   return (
     <Card className="max-w-2xl mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-accent mb-2">Quiz: {tema}</h2>
+        <h2 className="text-3xl font-bold text-accent mb-2">
+          {titulo ?? `Quiz: ${tema ?? ''}`}
+        </h2>
         <p className="text-lavender">
           {totalPerguntas} {totalPerguntas === 1 ? 'pergunta' : 'perguntas'}
         </p>
@@ -31,13 +35,6 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
             <span className="mr-2">📝</span>
             <span>
               Você terá um tempo limitado para responder cada pergunta
-            </span>
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2">⏱️</span>
-            <span>
-              Quando o tempo expirar, a próxima pergunta aparecerá
-              automaticamente
             </span>
           </li>
           <li className="flex items-start">

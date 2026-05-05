@@ -8,11 +8,29 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { QuizResult } from '@/components/quiz/QuizResult'
-import { useQuizAtivo, useClassificacaoQuiz } from '@/hooks/useQuiz'
-import { useRankingRealtime } from '@/hooks/useRankingRealtime'
+import {
+  useQuizAtivo,
+  useClassificacaoQuiz,
+  useClassificacaoGeral,
+} from '@/hooks/useQuiz'
+import {
+  useRankingRealtime,
+  useRankingGeralRealtime,
+} from '@/hooks/useRankingRealtime'
 import { Loading } from '@/components/ui/Loading'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { WelcomeModal } from '@/components/ui/WelcomeModal'
+
+interface ClassificacaoGeralItem {
+  posicao: number
+  userId: number
+  nome: string
+  social_name?: string | null
+  email: string
+  totalAcertos: number
+  totalQuizzes: number
+  mediaPorcentagem: number
+}
 
 interface ClassificacaoItem {
   posicao: number
@@ -39,12 +57,15 @@ export default function HomePage() {
   const { data: quizData, isLoading } = useQuizAtivo()
   const quizId = quizData?.quiz?.id
   const { data: classificacaoData } = useClassificacaoQuiz(quizId || null)
+  const { data: classificacaoGeralData } = useClassificacaoGeral()
   useRankingRealtime(quizId ?? null)
+  useRankingGeralRealtime()
 
   const quizAtivo = quizData?.quiz
   const jaRespondeu = quizData?.jaRespondeu || false
   const resultado = quizData?.resultado || null
   const classificacao = classificacaoData?.classificacao || []
+  const classificacaoGeral = classificacaoGeralData?.classificacao || []
 
   // Estado para controlar o modal de boas-vindas
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
@@ -92,7 +113,7 @@ export default function HomePage() {
             </div>
             <div className="text-center mb-6">
               <Link
-                href="/eventos#classificacao-geral"
+                href="#classificacao-geral"
                 className="
                   group relative inline-flex items-center gap-2.5
                   px-6 py-3 rounded-full
@@ -134,7 +155,7 @@ export default function HomePage() {
                           initial={{ opacity: 0, scale: 0.95, y: 20 }}
                           whileInView={{
                             opacity: 1,
-                            scale: index === 0 ? 1.05 : 1,
+                            scale: 1,
                             y: 0,
                           }}
                           viewport={{ once: true, margin: '-50px' }}
@@ -222,6 +243,108 @@ export default function HomePage() {
                 </div>
               </div>
             )}
+            {classificacaoGeral.length > 0 && (
+              <div
+                id="classificacao-geral"
+                className="mt-8 bg-bg-card rounded-lg shadow-md p-6"
+              >
+                <h2 className="text-2xl font-bold text-accent mb-6 text-center">
+                  Classificação Geral
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                  {classificacaoGeral.map(
+                    (item: ClassificacaoGeralItem, index: number) => {
+                      const medalhas = ['🥇', '🥈', '🥉']
+                      const podioClass =
+                        index < 3
+                          ? ['podio-gold', 'podio-silver', 'podio-bronze'][
+                              index
+                            ]
+                          : null
+                      return (
+                        <motion.div
+                          key={item.userId}
+                          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                          whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            y: 0,
+                          }}
+                          viewport={{ once: true, margin: '-50px' }}
+                          transition={{
+                            type: 'tween',
+                            ease: 'easeOut',
+                            duration: 0.4,
+                            delay: index * 0.05,
+                          }}
+                          className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                            podioClass ??
+                            'bg-bg-card border-primary/30 hover:border-primary/60'
+                          }`}
+                        >
+                          <div className="relative text-center">
+                            <div
+                              className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+                            >
+                              {index < 3 ? medalhas[index] : `${item.posicao}º`}
+                            </div>
+                            <h3
+                              className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}
+                            >
+                              {
+                                (item.social_name?.trim() || item.nome).split(
+                                  ' '
+                                )[0]
+                              }
+                            </h3>
+                            <div
+                              className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                            >
+                              <div className="bg-black/10 rounded p-2">
+                                <div
+                                  className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  Total de Acertos
+                                </div>
+                                <div
+                                  className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}
+                                >
+                                  {item.totalAcertos}
+                                </div>
+                              </div>
+                              <div className="bg-black/10 rounded p-2">
+                                <div
+                                  className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  Quizzes Respondidos
+                                </div>
+                                <div
+                                  className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}
+                                >
+                                  {item.totalQuizzes}
+                                </div>
+                              </div>
+                              <div className="bg-black/10 rounded p-2">
+                                <div
+                                  className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  Média de Acertos
+                                </div>
+                                <div
+                                  className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}
+                                >
+                                  {item.mediaPorcentagem}%
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )
+                    }
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </PageTransition>
@@ -236,9 +359,9 @@ export default function HomePage() {
           onClose={handleCloseWelcomeModal}
           videoUrl="https://www.youtube.com/shorts/ufRpAmkn7Yw"
         />
-        <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
-          <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 flex justify-center">
-            <div className="text-center">
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
+          <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
+            <div className="text-center mb-8">
               <p className="text-lavender text-lg mb-4">
                 Não há quiz ativo no momento.
               </p>
@@ -246,7 +369,7 @@ export default function HomePage() {
                 Aguarde um novo quiz ser disponibilizado.
               </p>
               <Link
-                href="/eventos#classificacao-geral"
+                href="#classificacao-geral"
                 className="
                   group relative inline-flex items-center gap-2.5
                   px-6 py-3 rounded-full
@@ -267,6 +390,108 @@ export default function HomePage() {
                 <span className="relative">Ver classificação geral</span>
               </Link>
             </div>
+            {classificacaoGeral.length > 0 && (
+              <div
+                id="classificacao-geral"
+                className="bg-bg-card rounded-lg shadow-md p-6"
+              >
+                <h2 className="text-2xl font-bold text-accent mb-6 text-center">
+                  Classificação Geral
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                  {classificacaoGeral.map(
+                    (item: ClassificacaoGeralItem, index: number) => {
+                      const medalhas = ['🥇', '🥈', '🥉']
+                      const podioClass =
+                        index < 3
+                          ? ['podio-gold', 'podio-silver', 'podio-bronze'][
+                              index
+                            ]
+                          : null
+                      return (
+                        <motion.div
+                          key={item.userId}
+                          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                          whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            y: 0,
+                          }}
+                          viewport={{ once: true, margin: '-50px' }}
+                          transition={{
+                            type: 'tween',
+                            ease: 'easeOut',
+                            duration: 0.4,
+                            delay: index * 0.05,
+                          }}
+                          className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                            podioClass ??
+                            'bg-bg-card border-primary/30 hover:border-primary/60'
+                          }`}
+                        >
+                          <div className="relative text-center">
+                            <div
+                              className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+                            >
+                              {index < 3 ? medalhas[index] : `${item.posicao}º`}
+                            </div>
+                            <h3
+                              className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}
+                            >
+                              {
+                                (item.social_name?.trim() || item.nome).split(
+                                  ' '
+                                )[0]
+                              }
+                            </h3>
+                            <div
+                              className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                            >
+                              <div className="bg-black/10 rounded p-2">
+                                <div
+                                  className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  Total de Acertos
+                                </div>
+                                <div
+                                  className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}
+                                >
+                                  {item.totalAcertos}
+                                </div>
+                              </div>
+                              <div className="bg-black/10 rounded p-2">
+                                <div
+                                  className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  Quizzes Respondidos
+                                </div>
+                                <div
+                                  className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}
+                                >
+                                  {item.totalQuizzes}
+                                </div>
+                              </div>
+                              <div className="bg-black/10 rounded p-2">
+                                <div
+                                  className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  Média de Acertos
+                                </div>
+                                <div
+                                  className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}
+                                >
+                                  {item.mediaPorcentagem}%
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )
+                    }
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </PageTransition>
@@ -282,14 +507,14 @@ export default function HomePage() {
       />
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="flex flex-col items-center justify-center mb-8">
+          <div className="flex flex-col items-center justify-center mb-8 p-4">
             <button
               onClick={handleResponderQuiz}
               className="
                 relative overflow-hidden
-                px-12 py-6
+                px-8 py-4
                 text-2xl md:text-3xl font-bold text-white
-                bg-gradient-to-r from-primary via-primary-hover to-orange
+                bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
                 rounded-xl shadow-2xl
                 transform transition-all duration-300
                 hover:scale-105 hover:shadow-3xl
@@ -308,9 +533,9 @@ export default function HomePage() {
                 }}
               />
             </button>
-            <p className="mt-4 text-center">
+            <p className="mt-6 text-center">
               <Link
-                href="/eventos#classificacao-geral"
+                href="#classificacao-geral"
                 className="
                   group relative inline-flex items-center gap-2.5
                   px-6 py-3 rounded-full
@@ -335,7 +560,7 @@ export default function HomePage() {
           {classificacao.length > 0 && (
             <div className="mt-8 bg-bg-card rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold text-accent mb-6 text-center">
-                Classificação
+                Classificação Semanal
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {classificacao.map((item: ClassificacaoItem, index: number) => {
@@ -350,7 +575,7 @@ export default function HomePage() {
                       initial={{ opacity: 0, scale: 0.95, y: 20 }}
                       whileInView={{
                         opacity: 1,
-                        scale: index === 0 ? 1.05 : 1,
+                        scale: 1,
                         y: 0,
                       }}
                       viewport={{ once: true, margin: '-50px' }}
@@ -431,6 +656,106 @@ export default function HomePage() {
                     </motion.div>
                   )
                 })}
+              </div>
+            </div>
+          )}
+          {classificacaoGeral.length > 0 && (
+            <div
+              id="classificacao-geral"
+              className="mt-8 bg-bg-card rounded-lg shadow-md p-6"
+            >
+              <h2 className="text-2xl font-bold text-accent mb-6 text-center">
+                Classificação Geral
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                {classificacaoGeral.map(
+                  (item: ClassificacaoGeralItem, index: number) => {
+                    const medalhas = ['🥇', '🥈', '🥉']
+                    const podioClass =
+                      index < 3
+                        ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
+                        : null
+                    return (
+                      <motion.div
+                        key={item.userId}
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                          y: 0,
+                        }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{
+                          type: 'tween',
+                          ease: 'easeOut',
+                          duration: 0.4,
+                          delay: index * 0.05,
+                        }}
+                        className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                          podioClass ??
+                          'bg-bg-card border-primary/30 hover:border-primary/60'
+                        }`}
+                      >
+                        <div className="relative text-center">
+                          <div
+                            className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+                          >
+                            {index < 3 ? medalhas[index] : `${item.posicao}º`}
+                          </div>
+                          <h3
+                            className={`text-xl font-bold mb-3 truncate ${podioClass ? 'podio-name' : 'text-accent'}`}
+                          >
+                            {
+                              (item.social_name?.trim() || item.nome).split(
+                                ' '
+                              )[0]
+                            }
+                          </h3>
+                          <div
+                            className={`space-y-2 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                          >
+                            <div className="bg-black/10 rounded p-2">
+                              <div
+                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
+                                Total de Acertos
+                              </div>
+                              <div
+                                className={`text-2xl font-bold ${podioClass ? 'podio-name' : 'text-primary'}`}
+                              >
+                                {item.totalAcertos}
+                              </div>
+                            </div>
+                            <div className="bg-black/10 rounded p-2">
+                              <div
+                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
+                                Quizzes Respondidos
+                              </div>
+                              <div
+                                className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-purple-600'}`}
+                              >
+                                {item.totalQuizzes}
+                              </div>
+                            </div>
+                            <div className="bg-black/10 rounded p-2">
+                              <div
+                                className={`font-semibold ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
+                                Média de Acertos
+                              </div>
+                              <div
+                                className={`text-lg font-bold ${podioClass ? 'podio-name' : 'text-green-600'}`}
+                              >
+                                {item.mediaPorcentagem}%
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )
+                  }
+                )}
               </div>
             </div>
           )}
