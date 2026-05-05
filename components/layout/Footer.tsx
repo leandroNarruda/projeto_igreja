@@ -2,6 +2,8 @@
 
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
+
+const AUTH_ROUTES = ['/login', '/cadastro']
 import { motion } from 'framer-motion'
 import { Home, User, Settings, BookOpen } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
@@ -16,7 +18,7 @@ export const Footer = () => {
 
   const isSessionLoading = status === 'loading'
 
-  if (!session && !isSessionLoading) {
+  if (AUTH_ROUTES.includes(pathname) || (!session && !isSessionLoading)) {
     return null
   }
 

@@ -3,9 +3,12 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Menu } from 'lucide-react'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
+
+const AUTH_ROUTES = ['/login', '/cadastro']
 
 function getInitials(name: string | null | undefined): string {
   if (!name || !name.trim()) return '?'
@@ -19,9 +22,10 @@ function getInitials(name: string | null | undefined): string {
 export const Navbar = () => {
   const { data: session, status } = useSession()
   const { quizEmAndamento, setDrawerAberto } = useQuizUI()
+  const pathname = usePathname()
   const isSessionLoading = status === 'loading'
 
-  if (!session && !isSessionLoading) {
+  if (AUTH_ROUTES.includes(pathname) || (!session && !isSessionLoading)) {
     return null
   }
 
@@ -85,7 +89,7 @@ export const Navbar = () => {
                     alt=""
                     width={48}
                     height={48}
-                    className="h-12 w-12 rounded-full object-cover border border-gray-200"
+                    className="h-10 w-10 rounded-full object-cover border border-gray-200"
                     unoptimized
                   />
                 ) : (

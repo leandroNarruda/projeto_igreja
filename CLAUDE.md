@@ -94,8 +94,23 @@ Fluxo paralelo ao quiz semanal, mas com persistência muito mais enxuta — em v
 - **Lote**: 10 versinhos por rodada, ordenados por `Versinho.id ASC` (do mais fácil ao mais difícil).
 - **Janela atual** (server-side): `base = floor(acertos / 10) * 10`. O lote enviado é `findMany({ orderBy: { id: 'asc' }, skip: base, take: 10 })`.
 - **Avanço**: ao responder, `novoAcertos = max(acertos, base + acertosDaRodada)`. Só avança o lote ao gabaritar (10/10). Se acertou menos, fica no mesmo lote, mas registra o melhor desempenho até então (sem regredir).
-- **Endpoints**: `GET /api/versinhos/quiz` (lote, sem `respostaCorreta`), `POST /api/versinhos/responder` (valida set de IDs do lote, calcula acertos comparando com gabarito server-side), `GET /api/versinhos/classificacao` (top 10 por `acertos DESC`, desempate por `updatedAt ASC`).
-- **Front**: `app/(protected)/versinhos/responder/page.tsx` reutiliza `QuizInstructions`/`QuizPlayer`/`QuizResult` com prop `autoAdvance` (avança imediatamente após o clique, sem feedback de gabarito). Hooks em `hooks/useVersinhos.ts`. Card flipável de ranking em `components/versinhos/RankingCard.tsx` (níveis com gradiente e progresso por nível).
+
+### Endpoints
+
+- `GET /api/versinhos/quiz` — retorna o lote atual sem `respostaCorreta`. Aceita `?lote=N` para retornar um lote anterior (modo revisão); valida que `N < loteAtual` do usuário. Resposta inclui `loteIndex`, `loteAtual`, `modoRevisao`.
+- `POST /api/versinhos/responder` — valida o set de IDs, calcula acertos server-side. Aceita `loteIndex` opcional no body:
+  - **Modo normal**: atualiza `VersinhoProgresso`, retorna `acertosDaRodada`, `acertosTotais`, `avancouLote`, `concluido`.
+  - **Modo revisão** (`loteIndex < loteAtual`): **não atualiza progresso**, retorna `gabarito` com texto de cada alternativa correta e errada (`textoRespostaCorreta`, `textoRespostaUsuario`).
+- `GET /api/versinhos/classificacao` — top 10 por `acertos DESC`, desempate por `updatedAt ASC`.
+
+### Front
+
+- **`app/(protected)/versinhos/page.tsx`**: botão principal abre `EscolherModoModal` em vez de navegar diretamente.
+- **`components/versinhos/EscolherModoModal.tsx`**: modal com duas telas — "Tentar novo recorde" (navega para `/versinhos/responder`) e "Revisar lotes anteriores" (lista lotes já concluídos; bloqueado se nenhum foi completado ainda).
+- **`app/(protected)/versinhos/responder/page.tsx`**: lê `?lote=N` da URL para entrar em modo revisão. Em modo revisão exibe `ResultadoRevisao` com gabarito detalhado (ícone ✅/❌ por questão, texto da alternativa correta em verde, texto da errada em vermelho). Usa `Suspense` para suportar `useSearchParams`.
+- **`hooks/useVersinhos.ts`**: `useVersinhosQuiz(enabled, loteIndex?)` passa `?lote=N` quando fornecido. `useResponderVersinhos()` recebe `{ respostas, loteIndex? }`.
+- **Progressão no player**: bolinhas abaixo do card (10 pontos — preenchido = respondido, maior = atual, vazio = pendente). Animação entre perguntas: fade + 8px vertical, 200ms.
+- Card flipável de ranking em `components/versinhos/RankingCard.tsx` (níveis com gradiente e progresso por nível).
 
 ## Padrões de código
 

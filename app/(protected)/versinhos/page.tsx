@@ -27,7 +27,7 @@ export default function VersinhosPage() {
               onClick={() => setModoOpen(true)}
               className="
                 relative overflow-hidden
-                px-12 py-6
+                px-12 py-4
                 text-2xl md:text-3xl font-bold text-white
                 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
                 rounded-xl shadow-2xl
