@@ -22,6 +22,7 @@ export async function POST(request: Request) {
     const userId = session.user.id
     const body = await request.json()
     const respostas: RespostaInput[] = body?.respostas
+    const loteIndexParam: number | undefined = body?.loteIndex
 
     if (!Array.isArray(respostas) || respostas.length === 0) {
       return NextResponse.json(
@@ -54,13 +55,28 @@ export async function POST(request: Request) {
       create: { userId },
     })
 
-    const base = Math.floor(progresso.acertos / TAMANHO_LOTE) * TAMANHO_LOTE
+    const loteAtual = Math.floor(progresso.acertos / TAMANHO_LOTE)
+    const modoRevisao =
+      typeof loteIndexParam === 'number' && loteIndexParam < loteAtual
+
+    const base = modoRevisao
+      ? loteIndexParam! * TAMANHO_LOTE
+      : loteAtual * TAMANHO_LOTE
 
     const versinhosLote = await prisma.versinho.findMany({
       orderBy: { id: 'asc' },
       skip: base,
       take: TAMANHO_LOTE,
-      select: { id: true, respostaCorreta: true },
+      select: {
+        id: true,
+        verso: true,
+        respostaCorreta: true,
+        alternativaA: true,
+        alternativaB: true,
+        alternativaC: true,
+        alternativaD: true,
+        alternativaE: true,
+      },
     })
 
     if (versinhosLote.length === 0) {
@@ -78,20 +94,55 @@ export async function POST(request: Request) {
       [...idsEsperados].some(id => !idsRecebidos.has(id))
     ) {
       return NextResponse.json(
-        { error: 'As respostas não correspondem ao lote atual' },
+        { error: 'As respostas não correspondem ao lote' },
         { status: 400 }
       )
     }
 
-    const gabarito = new Map(versinhosLote.map(v => [v.id, v.respostaCorreta]))
+    const gabaritoMap = new Map(
+      versinhosLote.map(v => [v.id, v.respostaCorreta])
+    )
     let acertosDaRodada = 0
     for (const r of respostas) {
       if (
         r.alternativaEscolhida &&
-        r.alternativaEscolhida === gabarito.get(r.versinhoId)
+        r.alternativaEscolhida === gabaritoMap.get(r.versinhoId)
       ) {
         acertosDaRodada++
       }
+    }
+
+    if (modoRevisao) {
+      const gabaritoDetalhado = versinhosLote.map(v => {
+        const altMap: Record<string, string> = {
+          A: v.alternativaA,
+          B: v.alternativaB,
+          C: v.alternativaC,
+          D: v.alternativaD,
+          E: v.alternativaE,
+        }
+        const respostaUsuario =
+          respostas.find(r => r.versinhoId === v.id)?.alternativaEscolhida ??
+          null
+        return {
+          versinhoId: v.id,
+          verso: v.verso,
+          respostaCorreta: v.respostaCorreta,
+          textoRespostaCorreta: altMap[v.respostaCorreta] ?? '',
+          respostaUsuario,
+          textoRespostaUsuario: respostaUsuario
+            ? (altMap[respostaUsuario] ?? '')
+            : null,
+          acertou: respostaUsuario === v.respostaCorreta,
+        }
+      })
+
+      return NextResponse.json({
+        modoRevisao: true,
+        acertosDaRodada,
+        acertosTotais: progresso.acertos,
+        gabarito: gabaritoDetalhado,
+      })
     }
 
     const novoAcertos = Math.max(progresso.acertos, base + acertosDaRodada)
@@ -111,6 +162,7 @@ export async function POST(request: Request) {
       Math.floor(novoAcertos / TAMANHO_LOTE) * TAMANHO_LOTE >= totalVersinhos
 
     return NextResponse.json({
+      modoRevisao: false,
       acertosDaRodada,
       acertosTotais: novoAcertos,
       avancouLote,

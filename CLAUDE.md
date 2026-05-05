@@ -20,11 +20,14 @@ npm run dev               # servidor local
 npm run build             # prisma generate + next build
 npm run lint              # ESLint
 npm run format            # Prettier
+npm run format && npm run lint  # verificação pré-commit sem derrubar o servidor
 npm run prisma:migrate    # prisma migrate dev (interativo, precisa de terminal)
 npm run prisma:migrate:deploy  # prisma migrate deploy (CI/produção)
 npm run prisma:generate   # gera Prisma Client após alterar schema
 npm run prisma:studio     # Prisma Studio
 ```
+
+> **IMPORTANTE**: Nunca rodar `npm run build` durante o desenvolvimento — isso sobrescreve o `.next/` e derruba o `npm run dev` em andamento. Para validar o código, usar apenas `npm run format && npm run lint`.
 
 > **Variáveis de ambiente**: definidas em `.env.local` (não commitado). Variáveis obrigatórias: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`. Opcionais: `BLOB_READ_WRITE_TOKEN`, `ABLY_API_KEY`, `VAPID_*`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`.
 

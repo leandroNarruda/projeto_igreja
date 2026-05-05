@@ -134,14 +134,14 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
         : 'bg-red-500'
 
   const variants = {
-    initial: { x: 100, opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: -100, opacity: 0 },
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -8 },
   }
 
   const transition = {
-    duration: 0.5,
-    ease: 'easeInOut',
+    duration: 0.2,
+    ease: 'easeOut',
   }
 
   return (
@@ -165,7 +165,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                 Tempo restante
               </h3>
               <span
-                className={`text-2xl font-bold ${
+                className={`text-base font-bold ${
                   tempoRestante <= 10 ? 'text-danger' : 'text-accent'
                 }`}
               >

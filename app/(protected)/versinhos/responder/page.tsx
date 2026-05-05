@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { CheckCircle2, XCircle } from 'lucide-react'
 import { QuizInstructions } from '@/components/quiz/QuizInstructions'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
@@ -9,18 +10,136 @@ import { Loading } from '@/components/ui/Loading'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { useQuizUI } from '@/components/providers/QuizUIProvider'
 import {
   useVersinhosQuiz,
   useResponderVersinhos,
   VersinhoRespostaInput,
+  GabaritoItem,
 } from '@/hooks/useVersinhos'
 
 const TEMPO_POR_PERGUNTA = 30
 
-export default function ResponderVersinhosPage() {
+function ResultadoRevisao({
+  acertosDaRodada,
+  total,
+  gabarito,
+  onJogarNovamente,
+  onVoltar,
+}: {
+  acertosDaRodada: number
+  total: number
+  gabarito: GabaritoItem[]
+  onJogarNovamente: () => void
+  onVoltar: () => void
+}) {
+  const porcentagem =
+    total > 0 ? Math.round((acertosDaRodada / total) * 100) : 0
+  const nota =
+    porcentagem === 100
+      ? {
+          emoji: '🏆',
+          label: 'Perfeito! Você domina esse lote!',
+          cor: 'text-yellow-400',
+        }
+      : porcentagem >= 70
+        ? { emoji: '⭐', label: 'Muito bem! Quase lá.', cor: 'text-green-400' }
+        : porcentagem >= 40
+          ? {
+              emoji: '📖',
+              label: 'Ainda precisa revisar um pouco.',
+              cor: 'text-blue-400',
+            }
+          : {
+              emoji: '💪',
+              label: 'Continue estudando, você vai chegar lá!',
+              cor: 'text-lavender',
+            }
+
+  return (
+    <PageTransition>
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
+        <div className="w-full px-4 max-w-2xl mx-auto">
+          <Card className="text-center mb-6 py-6">
+            <p className="text-5xl mb-3">{nota.emoji}</p>
+            <h2 className="text-xl font-bold text-accent mb-1">
+              Revisão concluída
+            </h2>
+            <p className={`text-sm font-medium mb-4 ${nota.cor}`}>
+              {nota.label}
+            </p>
+            <p className="text-4xl font-black text-accent">{porcentagem}%</p>
+            <p className="text-lavender text-sm mt-1">
+              {acertosDaRodada} de {total} acertos
+            </p>
+          </Card>
+
+          <div className="flex flex-col gap-3 mb-6">
+            {gabarito.map((item, i) => (
+              <div
+                key={item.versinhoId}
+                className={`flex gap-3 p-4 rounded-xl border ${
+                  item.acertou
+                    ? 'bg-success/5 border-success/30'
+                    : 'bg-danger/5 border-danger/30'
+                }`}
+              >
+                <div className="shrink-0 mt-0.5">
+                  {item.acertou ? (
+                    <CheckCircle2 className="size-5 text-success" />
+                  ) : (
+                    <XCircle className="size-5 text-danger" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-lavender mb-1 line-clamp-2">
+                    <span className="font-semibold text-accent">{i + 1}.</span>{' '}
+                    {item.verso}
+                  </p>
+                  <div className="flex flex-col gap-1 mt-1">
+                    <span className="text-xs text-success font-semibold">
+                      {item.respostaCorreta}) {item.textoRespostaCorreta}
+                    </span>
+                    {!item.acertou && (
+                      <span className="text-xs text-danger font-semibold">
+                        Sua resposta:{' '}
+                        {item.respostaUsuario
+                          ? `${item.respostaUsuario}) ${item.textoRespostaUsuario}`
+                          : 'Sem resposta'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button variant="primary" onClick={onJogarNovamente}>
+              Tentar esse lote novamente
+            </Button>
+            <Button variant="secondary" onClick={onVoltar}>
+              Voltar
+            </Button>
+          </div>
+        </div>
+      </div>
+    </PageTransition>
+  )
+}
+
+function ResponderVersinhosInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const loteParam = searchParams.get('lote')
+  const loteIndex = loteParam !== null ? parseInt(loteParam, 10) : undefined
+  const modoRevisao = loteIndex !== undefined
+
   const [iniciado, setIniciado] = useState(false)
-  const { data, isLoading, isFetching, refetch } = useVersinhosQuiz(iniciado)
+  const { data, isLoading, isFetching, refetch } = useVersinhosQuiz(
+    iniciado,
+    loteIndex
+  )
   const responderMutation = useResponderVersinhos()
 
   const [indice, setIndice] = useState(0)
@@ -31,9 +150,18 @@ export default function ResponderVersinhosPage() {
     avancouLote: boolean
     concluido: boolean
     total: number
+    modoRevisao: boolean
+    gabarito?: GabaritoItem[]
   } | null>(null)
 
+  const { setQuizEmAndamento } = useQuizUI()
   const versinhos = data?.versinhos ?? []
+
+  useEffect(() => {
+    const emAndamento = iniciado && !resultado
+    setQuizEmAndamento(emAndamento)
+    return () => setQuizEmAndamento(false)
+  }, [iniciado, resultado, setQuizEmAndamento])
 
   const iniciarQuiz = () => {
     setRespostas([])
@@ -65,21 +193,32 @@ export default function ResponderVersinhosPage() {
     }
 
     try {
-      const res = await responderMutation.mutateAsync(novasRespostas)
-      setResultado({ ...res, total: novasRespostas.length })
+      const res = await responderMutation.mutateAsync({
+        respostas: novasRespostas,
+        loteIndex,
+      })
+      setResultado({
+        ...res,
+        total: novasRespostas.length,
+        avancouLote: res.avancouLote ?? false,
+        concluido: res.concluido ?? false,
+      })
     } catch (e: any) {
       alert(e?.message || 'Erro ao salvar respostas')
     }
   }
 
-  // Tela de instruções
   if (!iniciado) {
     return (
       <PageTransition>
         <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
           <div className="w-full px-4">
             <QuizInstructions
-              titulo="Quiz de versinhos bíblicos"
+              titulo={
+                modoRevisao
+                  ? `Revisão — Lote ${loteIndex! + 1}`
+                  : 'Quiz de versinhos bíblicos'
+              }
               totalPerguntas={10}
               onStart={iniciarQuiz}
             />
@@ -89,13 +228,23 @@ export default function ResponderVersinhosPage() {
     )
   }
 
-  // Carregando lote
   if ((isLoading || isFetching) && versinhos.length === 0 && !resultado) {
     return <Loading text="Carregando versinhos..." />
   }
 
-  // Tela de resultado
   if (resultado) {
+    if (resultado.modoRevisao && resultado.gabarito) {
+      return (
+        <ResultadoRevisao
+          acertosDaRodada={resultado.acertosDaRodada}
+          total={resultado.total}
+          gabarito={resultado.gabarito}
+          onJogarNovamente={jogarNovamente}
+          onVoltar={() => router.push('/versinhos')}
+        />
+      )
+    }
+
     const erros = resultado.total - resultado.acertosDaRodada
     const porcentagem =
       resultado.total > 0
@@ -136,8 +285,7 @@ export default function ResponderVersinhosPage() {
     )
   }
 
-  // Concluiu todos os versinhos
-  if (data?.concluido) {
+  if (!modoRevisao && data?.concluido) {
     return (
       <PageTransition>
         <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
@@ -168,7 +316,6 @@ export default function ResponderVersinhosPage() {
     )
   }
 
-  // Player
   const versinho = versinhos[indice]
   if (!versinho) {
     if (responderMutation.isPending) {
@@ -177,28 +324,15 @@ export default function ResponderVersinhosPage() {
     return <Loading />
   }
 
-  const progresso = ((indice + 1) / versinhos.length) * 100
-
   return (
     <PageTransition>
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="w-full px-4">
-          <div className="max-w-3xl mx-auto mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-lavender">
-                Pergunta {indice + 1} de {versinhos.length}
-              </span>
-              <span className="text-sm text-lavender">
-                {Math.round(progresso)}%
-              </span>
-            </div>
-            <div className="w-full bg-primary/20 rounded-full h-2">
-              <div
-                className="bg-primary h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progresso}%` }}
-              />
-            </div>
-          </div>
+          {modoRevisao && (
+            <p className="text-center text-xs text-lavender mb-4 font-medium tracking-wide uppercase">
+              Modo revisão — Lote {loteIndex! + 1}
+            </p>
+          )}
           <QuizPlayer
             quizId={0}
             pergunta={{
@@ -214,8 +348,30 @@ export default function ResponderVersinhosPage() {
             onAnswer={handleAnswer}
             autoAdvance
           />
+          <div className="flex justify-center gap-2 mt-5">
+            {versinhos.map((_, i) => (
+              <div
+                key={i}
+                className={`rounded-full transition-all duration-300 ${
+                  i < indice
+                    ? 'w-2 h-2 bg-primary'
+                    : i === indice
+                      ? 'w-3 h-3 bg-primary scale-110'
+                      : 'w-2 h-2 bg-primary/20'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </PageTransition>
+  )
+}
+
+export default function ResponderVersinhosPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ResponderVersinhosInner />
+    </Suspense>
   )
 }

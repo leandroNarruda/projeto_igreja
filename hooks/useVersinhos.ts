@@ -15,6 +15,8 @@ export interface VersinhoQuestao {
 export interface VersinhosQuizResponse {
   acertosTotais: number
   loteIndex: number
+  loteAtual: number
+  modoRevisao: boolean
   versinhos: VersinhoQuestao[]
   concluido: boolean
 }
@@ -24,18 +26,34 @@ export interface VersinhoRespostaInput {
   alternativaEscolhida: string | null
 }
 
-export interface ResponderVersinhosResponse {
-  acertosDaRodada: number
-  acertosTotais: number
-  avancouLote: boolean
-  concluido: boolean
+export interface GabaritoItem {
+  versinhoId: number
+  verso: string
+  respostaCorreta: string
+  textoRespostaCorreta: string
+  respostaUsuario: string | null
+  textoRespostaUsuario: string | null
+  acertou: boolean
 }
 
-export function useVersinhosQuiz(enabled: boolean) {
+export interface ResponderVersinhosResponse {
+  modoRevisao: boolean
+  acertosDaRodada: number
+  acertosTotais: number
+  avancouLote?: boolean
+  concluido?: boolean
+  gabarito?: GabaritoItem[]
+}
+
+export function useVersinhosQuiz(enabled: boolean, loteIndex?: number) {
   return useQuery({
-    queryKey: ['versinhos', 'quiz'],
+    queryKey: ['versinhos', 'quiz', loteIndex ?? 'atual'],
     queryFn: async (): Promise<VersinhosQuizResponse> => {
-      const res = await fetch('/api/versinhos/quiz')
+      const url =
+        loteIndex !== undefined
+          ? `/api/versinhos/quiz?lote=${loteIndex}`
+          : '/api/versinhos/quiz'
+      const res = await fetch(url)
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Erro ao carregar quiz')
       return data
@@ -49,13 +67,17 @@ export function useVersinhosQuiz(enabled: boolean) {
 export function useResponderVersinhos() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (
+    mutationFn: async ({
+      respostas,
+      loteIndex,
+    }: {
       respostas: VersinhoRespostaInput[]
-    ): Promise<ResponderVersinhosResponse> => {
+      loteIndex?: number
+    }): Promise<ResponderVersinhosResponse> => {
       const res = await fetch('/api/versinhos/responder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ respostas }),
+        body: JSON.stringify({ respostas, loteIndex }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Erro ao salvar respostas')

@@ -1,33 +1,30 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Layers } from 'lucide-react'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { RankingCard } from '@/components/versinhos/RankingCard'
 import { NiveisModal } from '@/components/versinhos/NiveisModal'
+import { EscolherModoModal } from '@/components/versinhos/EscolherModoModal'
 import { useClassificacaoVersinhos } from '@/hooks/useVersinhos'
 
 export default function VersinhosPage() {
-  const router = useRouter()
   const { data: session } = useSession()
   const { data } = useClassificacaoVersinhos()
   const classificacao = data?.classificacao ?? []
   const [niveisOpen, setNiveisOpen] = useState(false)
-
-  const handleResponderQuiz = () => {
-    router.push('/versinhos/responder')
-  }
+  const [modoOpen, setModoOpen] = useState(false)
 
   return (
     <PageTransition>
       <NiveisModal isOpen={niveisOpen} onClose={() => setNiveisOpen(false)} />
+      <EscolherModoModal isOpen={modoOpen} onClose={() => setModoOpen(false)} />
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex flex-col items-center justify-center mb-8 p-4">
             <button
-              onClick={handleResponderQuiz}
+              onClick={() => setModoOpen(true)}
               className="
                 relative overflow-hidden
                 px-12 py-6

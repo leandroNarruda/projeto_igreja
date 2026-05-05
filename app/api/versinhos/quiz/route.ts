@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 const TAMANHO_LOTE = 10
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession()
     if (!session?.user?.id) {
@@ -14,6 +14,8 @@ export async function GET() {
     }
 
     const userId = session.user.id
+    const { searchParams } = new URL(request.url)
+    const loteParam = searchParams.get('lote')
 
     const progresso = await prisma.versinhoProgresso.upsert({
       where: { userId },
@@ -21,7 +23,30 @@ export async function GET() {
       create: { userId },
     })
 
-    const base = Math.floor(progresso.acertos / TAMANHO_LOTE) * TAMANHO_LOTE
+    const loteAtual = Math.floor(progresso.acertos / TAMANHO_LOTE)
+
+    let loteIndex: number
+    let modoRevisao = false
+
+    if (loteParam !== null) {
+      const loteRequisitado = parseInt(loteParam, 10)
+      if (
+        isNaN(loteRequisitado) ||
+        loteRequisitado < 0 ||
+        loteRequisitado >= loteAtual
+      ) {
+        return NextResponse.json(
+          { error: 'Lote de revisão inválido' },
+          { status: 400 }
+        )
+      }
+      loteIndex = loteRequisitado
+      modoRevisao = true
+    } else {
+      loteIndex = loteAtual
+    }
+
+    const base = loteIndex * TAMANHO_LOTE
 
     const versinhos = await prisma.versinho.findMany({
       orderBy: { id: 'asc' },
@@ -40,9 +65,11 @@ export async function GET() {
 
     return NextResponse.json({
       acertosTotais: progresso.acertos,
-      loteIndex: base / TAMANHO_LOTE,
+      loteIndex,
+      loteAtual,
+      modoRevisao,
       versinhos,
-      concluido: versinhos.length === 0,
+      concluido: !modoRevisao && versinhos.length === 0,
     })
   } catch (error: any) {
     console.error('[versinhos/quiz] erro:', error)
