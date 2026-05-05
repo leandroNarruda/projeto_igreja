@@ -25,7 +25,7 @@ export default function VersinhosPage() {
       <NiveisModal isOpen={niveisOpen} onClose={() => setNiveisOpen(false)} />
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="flex flex-col items-center justify-center mb-8">
+          <div className="flex flex-col items-center justify-center mb-8 p-4">
             <button
               onClick={handleResponderQuiz}
               className="
@@ -54,7 +54,7 @@ export default function VersinhosPage() {
               />
             </button>
 
-            <p className="mt-4 text-center">
+            <p className="mt-6 text-center">
               <button
                 onClick={() => setNiveisOpen(true)}
                 className="

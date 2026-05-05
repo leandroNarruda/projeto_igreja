@@ -110,7 +110,7 @@ export function RankingCard({ item, index, isMe }: RankingCardProps) {
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       whileInView={{
         opacity: 1,
-        scale: index === 0 ? 1.05 : 1,
+        scale: 1,
         y: 0,
       }}
       viewport={{ once: true, margin: '-50px' }}
