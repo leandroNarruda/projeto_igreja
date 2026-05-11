@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X, ChevronRight } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
@@ -39,48 +39,69 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
   const [tempoAvançar, setTempoAvançar] = useState(15)
   const [avancou, setAvancou] = useState(false)
 
+  // Refs para acesso sem re-render nos listeners
+  const respondidaRef = useRef(respondida)
+  const avancouRef = useRef(avancou)
+  const alternativaRef = useRef(alternativaSelecionada)
+  respondidaRef.current = respondida
+  avancouRef.current = avancou
+  alternativaRef.current = alternativaSelecionada
+
+  const startTimeRef = useRef<number>(Date.now())
+
   useEffect(() => {
+    startTimeRef.current = Date.now()
     setTempoRestante(pergunta.tempoSegundos)
     setAlternativaSelecionada(null)
     setRespondida(false)
     setTempoAvançar(15)
     setAvancou(false)
 
-    // Remove o foco de qualquer elemento ativo
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur()
     }
   }, [pergunta.id, pergunta.tempoSegundos])
 
-  // Timer: para quando respondida; ao zerar só marca respondida (não avança)
+  // Timer baseado em Date.now() — imune a throttling de aba em segundo plano
   useEffect(() => {
     if (respondida) return
 
-    if (tempoRestante <= 0) {
-      setRespondida(true)
-      if (autoAdvance && !avancou) {
-        setAvancou(true)
-        onAnswer(null)
+    const tick = () => {
+      const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000)
+      const restante = Math.max(0, pergunta.tempoSegundos - elapsed)
+      setTempoRestante(restante)
+
+      if (restante <= 0) {
+        setRespondida(true)
+        if (autoAdvance && !avancouRef.current) {
+          setAvancou(true)
+          onAnswer(null)
+        }
       }
-      return
     }
 
-    const timer = setInterval(() => {
-      setTempoRestante(prev => {
-        if (prev <= 1) {
-          setRespondida(true)
-          if (autoAdvance && !avancou) {
-            setAvancou(true)
-            onAnswer(null)
-          }
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
+    const timer = setInterval(tick, 250)
     return () => clearInterval(timer)
-  }, [tempoRestante, respondida])
+  }, [respondida, pergunta.tempoSegundos, autoAdvance, onAnswer])
+
+  // Auto-submit ao sair da aba — impede consulta externa durante o timer
+  useEffect(() => {
+    if (respondida) return
+
+    const handleVisibility = () => {
+      if (document.hidden && !respondidaRef.current) {
+        setRespondida(true)
+        if (autoAdvance && !avancouRef.current) {
+          setAvancou(true)
+          onAnswer(null)
+        }
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () =>
+      document.removeEventListener('visibilitychange', handleVisibility)
+  }, [respondida, autoAdvance, onAnswer])
 
   const handleAlternativaChange = (alternativa: string) => {
     if (respondida) return
