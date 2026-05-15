@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { CheckCircle2, XCircle, Swords } from 'lucide-react'
 import { QuizInstructions } from '@/components/quiz/QuizInstructions'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
@@ -11,9 +11,11 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
+import { ChefaoPlayer } from '@/components/versinhos/ChefaoPlayer'
 import {
   useVersinhosQuiz,
   useResponderVersinhos,
+  useChefao,
   VersinhoRespostaInput,
   GabaritoItem,
 } from '@/hooks/useVersinhos'
@@ -128,16 +130,60 @@ function ResultadoRevisao({
   )
 }
 
+// ─── Modo Chefão ─────────────────────────────────────────────────────────────
+
+function ModoChefao({ onFim }: { onFim: () => void }) {
+  const { data, isLoading } = useChefao(true)
+
+  if (isLoading) return <Loading text="Preparando o Chefão…" />
+
+  if (!data?.prontoParaChefao) {
+    return (
+      <PageTransition>
+        <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
+          <Card className="max-w-sm mx-4 text-center">
+            <p className="text-4xl mb-3">⚔️</p>
+            <h2 className="text-xl font-bold text-accent mb-2">
+              Chefão não disponível
+            </h2>
+            <p className="text-lavender text-sm mb-6">
+              Complete os versinhos do nível atual para desafiar o Chefão.
+            </p>
+            <Button variant="primary" onClick={onFim}>
+              Voltar
+            </Button>
+          </Card>
+        </div>
+      </PageTransition>
+    )
+  }
+
+  return (
+    <ChefaoPlayer
+      versinhos={data.versinhos!}
+      nivel={data.nivel}
+      proximoNivel={data.proximoNivel!}
+      nomeProximoNivel={data.nomeProximoNivel!}
+      emojiProximoNivel={data.emojiProximoNivel!}
+      gradientProximoNivel={data.gradientProximoNivel!}
+      onFim={onFim}
+    />
+  )
+}
+
+// ─── Modo normal ─────────────────────────────────────────────────────────────
+
 function ResponderVersinhosInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const loteParam = searchParams.get('lote')
+  const modoChefao = searchParams.get('modo') === 'chefao'
   const loteIndex = loteParam !== null ? parseInt(loteParam, 10) : undefined
   const modoRevisao = loteIndex !== undefined
 
   const [iniciado, setIniciado] = useState(false)
   const { data, isLoading, isFetching, refetch } = useVersinhosQuiz(
-    iniciado,
+    iniciado && !modoChefao,
     loteIndex
   )
   const responderMutation = useResponderVersinhos()
@@ -152,16 +198,23 @@ function ResponderVersinhosInner() {
     total: number
     modoRevisao: boolean
     gabarito?: GabaritoItem[]
+    prontoParaChefao?: boolean
+    nivel?: number
   } | null>(null)
 
   const { setQuizEmAndamento } = useQuizUI()
   const versinhos = data?.versinhos ?? []
 
   useEffect(() => {
-    const emAndamento = iniciado && !resultado
+    const emAndamento = modoChefao || (iniciado && !resultado)
     setQuizEmAndamento(emAndamento)
     return () => setQuizEmAndamento(false)
-  }, [iniciado, resultado, setQuizEmAndamento])
+  }, [iniciado, resultado, modoChefao, setQuizEmAndamento])
+
+  // Modo Chefão direto via ?modo=chefao
+  if (modoChefao) {
+    return <ModoChefao onFim={() => router.push('/versinhos')} />
+  }
 
   const iniciarQuiz = () => {
     setRespostas([])
@@ -267,6 +320,26 @@ function ResponderVersinhosInner() {
                   {resultado.acertosTotais}
                 </span>
               </p>
+
+              {/* Botão Chefão se disponível */}
+              {resultado.prontoParaChefao && (
+                <div className="mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-900/40 border border-red-500/40 text-red-300 text-xs font-semibold mb-3 animate-pulse">
+                    <Swords className="size-3" />
+                    Chefão desbloqueado!
+                  </div>
+                  <button
+                    onClick={() =>
+                      router.push('/versinhos/responder?modo=chefao')
+                    }
+                    className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-xl bg-gradient-to-r from-red-700 via-red-600 to-orange-600 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.99] transition-all duration-200"
+                  >
+                    <Swords className="size-5" />
+                    Enfrentar o Chefão agora
+                  </button>
+                </div>
+              )}
+
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button variant="primary" onClick={jogarNovamente}>
                   Jogar novamente

@@ -2,12 +2,21 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Trophy, BookOpen, ChevronRight, Star, Lock, X } from 'lucide-react'
+import {
+  Trophy,
+  BookOpen,
+  ChevronRight,
+  Star,
+  Lock,
+  X,
+  Swords,
+} from 'lucide-react'
 import { useVersinhosQuiz } from '@/hooks/useVersinhos'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
+  prontoParaChefao?: boolean
 }
 
 type Tela = 'escolha' | 'lotes'
@@ -18,7 +27,11 @@ function nomeLote(index: number) {
   return `Lote ${index + 1} — Versinhos ${inicio}–${fim}`
 }
 
-export function EscolherModoModal({ isOpen, onClose }: Props) {
+export function EscolherModoModal({
+  isOpen,
+  onClose,
+  prontoParaChefao = false,
+}: Props) {
   const router = useRouter()
   const [tela, setTela] = useState<Tela>('escolha')
   const { data, isLoading } = useVersinhosQuiz(isOpen)
@@ -76,27 +89,56 @@ export function EscolherModoModal({ isOpen, onClose }: Props) {
               Como quer jogar?
             </h2>
 
-            <button
-              onClick={irParaNovoRecorde}
-              className="
-                group flex items-center gap-4 p-5 rounded-xl
-                bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
-                text-white font-semibold shadow-lg
-                hover:shadow-xl hover:scale-[1.02] active:scale-[0.99]
-                transition-all duration-200
-              "
-            >
-              <div className="p-2 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors shrink-0">
-                <Trophy className="size-6" />
-              </div>
-              <div className="flex-1 text-left">
-                <p className="text-base font-bold">Tentar novo recorde</p>
-                <p className="text-xs text-white/80">
-                  Continue do ponto onde parou
-                </p>
-              </div>
-              <ChevronRight className="size-5 text-white/60 group-hover:text-white transition-colors" />
-            </button>
+            {prontoParaChefao && (
+              <button
+                onClick={() => {
+                  onClose()
+                  router.push('/versinhos/responder?modo=chefao')
+                }}
+                className="
+                  group flex items-center gap-4 p-5 rounded-xl
+                  bg-gradient-to-r from-red-700 via-red-600 to-orange-600
+                  text-white font-semibold shadow-lg animate-pulse hover:animate-none
+                  hover:shadow-xl hover:scale-[1.02] active:scale-[0.99]
+                  transition-all duration-200
+                "
+              >
+                <div className="p-2 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors shrink-0">
+                  <Swords className="size-6" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-base font-bold">⚔️ Enfrentar o Chefão!</p>
+                  <p className="text-xs text-white/80">
+                    Você está pronto para subir de nível
+                  </p>
+                </div>
+                <ChevronRight className="size-5 text-white/60 group-hover:text-white transition-colors" />
+              </button>
+            )}
+
+            {!prontoParaChefao && (
+              <button
+                onClick={irParaNovoRecorde}
+                className="
+                  group flex items-center gap-4 p-5 rounded-xl
+                  bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
+                  text-white font-semibold shadow-lg
+                  hover:shadow-xl hover:scale-[1.02] active:scale-[0.99]
+                  transition-all duration-200
+                "
+              >
+                <div className="p-2 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors shrink-0">
+                  <Trophy className="size-6" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-base font-bold">Tentar novo recorde</p>
+                  <p className="text-xs text-white/80">
+                    Continue do ponto onde parou
+                  </p>
+                </div>
+                <ChevronRight className="size-5 text-white/60 group-hover:text-white transition-colors" />
+              </button>
+            )}
 
             <button
               onClick={() => setTela('lotes')}

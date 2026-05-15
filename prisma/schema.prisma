@@ -155,6 +155,7 @@ model VersinhoProgresso {
   id        Int      @id @default(autoincrement())
   userId    Int      @unique
   acertos   Int      @default(0)
+  nivel     Int      @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)

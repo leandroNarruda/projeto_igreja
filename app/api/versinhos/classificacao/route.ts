@@ -15,7 +15,9 @@ export async function GET() {
       where: { acertos: { gt: 0 } },
       orderBy: [{ acertos: 'desc' }, { updatedAt: 'asc' }],
       take: 10,
-      include: {
+      select: {
+        acertos: true,
+        nivel: true,
         user: {
           select: {
             id: true,
@@ -34,6 +36,7 @@ export async function GET() {
       social_name: p.user.social_name ?? null,
       image: p.user.avatar_url ?? null,
       acertos: p.acertos,
+      nivel: p.nivel,
     }))
 
     return NextResponse.json({ classificacao })

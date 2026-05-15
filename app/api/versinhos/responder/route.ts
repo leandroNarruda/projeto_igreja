@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { VERSINOS_POR_NIVEL, isNivelMaximo } from '@/lib/versinhoNiveis'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
       where: { userId },
       update: {},
       create: { userId },
+      select: { acertos: true, nivel: true },
     })
 
     const loteAtual = Math.floor(progresso.acertos / TAMANHO_LOTE)
@@ -161,12 +163,18 @@ export async function POST(request: Request) {
     const concluido =
       Math.floor(novoAcertos / TAMANHO_LOTE) * TAMANHO_LOTE >= totalVersinhos
 
+    const { nivel } = progresso
+    const prontoParaChefao =
+      novoAcertos >= nivel * VERSINOS_POR_NIVEL && !isNivelMaximo(nivel)
+
     return NextResponse.json({
       modoRevisao: false,
       acertosDaRodada,
       acertosTotais: novoAcertos,
       avancouLote,
       concluido,
+      prontoParaChefao,
+      nivel,
     })
   } catch (error: any) {
     console.error('[versinhos/responder] erro:', error)

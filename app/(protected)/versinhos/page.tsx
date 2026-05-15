@@ -1,33 +1,61 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Layers } from 'lucide-react'
+import { Layers, Swords } from 'lucide-react'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { RankingCard } from '@/components/versinhos/RankingCard'
 import { NiveisModal } from '@/components/versinhos/NiveisModal'
 import { EscolherModoModal } from '@/components/versinhos/EscolherModoModal'
-import { useClassificacaoVersinhos } from '@/hooks/useVersinhos'
+import { useClassificacaoVersinhos, useChefao } from '@/hooks/useVersinhos'
 
 export default function VersinhosPage() {
   const { data: session } = useSession()
+  const router = useRouter()
   const { data } = useClassificacaoVersinhos()
+  const { data: chefaoData } = useChefao(true)
   const classificacao = data?.classificacao ?? []
+  const prontoParaChefao = chefaoData?.prontoParaChefao ?? false
   const [niveisOpen, setNiveisOpen] = useState(false)
   const [modoOpen, setModoOpen] = useState(false)
 
   return (
     <PageTransition>
       <NiveisModal isOpen={niveisOpen} onClose={() => setNiveisOpen(false)} />
-      <EscolherModoModal isOpen={modoOpen} onClose={() => setModoOpen(false)} />
+      <EscolherModoModal
+        isOpen={modoOpen}
+        onClose={() => setModoOpen(false)}
+        prontoParaChefao={prontoParaChefao}
+      />
       <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="flex flex-col items-center justify-center mb-8 p-4">
+          <div className="flex flex-col items-center justify-center mb-8 p-4 gap-4">
+            {/* Botão Chefão — aparece quando disponível */}
+            {prontoParaChefao && (
+              <button
+                onClick={() => router.push('/versinhos/responder?modo=chefao')}
+                className="
+                  flex items-center gap-3
+                  px-8 py-3
+                  text-xl font-bold text-white
+                  bg-gradient-to-r from-red-700 via-red-600 to-orange-600
+                  rounded-xl shadow-2xl
+                  transform transition-all duration-300
+                  hover:scale-105 hover:shadow-red-500/40
+                  focus:outline-none focus:ring-4 focus:ring-red-400 focus:ring-offset-2
+                  cursor-pointer animate-pulse hover:animate-none
+                "
+              >
+                <span>⚔️ Enfrentar o Chefão!</span>
+              </button>
+            )}
+
             <button
               onClick={() => setModoOpen(true)}
               className="
                 relative overflow-hidden
-                px-12 py-4
+                px-12 py-3
                 text-2xl md:text-3xl font-bold text-white
                 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
                 rounded-xl shadow-2xl
@@ -51,7 +79,7 @@ export default function VersinhosPage() {
               />
             </button>
 
-            <p className="mt-6 text-center">
+            <p className="mt-2 text-center">
               <button
                 onClick={() => setNiveisOpen(true)}
                 className="

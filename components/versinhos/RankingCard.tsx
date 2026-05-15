@@ -4,82 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { ClassificacaoVersinhosItem } from '@/hooks/useVersinhos'
-
-const TAMANHO_LOTE = 20
-
-interface NivelInfo {
-  titulo: string
-  emoji: string
-  gradient: string
-}
-
-function getNivelInfo(nivel: number): NivelInfo {
-  if (nivel >= 11)
-    return {
-      titulo: 'Lenda Bíblica',
-      emoji: '🏆',
-      gradient: 'from-yellow-300 via-amber-400 to-orange-500',
-    }
-  if (nivel >= 10)
-    return {
-      titulo: 'Patriarca',
-      emoji: '💎',
-      gradient: 'from-sky-300 via-blue-500 to-indigo-600',
-    }
-  if (nivel >= 9)
-    return {
-      titulo: 'Guardião',
-      emoji: '🌿',
-      gradient: 'from-red-500 via-rose-600 to-pink-700',
-    }
-  if (nivel >= 8)
-    return {
-      titulo: 'Profeta',
-      emoji: '🌟',
-      gradient: 'from-violet-500 via-purple-600 to-fuchsia-700',
-    }
-  if (nivel >= 7)
-    return {
-      titulo: 'Arauto',
-      emoji: '📯',
-      gradient: 'from-purple-400 via-pink-500 to-rose-500',
-    }
-  if (nivel >= 6)
-    return {
-      titulo: 'Intercessor',
-      emoji: '🕊️',
-      gradient: 'from-cyan-400 via-sky-500 to-blue-600',
-    }
-  if (nivel >= 5)
-    return {
-      titulo: 'Proclamador',
-      emoji: '🔥',
-      gradient: 'from-yellow-400 via-orange-500 to-red-500',
-    }
-  if (nivel >= 4)
-    return {
-      titulo: 'Guardador',
-      emoji: '🛡️',
-      gradient: 'from-teal-400 via-cyan-500 to-sky-600',
-    }
-  if (nivel >= 3)
-    return {
-      titulo: 'Estudante',
-      emoji: '✨',
-      gradient: 'from-blue-400 via-indigo-500 to-purple-500',
-    }
-  if (nivel >= 2)
-    return {
-      titulo: 'Discípulo',
-      emoji: '📖',
-      gradient: 'from-emerald-400 via-teal-500 to-cyan-500',
-    }
-  return {
-    titulo: 'Semente',
-    emoji: '🌱',
-    gradient: 'from-lime-400 via-green-500 to-emerald-500',
-  }
-}
+import { getNivelInfo, VERSINOS_POR_NIVEL } from '@/lib/versinhoNiveis'
 
 function getFirstLetter(name: string): string {
   if (!name || !name.trim()) return '?'
@@ -99,9 +24,12 @@ export function RankingCard({ item, index, isMe }: RankingCardProps) {
   const podioClass =
     index < 3 ? ['podio-gold', 'podio-silver', 'podio-bronze'][index] : null
 
-  const nivel = Math.floor(item.acertos / TAMANHO_LOTE) + 1
-  const acertosNoLote = item.acertos % TAMANHO_LOTE
-  const progressoLote = (acertosNoLote / TAMANHO_LOTE) * 100
+  const nivel = item.nivel
+  const acertosNoNivel = item.acertos - (nivel - 1) * VERSINOS_POR_NIVEL
+  const progressoNivel = Math.min(
+    (acertosNoNivel / VERSINOS_POR_NIVEL) * 100,
+    100
+  )
   const nivelInfo = getNivelInfo(nivel)
   const nomeExibido = (item.social_name?.trim() || item.nome).split(' ')[0]
 
@@ -225,13 +153,13 @@ export function RankingCard({ item, index, isMe }: RankingCardProps) {
               <div className="flex justify-between text-[11px] font-semibold opacity-95 mb-1">
                 <span>Próximo nível</span>
                 <span>
-                  {acertosNoLote}/{TAMANHO_LOTE}
+                  {acertosNoNivel}/{VERSINOS_POR_NIVEL}
                 </span>
               </div>
               <div className="w-full h-2 bg-white/25 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-white rounded-full transition-all duration-500"
-                  style={{ width: `${progressoLote}%` }}
+                  style={{ width: `${progressoNivel}%` }}
                 />
               </div>
             </div>

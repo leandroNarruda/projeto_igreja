@@ -43,6 +43,8 @@ export interface ResponderVersinhosResponse {
   avancouLote?: boolean
   concluido?: boolean
   gabarito?: GabaritoItem[]
+  prontoParaChefao?: boolean
+  nivel?: number
 }
 
 export function useVersinhosQuiz(enabled: boolean, loteIndex?: number) {
@@ -90,6 +92,96 @@ export function useResponderVersinhos() {
   })
 }
 
+// ─── Chefão ──────────────────────────────────────────────────────────────────
+
+export interface ChefaoResponse {
+  prontoParaChefao: boolean
+  nivel: number
+  acertos?: number
+  acertosNecessarios?: number
+  versinhos?: VersinhoQuestao[]
+  proximoNivel?: number
+  nomeProximoNivel?: string
+  emojiProximoNivel?: string
+  gradientProximoNivel?: string
+}
+
+export interface ResponderChefaoResponse {
+  correto: boolean
+  respostaCorreta: string
+}
+
+export interface ConcluirChefaoResponse {
+  aprovado: boolean
+  nivel: number
+  nomeNivel: string
+  emojiNivel: string
+  gradient?: string
+  jaEraNivelMaximo?: boolean
+}
+
+export function useChefao(enabled: boolean) {
+  return useQuery({
+    queryKey: ['versinhos', 'chefao'],
+    queryFn: async (): Promise<ChefaoResponse> => {
+      const res = await fetch('/api/versinhos/chefao')
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || 'Erro ao carregar Chefão')
+      return data
+    },
+    enabled,
+    staleTime: 0,
+    refetchOnWindowFocus: false,
+  })
+}
+
+export function useResponderChefao() {
+  return useMutation({
+    mutationFn: async ({
+      versinhoId,
+      resposta,
+    }: {
+      versinhoId: number
+      resposta: string
+    }): Promise<ResponderChefaoResponse> => {
+      const res = await fetch('/api/versinhos/chefao/responder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ versinhoId, resposta }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || 'Erro ao responder Chefão')
+      return data
+    },
+  })
+}
+
+export function useConcluirChefao() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      aprovado,
+    }: {
+      aprovado: boolean
+    }): Promise<ConcluirChefaoResponse> => {
+      const res = await fetch('/api/versinhos/chefao/concluir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ aprovado }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || 'Erro ao concluir Chefão')
+      return data
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['versinhos', 'chefao'] })
+      qc.invalidateQueries({ queryKey: ['versinhos', 'classificacao'] })
+    },
+  })
+}
+
+// ─── Classificação ───────────────────────────────────────────────────────────
+
 export interface ClassificacaoVersinhosItem {
   posicao: number
   userId: number
@@ -97,6 +189,7 @@ export interface ClassificacaoVersinhosItem {
   social_name: string | null
   image: string | null
   acertos: number
+  nivel: number
 }
 
 export function useClassificacaoVersinhos() {

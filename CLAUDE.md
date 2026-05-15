@@ -76,41 +76,97 @@ O `middleware.ts` protege todas as rotas em `/home`, `/admin`, `/quiz`, `/versin
 
 ## Banco de dados — modelos principais
 
-| Modelo                | Descrição                                                                                    |
-| --------------------- | -------------------------------------------------------------------------------------------- |
-| `User`                | Usuário com `role: Role` (USER, ADMIN, MODERATOR)                                            |
-| `Quiz`                | Quiz semanal com campo `ativo: Boolean` (só um pode estar ativo)                             |
-| `Pergunta`            | Pergunta do quiz: 5 alternativas A–E + `respostaCorreta` + `justificativa` + `tempoSegundos` |
-| `RespostaUsuario`     | Resposta do usuário a uma pergunta de um quiz específico                                     |
-| `ResultadoQuiz`       | Resultado consolidado: acertos, erros, nulos, porcentagem                                    |
-| `Versinho`            | Versinho bíblico para quiz: 5 alternativas, `respostaCorreta`, `ranking` (popularidade)      |
-| `VersinhoProgresso`   | Progresso enxuto do quiz de versinhos: 1 linha por usuário (`userId @unique`, `acertos Int`) |
-| `WebPushSubscription` | Endpoint + chaves p256dh/auth para Web Push                                                  |
+| Modelo                | Descrição                                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `User`                | Usuário com `role: Role` (USER, ADMIN, MODERATOR)                                                                  |
+| `Quiz`                | Quiz semanal com campo `ativo: Boolean` (só um pode estar ativo)                                                   |
+| `Pergunta`            | Pergunta do quiz: 5 alternativas A–E + `respostaCorreta` + `justificativa` + `tempoSegundos`                       |
+| `RespostaUsuario`     | Resposta do usuário a uma pergunta de um quiz específico                                                           |
+| `ResultadoQuiz`       | Resultado consolidado: acertos, erros, nulos, porcentagem                                                          |
+| `Versinho`            | Versinho bíblico: `verso` (texto), 5 alternativas A–E no formato `"Livro Cap:Verso"`, `respostaCorreta`, `ranking` |
+| `VersinhoProgresso`   | Progresso do quiz de versinhos: 1 linha por usuário — `acertos Int`, `nivel Int @default(1)`                       |
+| `WebPushSubscription` | Endpoint + chaves p256dh/auth para Web Push                                                                        |
 
 ## Quiz de Versinhos
 
-Fluxo paralelo ao quiz semanal, mas com persistência muito mais enxuta — em vez de gravar resposta por resposta, armazena apenas um contador acumulado de acertos por usuário em `VersinhoProgresso`.
+Fluxo paralelo ao quiz semanal, com persistência enxuta em `VersinhoProgresso` (`acertos`, `nivel`).
 
-- **Lote**: 10 versinhos por rodada, ordenados por `Versinho.id ASC` (do mais fácil ao mais difícil).
-- **Janela atual** (server-side): `base = floor(acertos / 10) * 10`. O lote enviado é `findMany({ orderBy: { id: 'asc' }, skip: base, take: 10 })`.
-- **Avanço**: ao responder, `novoAcertos = max(acertos, base + acertosDaRodada)`. Só avança o lote ao gabaritar (10/10). Se acertou menos, fica no mesmo lote, mas registra o melhor desempenho até então (sem regredir).
+### Constantes centrais (`lib/versinhoNiveis.ts`)
+
+- `VERSINOS_POR_NIVEL = 20` — versinhos necessários para desbloquear o Chefão de cada nível
+- `getNivelInfo(nivel)` — retorna `{ titulo, emoji, gradient }` para os 11 níveis (1 Semente → 11 Lenda Bíblica)
+- `isNivelMaximo(nivel)` — true se nivel >= 11
+
+### Lotes e progressão normal
+
+- **Lote**: 10 versinhos por rodada, ordenados por `Versinho.id ASC`.
+- **Janela atual** (server-side): `base = floor(acertos / 10) * 10`. O lote é `findMany({ orderBy: { id: 'asc' }, skip: base, take: 10 })`.
+- **Avanço**: `novoAcertos = max(acertos, base + acertosDaRodada)`. Não regride. Retorna também `prontoParaChefao` e `nivel`.
+- **`prontoParaChefao`**: `acertos >= nivel * 20 && !isNivelMaximo(nivel)` — calculado no `POST /api/versinhos/responder` e no `GET /api/versinhos/chefao`.
+
+### Modo Chefão (`/versinhos/responder?modo=chefao`)
+
+O Chefão é desbloqueado quando o usuário completa 20 versinhos de um nível sem ainda ter avançado de nível. Enquanto `prontoParaChefao = true`, o botão "Tentar novo recorde" é ocultado — o usuário **precisa** vencer o Chefão para avançar.
+
+**Mecânica:**
+
+- 20 versinhos do nível atual apresentados um por um (sem alternativas de texto)
+- 3 vidas (❤️❤️❤️) — perde uma a cada erro ou tempo esgotado
+- Timer de 30s por questão (baseado em `Date.now()`, imune a throttling de aba)
+- Sair da aba durante `'respondendo'` = derrota imediata (`visibilitychange`)
+- Clicar "Desistir" volta para `/versinhos` sem penalidade de API
+
+**Interface de resposta (3 selects encadeados):**
+
+- Livro → todos os 66 livros bíblicos em português (`lib/bibliaData.ts`)
+- Capítulo → filtrado dinamicamente pelo livro selecionado
+- Versículo → filtrado dinamicamente pelo capítulo selecionado
+- Concatenação enviada ao back: `"${livro} ${capitulo}:${verso}"` ex: `"João 3:16"`
+
+**Validação no back (`POST /api/versinhos/chefao/responder`):**
+
+- Compara a string concatenada contra cada alternativa A–E do versinho
+- Verifica se a alternativa encontrada é a `respostaCorreta`
+- **Importante**: as alternativas na tabela `Versinho` devem estar no formato `"Livro Cap:Verso"` para o Chefão funcionar. Versinhos com alternativas de texto não são compatíveis com o Chefão.
+
+**Resultado:**
+
+- Aprovado (terminou os 20 com ≥ 1 vida) → `POST /api/versinhos/chefao/concluir { aprovado: true }` → `nivel++` no banco → animação de confetti + nível conquistado (`NivelConquistadoModal`)
+- Reprovado (perdeu as 3 vidas) → `POST /api/versinhos/chefao/concluir { aprovado: false }` → animação de derrota (`ChefaoDerrota`) → pode tentar novamente sem perder progresso
 
 ### Endpoints
 
-- `GET /api/versinhos/quiz` — retorna o lote atual sem `respostaCorreta`. Aceita `?lote=N` para retornar um lote anterior (modo revisão); valida que `N < loteAtual` do usuário. Resposta inclui `loteIndex`, `loteAtual`, `modoRevisao`.
-- `POST /api/versinhos/responder` — valida o set de IDs, calcula acertos server-side. Aceita `loteIndex` opcional no body:
-  - **Modo normal**: atualiza `VersinhoProgresso`, retorna `acertosDaRodada`, `acertosTotais`, `avancouLote`, `concluido`.
-  - **Modo revisão** (`loteIndex < loteAtual`): **não atualiza progresso**, retorna `gabarito` com texto de cada alternativa correta e errada (`textoRespostaCorreta`, `textoRespostaUsuario`).
-- `GET /api/versinhos/classificacao` — top 10 por `acertos DESC`, desempate por `updatedAt ASC`.
+- `GET /api/versinhos/quiz` — retorna lote atual sem `respostaCorreta`. Aceita `?lote=N` (revisão). Resposta: `loteIndex`, `loteAtual`, `modoRevisao`, `concluido`.
+- `POST /api/versinhos/responder` — calcula acertos server-side. Modo normal: atualiza `VersinhoProgresso`, retorna `avancouLote`, `concluido`, `prontoParaChefao`, `nivel`. Modo revisão: retorna `gabarito` detalhado.
+- `GET /api/versinhos/classificacao` — top 10 por `acertos DESC`, retorna `nivel` do banco.
+- `GET /api/versinhos/chefao` — verifica `prontoParaChefao`, retorna os 20 versinhos do nível sem `respostaCorreta` + dados do próximo nível.
+- `POST /api/versinhos/chefao/responder` — valida uma resposta individual do Chefão. Body: `{ versinhoId, resposta }`.
+- `POST /api/versinhos/chefao/concluir` — finaliza o Chefão. Body: `{ aprovado }`. Se `aprovado`, incrementa `nivel`.
 
 ### Front
 
-- **`app/(protected)/versinhos/page.tsx`**: botão principal abre `EscolherModoModal` em vez de navegar diretamente.
-- **`components/versinhos/EscolherModoModal.tsx`**: modal com duas telas — "Tentar novo recorde" (navega para `/versinhos/responder`) e "Revisar lotes anteriores" (lista lotes já concluídos; bloqueado se nenhum foi completado ainda).
-- **`app/(protected)/versinhos/responder/page.tsx`**: lê `?lote=N` da URL para entrar em modo revisão. Em modo revisão exibe `ResultadoRevisao` com gabarito detalhado (ícone ✅/❌ por questão, texto da alternativa correta em verde, texto da errada em vermelho). Usa `Suspense` para suportar `useSearchParams`.
-- **`hooks/useVersinhos.ts`**: `useVersinhosQuiz(enabled, loteIndex?)` passa `?lote=N` quando fornecido. `useResponderVersinhos()` recebe `{ respostas, loteIndex? }`.
-- **Progressão no player**: bolinhas abaixo do card (10 pontos — preenchido = respondido, maior = atual, vazio = pendente). Animação entre perguntas: fade + 8px vertical, 200ms.
-- Card flipável de ranking em `components/versinhos/RankingCard.tsx` (níveis com gradiente e progresso por nível).
+- **`app/(protected)/versinhos/page.tsx`**: chama `useChefao(true)` ao montar. Se `prontoParaChefao`, exibe botão vermelho pulsante "⚔️ Enfrentar o Chefão!" acima do botão principal.
+- **`components/versinhos/EscolherModoModal.tsx`**: recebe `prontoParaChefao` como prop. Quando true, exibe botão do Chefão no topo e **oculta** "Tentar novo recorde".
+- **`app/(protected)/versinhos/responder/page.tsx`**: lê `?modo=chefao` e `?lote=N`. Controla `quizEmAndamento` (oculta navbar/footer) para ambos os modos. Após lote normal com `prontoParaChefao = true`, exibe botão "Enfrentar o Chefão agora".
+- **`components/versinhos/ChefaoPlayer.tsx`**: player principal do Chefão. Estados internos: `'respondendo' | 'aguardando' | 'feedback' | 'vitoria' | 'derrota'`. O estado `'aguardando'` congela o timer enquanto a API responde.
+- **`components/versinhos/NivelConquistadoModal.tsx`**: animação de vitória com confetti CSS puro (40 partículas), entrada em cascata do card de nível.
+- **`components/versinhos/ChefaoDerrota.tsx`**: animação de derrota com ondas de choque e coração partido.
+- **`components/versinhos/RankingCard.tsx`**: usa `item.nivel` vindo do banco (não calcula por acertos). Progresso de nível: `acertosNoNivel = acertos - (nivel - 1) * 20`.
+- **`hooks/useVersinhos.ts`**: `useChefao(enabled)`, `useResponderChefao()`, `useConcluirChefao()`. `ClassificacaoVersinhosItem` inclui campo `nivel`.
+- **`lib/bibliaData.ts`**: 66 livros, capítulos por livro, versos por capítulo. `getCapitulosPorLivro(livro)`, `getVersosPorCapitulo(livro, capitulo)`.
+
+### Migração aplicada
+
+```sql
+-- 20260515000000_add_nivel_versinho_progresso
+ALTER TABLE "VersinhoProgresso" ADD COLUMN "nivel" INTEGER NOT NULL DEFAULT 1;
+```
+
+Para resetar progresso de todos os usuários:
+
+```sql
+UPDATE "VersinhoProgresso" SET acertos = 0, nivel = 1;
+```
 
 ## Padrões de código
 
