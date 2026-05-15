@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { ReactNode } from 'react'
 import { SocialNameModal } from '@/components/ui/SocialNameModal'
+import { PushPermissionModal } from '@/components/ui/PushPermissionModal'
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
   const { data: session, status, update } = useSession()
@@ -24,6 +25,7 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
         onClose={() => {}}
         onSuccess={handleSocialNameSuccess}
       />
+      <PushPermissionModal blocked={!!shouldShowSocialNameModal} />
     </>
   )
 }
