@@ -18,6 +18,7 @@ import {
   useChefao,
   VersinhoRespostaInput,
   GabaritoItem,
+  ChefaoResponse,
 } from '@/hooks/useVersinhos'
 
 const TEMPO_POR_PERGUNTA = 30
@@ -134,10 +135,23 @@ function ResultadoRevisao({
 
 function ModoChefao({ onFim }: { onFim: () => void }) {
   const { data, isLoading } = useChefao(true)
+  // Snapshot dos dados na primeira vez que o Chefão fica disponível.
+  // Sem isso, o invalidate disparado por useConcluirChefao re-busca a query,
+  // que volta com prontoParaChefao=false (usuário já avançou de nível), e
+  // o ChefaoPlayer é desmontado no meio da animação de vitória.
+  const [snapshot, setSnapshot] = useState<ChefaoResponse | null>(null)
 
-  if (isLoading) return <Loading text="Preparando o Chefão…" />
+  useEffect(() => {
+    if (data?.prontoParaChefao && !snapshot) {
+      setSnapshot(data)
+    }
+  }, [data, snapshot])
 
-  if (!data?.prontoParaChefao) {
+  if (isLoading && !snapshot) return <Loading text="Preparando o Chefão…" />
+
+  const dados = snapshot ?? data
+
+  if (!dados?.prontoParaChefao) {
     return (
       <PageTransition>
         <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
@@ -160,12 +174,12 @@ function ModoChefao({ onFim }: { onFim: () => void }) {
 
   return (
     <ChefaoPlayer
-      versinhos={data.versinhos!}
-      nivel={data.nivel}
-      proximoNivel={data.proximoNivel!}
-      nomeProximoNivel={data.nomeProximoNivel!}
-      emojiProximoNivel={data.emojiProximoNivel!}
-      gradientProximoNivel={data.gradientProximoNivel!}
+      versinhos={dados.versinhos!}
+      nivel={dados.nivel}
+      proximoNivel={dados.proximoNivel!}
+      nomeProximoNivel={dados.nomeProximoNivel!}
+      emojiProximoNivel={dados.emojiProximoNivel!}
+      gradientProximoNivel={dados.gradientProximoNivel!}
       onFim={onFim}
     />
   )
