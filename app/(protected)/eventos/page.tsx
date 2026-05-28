@@ -178,8 +178,7 @@ export default function EventosPage() {
                   Formato
                 </h3>
                 <p className="text-lavender/90 text-center text-sm leading-relaxed">
-                  Cada quiz possui 14 perguntas, sendo 2 perguntas para cada dia
-                  da semana.
+                  Cada quiz possui perguntas baseadas na lição da semana.
                 </p>
               </Card>
 
