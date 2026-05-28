@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     const userId = session.user.id
     const body = await request.json()
     const aprovado: boolean = body?.aprovado
+    const nivelBody: unknown = body?.nivel
 
     if (typeof aprovado !== 'boolean') {
       return NextResponse.json(
@@ -33,13 +34,42 @@ export async function POST(request: Request) {
       )
     }
 
+    let nivelAlvo = progresso.nivel
+    if (nivelBody !== undefined) {
+      if (
+        typeof nivelBody !== 'number' ||
+        nivelBody < 1 ||
+        nivelBody > progresso.nivel
+      ) {
+        return NextResponse.json({ error: 'Nível inválido' }, { status: 400 })
+      }
+      nivelAlvo = nivelBody
+    }
+
+    const modoRevisao = nivelAlvo < progresso.nivel
+
     if (!aprovado) {
-      const nivelInfo = getNivelInfo(progresso.nivel)
+      const nivelInfo = getNivelInfo(nivelAlvo)
       return NextResponse.json({
         aprovado: false,
-        nivel: progresso.nivel,
+        modoRevisao,
+        nivel: nivelAlvo,
         nomeNivel: nivelInfo.titulo,
         emojiNivel: nivelInfo.emoji,
+      })
+    }
+
+    // Vitória em modo revisão: não altera progresso
+    if (modoRevisao) {
+      const nivelInfo = getNivelInfo(nivelAlvo)
+      return NextResponse.json({
+        aprovado: true,
+        modoRevisao: true,
+        nivel: nivelAlvo,
+        nomeNivel: nivelInfo.titulo,
+        emojiNivel: nivelInfo.emoji,
+        gradient: nivelInfo.gradient,
+        jaEraNivelMaximo: false,
       })
     }
 
@@ -47,6 +77,7 @@ export async function POST(request: Request) {
       const nivelInfo = getNivelInfo(progresso.nivel)
       return NextResponse.json({
         aprovado: true,
+        modoRevisao: false,
         nivel: progresso.nivel,
         nomeNivel: nivelInfo.titulo,
         emojiNivel: nivelInfo.emoji,
@@ -63,6 +94,7 @@ export async function POST(request: Request) {
     const nivelInfo = getNivelInfo(novoNivel)
     return NextResponse.json({
       aprovado: true,
+      modoRevisao: false,
       nivel: novoNivel,
       nomeNivel: nivelInfo.titulo,
       emojiNivel: nivelInfo.emoji,

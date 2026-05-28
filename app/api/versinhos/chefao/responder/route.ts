@@ -30,6 +30,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const versinhoId: number = body?.versinhoId
     const resposta: string = body?.resposta
+    const nivelBody: unknown = body?.nivel
 
     if (
       typeof versinhoId !== 'number' ||
@@ -52,8 +53,20 @@ export async function POST(request: Request) {
       )
     }
 
-    // Verifica que o versinho pertence ao lote do nível atual do usuário
-    const skip = (progresso.nivel - 1) * VERSINOS_POR_NIVEL
+    let nivelAlvo = progresso.nivel
+    if (nivelBody !== undefined) {
+      if (
+        typeof nivelBody !== 'number' ||
+        nivelBody < 1 ||
+        nivelBody > progresso.nivel
+      ) {
+        return NextResponse.json({ error: 'Nível inválido' }, { status: 400 })
+      }
+      nivelAlvo = nivelBody
+    }
+
+    // Verifica que o versinho pertence ao lote do nível alvo
+    const skip = (nivelAlvo - 1) * VERSINOS_POR_NIVEL
     const versinhosDoNivel = await prisma.versinho.findMany({
       orderBy: { id: 'asc' },
       skip,
@@ -64,7 +77,7 @@ export async function POST(request: Request) {
 
     if (!idsDoNivel.has(versinhoId)) {
       return NextResponse.json(
-        { error: 'Versinho não pertence ao nível atual' },
+        { error: 'Versinho não pertence ao nível informado' },
         { status: 400 }
       )
     }

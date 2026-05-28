@@ -26,6 +26,7 @@ interface Props {
   nomeProximoNivel: string
   emojiProximoNivel: string
   gradientProximoNivel: string
+  modoRevisao?: boolean
   onFim: () => void
 }
 
@@ -45,8 +46,10 @@ export function ChefaoPlayer({
   nomeProximoNivel,
   emojiProximoNivel,
   gradientProximoNivel,
+  modoRevisao = false,
   onFim,
 }: Props) {
+  const nivelParaApi = modoRevisao ? nivel : undefined
   const [fase, setFase] = useState<Fase>('respondendo')
   const [atual, setAtual] = useState(0)
   const [vidas, setVidas] = useState(TOTAL_VIDAS)
@@ -85,11 +88,14 @@ export function ChefaoPlayer({
     if (concluindoRef.current) return
     concluindoRef.current = true
     try {
-      await concluirMutation.mutateAsync({ aprovado: false })
+      await concluirMutation.mutateAsync({
+        aprovado: false,
+        nivel: nivelParaApi,
+      })
     } finally {
       setFase('derrota')
     }
-  }, [concluirMutation])
+  }, [concluirMutation, nivelParaApi])
 
   // Reset ao mudar de questão
   useEffect(() => {
@@ -170,6 +176,7 @@ export function ChefaoPlayer({
       const resultado = await responderMutation.mutateAsync({
         versinhoId: versinho.id,
         resposta: respostaUsuario,
+        nivel: nivelParaApi,
       })
 
       const novasVidas = resultado.correto ? vidas : vidas - 1
@@ -199,7 +206,10 @@ export function ChefaoPlayer({
     if (proximoIdx >= totalVersinhos) {
       setAnimando(true)
       try {
-        await concluirMutation.mutateAsync({ aprovado: true })
+        await concluirMutation.mutateAsync({
+          aprovado: true,
+          nivel: nivelParaApi,
+        })
         setFase('vitoria')
       } catch {
         setAnimando(false)
@@ -465,16 +475,40 @@ export function ChefaoPlayer({
         </div>
       </div>
 
-      {fase === 'vitoria' && (
-        <NivelConquistadoModal
-          isOpen
-          nivel={proximoNivel}
-          nomeNivel={nomeProximoNivel}
-          emojiNivel={emojiProximoNivel}
-          gradient={gradientProximoNivel}
-          onContinuar={onFim}
-        />
-      )}
+      {fase === 'vitoria' &&
+        (modoRevisao ? (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+            <div className="relative z-10 w-full max-w-sm bg-bg-card rounded-2xl shadow-2xl border border-primary/20 p-8 text-center">
+              <p className="text-6xl mb-4">{emojiProximoNivel}</p>
+              <h2 className="text-2xl font-bold text-accent mb-2">
+                Você venceu de novo! 🎉
+              </h2>
+              <p className="text-lavender text-sm mb-6">
+                Chefão de{' '}
+                <span className="font-semibold text-accent">
+                  {nomeProximoNivel}
+                </span>{' '}
+                derrotado mais uma vez. Seu progresso não foi alterado.
+              </p>
+              <button
+                onClick={onFim}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-orange-500 text-white font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.99] transition-all duration-200"
+              >
+                Voltar para Versinhos
+              </button>
+            </div>
+          </div>
+        ) : (
+          <NivelConquistadoModal
+            isOpen
+            nivel={proximoNivel}
+            nomeNivel={nomeProximoNivel}
+            emojiNivel={emojiProximoNivel}
+            gradient={gradientProximoNivel}
+            onContinuar={onFim}
+          />
+        ))}
 
       {fase === 'derrota' && (
         <ChefaoDerrota

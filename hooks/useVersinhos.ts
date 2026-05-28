@@ -96,6 +96,7 @@ export function useResponderVersinhos() {
 
 export interface ChefaoResponse {
   prontoParaChefao: boolean
+  modoRevisao?: boolean
   nivel: number
   acertos?: number
   acertosNecessarios?: number
@@ -113,6 +114,7 @@ export interface ResponderChefaoResponse {
 
 export interface ConcluirChefaoResponse {
   aprovado: boolean
+  modoRevisao?: boolean
   nivel: number
   nomeNivel: string
   emojiNivel: string
@@ -120,11 +122,15 @@ export interface ConcluirChefaoResponse {
   jaEraNivelMaximo?: boolean
 }
 
-export function useChefao(enabled: boolean) {
+export function useChefao(enabled: boolean, nivel?: number) {
   return useQuery({
-    queryKey: ['versinhos', 'chefao'],
+    queryKey: ['versinhos', 'chefao', nivel ?? 'atual'],
     queryFn: async (): Promise<ChefaoResponse> => {
-      const res = await fetch('/api/versinhos/chefao')
+      const url =
+        nivel !== undefined
+          ? `/api/versinhos/chefao?nivel=${nivel}`
+          : '/api/versinhos/chefao'
+      const res = await fetch(url)
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Erro ao carregar Chefão')
       return data
@@ -140,14 +146,16 @@ export function useResponderChefao() {
     mutationFn: async ({
       versinhoId,
       resposta,
+      nivel,
     }: {
       versinhoId: number
       resposta: string
+      nivel?: number
     }): Promise<ResponderChefaoResponse> => {
       const res = await fetch('/api/versinhos/chefao/responder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ versinhoId, resposta }),
+        body: JSON.stringify({ versinhoId, resposta, nivel }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Erro ao responder Chefão')
@@ -161,13 +169,15 @@ export function useConcluirChefao() {
   return useMutation({
     mutationFn: async ({
       aprovado,
+      nivel,
     }: {
       aprovado: boolean
+      nivel?: number
     }): Promise<ConcluirChefaoResponse> => {
       const res = await fetch('/api/versinhos/chefao/concluir', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ aprovado }),
+        body: JSON.stringify({ aprovado, nivel }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Erro ao concluir Chefão')

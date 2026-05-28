@@ -133,55 +133,59 @@ function ResultadoRevisao({
 
 // ─── Modo Chefão ─────────────────────────────────────────────────────────────
 
-function ModoChefao({ onFim }: { onFim: () => void }) {
-  const { data, isLoading } = useChefao(true)
-  // Snapshot dos dados na primeira vez que o Chefão fica disponível.
-  // Sem isso, o invalidate disparado por useConcluirChefao re-busca a query,
-  // que volta com prontoParaChefao=false (usuário já avançou de nível), e
-  // o ChefaoPlayer é desmontado no meio da animação de vitória.
+function ModoChefao({
+  onFim,
+  nivelRevisao,
+}: {
+  onFim: () => void
+  nivelRevisao?: number
+}) {
+  const { data, isLoading } = useChefao(true, nivelRevisao)
   const [snapshot, setSnapshot] = useState<ChefaoResponse | null>(null)
 
+  // Trava os dados iniciais do Chefão para que o player não seja desmontado
+  // quando o refetch após concluir o Chefão retornar prontoParaChefao=false
+  // (o nível subiu, mas ainda faltam acertos para o próximo Chefão).
   useEffect(() => {
-    if (data?.prontoParaChefao && !snapshot) {
+    if (!snapshot && data?.prontoParaChefao && data.versinhos) {
       setSnapshot(data)
     }
   }, [data, snapshot])
 
-  if (isLoading && !snapshot) return <Loading text="Preparando o Chefão…" />
-
-  const dados = snapshot ?? data
-
-  if (!dados?.prontoParaChefao) {
+  if (snapshot) {
     return (
-      <PageTransition>
-        <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
-          <Card className="max-w-sm mx-4 text-center">
-            <p className="text-4xl mb-3">⚔️</p>
-            <h2 className="text-xl font-bold text-accent mb-2">
-              Chefão não disponível
-            </h2>
-            <p className="text-lavender text-sm mb-6">
-              Complete os versinhos do nível atual para desafiar o Chefão.
-            </p>
-            <Button variant="primary" onClick={onFim}>
-              Voltar
-            </Button>
-          </Card>
-        </div>
-      </PageTransition>
+      <ChefaoPlayer
+        versinhos={snapshot.versinhos!}
+        nivel={snapshot.nivel}
+        proximoNivel={snapshot.proximoNivel!}
+        nomeProximoNivel={snapshot.nomeProximoNivel!}
+        emojiProximoNivel={snapshot.emojiProximoNivel!}
+        gradientProximoNivel={snapshot.gradientProximoNivel!}
+        modoRevisao={snapshot.modoRevisao ?? false}
+        onFim={onFim}
+      />
     )
   }
 
+  if (isLoading) return <Loading text="Preparando o Chefão…" />
+
   return (
-    <ChefaoPlayer
-      versinhos={dados.versinhos!}
-      nivel={dados.nivel}
-      proximoNivel={dados.proximoNivel!}
-      nomeProximoNivel={dados.nomeProximoNivel!}
-      emojiProximoNivel={dados.emojiProximoNivel!}
-      gradientProximoNivel={dados.gradientProximoNivel!}
-      onFim={onFim}
-    />
+    <PageTransition>
+      <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
+        <Card className="max-w-sm mx-4 text-center">
+          <p className="text-4xl mb-3">⚔️</p>
+          <h2 className="text-xl font-bold text-accent mb-2">
+            Chefão não disponível
+          </h2>
+          <p className="text-lavender text-sm mb-6">
+            Complete os versinhos do nível atual para desafiar o Chefão.
+          </p>
+          <Button variant="primary" onClick={onFim}>
+            Voltar
+          </Button>
+        </Card>
+      </div>
+    </PageTransition>
   )
 }
 
@@ -191,8 +195,11 @@ function ResponderVersinhosInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const loteParam = searchParams.get('lote')
+  const nivelParam = searchParams.get('nivel')
   const modoChefao = searchParams.get('modo') === 'chefao'
   const loteIndex = loteParam !== null ? parseInt(loteParam, 10) : undefined
+  const nivelRevisao =
+    modoChefao && nivelParam !== null ? parseInt(nivelParam, 10) : undefined
   const modoRevisao = loteIndex !== undefined
 
   const [iniciado, setIniciado] = useState(false)
@@ -227,7 +234,12 @@ function ResponderVersinhosInner() {
 
   // Modo Chefão direto via ?modo=chefao
   if (modoChefao) {
-    return <ModoChefao onFim={() => router.push('/versinhos')} />
+    return (
+      <ModoChefao
+        onFim={() => router.push('/versinhos')}
+        nivelRevisao={nivelRevisao}
+      />
+    )
   }
 
   const iniciarQuiz = () => {
