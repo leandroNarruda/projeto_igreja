@@ -6,6 +6,11 @@ import { publishRankingUpdated } from '@/lib/realtime/publish'
 
 export const dynamic = 'force-dynamic'
 
+type RespostaInput = {
+  perguntaId: number
+  alternativaEscolhida: string | null
+}
+
 export async function POST(request: Request) {
   try {
     const session = await getServerSession()
@@ -20,23 +25,6 @@ export async function POST(request: Request) {
     if (!quizId || !respostas || !Array.isArray(respostas)) {
       return NextResponse.json(
         { error: 'quizId e respostas (array) são obrigatórios' },
-        { status: 400 }
-      )
-    }
-
-    // Verificar se o usuário já tem resultado para este quiz
-    const resultadoExistente = await prisma.resultadoQuiz.findUnique({
-      where: {
-        userId_quizId: {
-          userId: session.user.id,
-          quizId,
-        },
-      },
-    })
-
-    if (resultadoExistente) {
-      return NextResponse.json(
-        { error: 'Você já respondeu este quiz' },
         { status: 400 }
       )
     }
@@ -94,29 +82,12 @@ export async function POST(request: Request) {
     // Buscar todas as perguntas com suas respostas corretas para cálculo
     const perguntasMap = new Map(todasPerguntas.map(p => [p.id, p]))
 
-    // Calcular acertos, erros e nulos
-    let acertos = 0
-    let erros = 0
-    let nulos = 0
+    const calcularResultado = (respostasRecebidas: RespostaInput[]) => {
+      let acertos = 0
+      let erros = 0
+      let nulos = 0
 
-    // Salvar todas as respostas e calcular resultado em uma transação
-    const resultado = await prisma.$transaction(async tx => {
-      // Salvar todas as respostas
-      await Promise.all(
-        respostas.map((resposta: any) =>
-          tx.respostaUsuario.create({
-            data: {
-              userId: session.user.id,
-              quizId,
-              perguntaId: resposta.perguntaId,
-              alternativaEscolhida: resposta.alternativaEscolhida || null,
-            },
-          })
-        )
-      )
-
-      // Calcular resultado
-      for (const resposta of respostas) {
+      for (const resposta of respostasRecebidas) {
         const pergunta = perguntasMap.get(resposta.perguntaId)
         if (!pergunta) continue
 
@@ -132,19 +103,6 @@ export async function POST(request: Request) {
       const total = todasPerguntas.length
       const porcentagem = total > 0 ? Math.round((acertos / total) * 100) : 0
 
-      // Criar registro de resultado
-      const resultadoQuiz = await tx.resultadoQuiz.create({
-        data: {
-          userId: session.user.id,
-          quizId,
-          acertos,
-          erros,
-          nulos,
-          total,
-          porcentagem,
-        },
-      })
-
       return {
         total,
         acertos,
@@ -152,6 +110,55 @@ export async function POST(request: Request) {
         nulos,
         porcentagem,
       }
+    }
+
+    const resultado = calcularResultado(respostas)
+
+    // Verificar se o usuário já tem resultado para este quiz.
+    // Novas tentativas retornam feedback, mas não alteram pontuação nem ranking.
+    const resultadoExistente = await prisma.resultadoQuiz.findUnique({
+      where: {
+        userId_quizId: {
+          userId: session.user.id,
+          quizId,
+        },
+      },
+    })
+
+    if (resultadoExistente) {
+      return NextResponse.json({
+        resultado,
+        pontuacaoContabilizada: false,
+      })
+    }
+
+    // Salvar todas as respostas e o primeiro resultado em uma transação
+    await prisma.$transaction(async tx => {
+      await Promise.all(
+        respostas.map((resposta: any) =>
+          tx.respostaUsuario.create({
+            data: {
+              userId: session.user.id,
+              quizId,
+              perguntaId: resposta.perguntaId,
+              alternativaEscolhida: resposta.alternativaEscolhida || null,
+            },
+          })
+        )
+      )
+
+      // Criar registro de resultado
+      await tx.resultadoQuiz.create({
+        data: {
+          userId: session.user.id,
+          quizId,
+          acertos: resultado.acertos,
+          erros: resultado.erros,
+          nulos: resultado.nulos,
+          total: resultado.total,
+          porcentagem: resultado.porcentagem,
+        },
+      })
     })
 
     // Realtime: publicar classificação atualizada (não bloqueia resposta em caso de falha)
@@ -173,6 +180,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       resultado,
+      pontuacaoContabilizada: true,
     })
   } catch (error: any) {
     console.error('Erro ao salvar respostas:', error)

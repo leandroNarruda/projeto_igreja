@@ -221,23 +221,6 @@ export async function GET(
       return NextResponse.json({ perguntas })
     }
 
-    // Verificar se o usuário já tem resultado para este quiz
-    const resultadoExistente = await prisma.resultadoQuiz.findUnique({
-      where: {
-        userId_quizId: {
-          userId: session.user.id,
-          quizId,
-        },
-      },
-    })
-
-    if (resultadoExistente) {
-      return NextResponse.json(
-        { error: 'Você já respondeu este quiz' },
-        { status: 400 }
-      )
-    }
-
     // Buscar todas as perguntas do quiz
     const todasPerguntas = await prisma.pergunta.findMany({
       where: { quizId },

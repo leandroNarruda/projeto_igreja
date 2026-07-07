@@ -111,6 +111,25 @@ export default function HomePage() {
                 porcentagem={resultado.porcentagem}
               />
             </div>
+            <div className="mb-8 text-center">
+              <p className="mb-4 text-sm font-medium text-lavender">
+                Essa foi sua pontuação registrada. Você pode responder de novo
+                para treinar, sem alterar o ranking.
+              </p>
+              <button
+                onClick={handleResponderQuiz}
+                className="
+                  inline-flex items-center justify-center
+                  px-6 py-3 rounded-lg
+                  bg-primary text-accent font-semibold
+                  hover:bg-primary-hover
+                  transition-colors
+                  focus:outline-none focus:ring-4 focus:ring-primary/30
+                "
+              >
+                Responder novamente
+              </button>
+            </div>
             <div className="text-center mb-6">
               <Link
                 href="#classificacao-geral"

@@ -46,6 +46,9 @@ export default function ResponderQuizPage() {
     nulos: number
     porcentagem: number
   } | null>(null)
+  const [pontuacaoContabilizada, setPontuacaoContabilizada] = useState<
+    boolean | null
+  >(null)
   const [mostrarModalSaida, setMostrarModalSaida] = useState(false)
   const [quizEmAndamento, setQuizEmAndamento] = useState(false)
   const pendenteNavegacao = useRef<string | null>(null)
@@ -69,16 +72,11 @@ export default function ResponderQuizPage() {
       : null
   }, [quizData?.quiz])
 
-  // Verificar se já respondeu e redirecionar
+  // Verificar se existe quiz ativo
   useEffect(() => {
     if (!isLoading && quizData) {
       if (!quizData.quiz) {
         alert('Não há quiz ativo no momento')
-        router.push('/home')
-        return
-      }
-
-      if (quizData.jaRespondeu) {
         router.push('/home')
         return
       }
@@ -102,6 +100,7 @@ export default function ResponderQuizPage() {
         setTodasPerguntas(data.perguntas)
         setIndicePerguntaAtual(0)
         setRespostas({})
+        setPontuacaoContabilizada(null)
         setMostrarInstrucoes(false)
         setQuizEmAndamento(true)
       } else {
@@ -186,6 +185,7 @@ export default function ResponderQuizPage() {
 
       if (data.resultado) {
         setResultado(data.resultado)
+        setPontuacaoContabilizada(data.pontuacaoContabilizada ?? true)
         setQuizEmAndamento(false)
         return true
       }
@@ -193,12 +193,7 @@ export default function ResponderQuizPage() {
       return false
     } catch (error: any) {
       console.error('Erro ao enviar respostas:', error)
-      // Se o erro for "já respondeu", não mostrar alerta (pode ser que já tenha sido enviado)
-      if (error?.message?.includes('já respondeu')) {
-        console.log('Quiz já foi respondido anteriormente')
-      } else {
-        alert(error?.message || 'Erro ao enviar respostas')
-      }
+      alert(error?.message || 'Erro ao enviar respostas')
       return false
     }
   }
@@ -410,6 +405,12 @@ export default function ResponderQuizPage() {
       <PageTransition>
         <div className="min-h-[calc(100vh-8rem)] bg-bg-base flex items-center justify-center py-8">
           <div className="w-full px-4">
+            {pontuacaoContabilizada === false && (
+              <div className="max-w-2xl mx-auto mb-4 rounded-lg border border-primary/30 bg-bg-card px-4 py-3 text-center text-sm font-medium text-lavender">
+                Tentativa de treino: sua primeira pontuação continua valendo no
+                ranking.
+              </div>
+            )}
             <QuizResult
               total={resultado.total}
               acertos={resultado.acertos}
@@ -467,7 +468,7 @@ export default function ResponderQuizPage() {
         }}
         onConfirm={handleSaidaQuiz}
         title="Atenção!"
-        message="Se você sair agora, não poderá fazer este quiz novamente. Deseja realmente sair?"
+        message="Se você sair agora, suas respostas atuais serão enviadas. Deseja realmente sair?"
         confirmText="Sair mesmo assim"
         cancelText="Cancelar"
       />
