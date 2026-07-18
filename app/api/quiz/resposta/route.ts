@@ -132,34 +132,40 @@ export async function POST(request: Request) {
       })
     }
 
-    // Salvar todas as respostas e o primeiro resultado em uma transação
-    await prisma.$transaction(async tx => {
-      await Promise.all(
-        respostas.map((resposta: any) =>
-          tx.respostaUsuario.create({
-            data: {
-              userId: session.user.id,
-              quizId,
-              perguntaId: resposta.perguntaId,
-              alternativaEscolhida: resposta.alternativaEscolhida || null,
-            },
-          })
-        )
-      )
+    try {
+      // Salvar respostas em lote mantém a transação curta mesmo em quizzes grandes.
+      await prisma.$transaction([
+        prisma.respostaUsuario.createMany({
+          data: respostas.map((resposta: RespostaInput) => ({
+            userId: session.user.id,
+            quizId,
+            perguntaId: resposta.perguntaId,
+            alternativaEscolhida: resposta.alternativaEscolhida || null,
+          })),
+          skipDuplicates: true,
+        }),
+        prisma.resultadoQuiz.create({
+          data: {
+            userId: session.user.id,
+            quizId,
+            acertos: resultado.acertos,
+            erros: resultado.erros,
+            nulos: resultado.nulos,
+            total: resultado.total,
+            porcentagem: resultado.porcentagem,
+          },
+        }),
+      ])
+    } catch (error: any) {
+      if (error?.code === 'P2002') {
+        return NextResponse.json({
+          resultado,
+          pontuacaoContabilizada: false,
+        })
+      }
 
-      // Criar registro de resultado
-      await tx.resultadoQuiz.create({
-        data: {
-          userId: session.user.id,
-          quizId,
-          acertos: resultado.acertos,
-          erros: resultado.erros,
-          nulos: resultado.nulos,
-          total: resultado.total,
-          porcentagem: resultado.porcentagem,
-        },
-      })
-    })
+      throw error
+    }
 
     // Realtime: publicar classificação atualizada (não bloqueia resposta em caso de falha)
     publishRankingUpdated(quizId).catch(err =>

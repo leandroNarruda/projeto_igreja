@@ -416,6 +416,7 @@ export default function ResponderQuizPage() {
               acertos={resultado.acertos}
               erros={resultado.erros}
               porcentagem={resultado.porcentagem}
+              showShareToast={pontuacaoContabilizada !== false}
             />
             <div className="text-center mt-6">
               <button

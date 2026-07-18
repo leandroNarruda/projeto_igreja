@@ -113,26 +113,10 @@ export default function HomePage() {
             </div>
             <div className="mb-8 text-center">
               <p className="mb-4 text-sm font-medium text-lavender">
-                Essa foi sua pontuação registrada. Você pode responder de novo
-                para treinar, sem alterar o ranking.
+                Você pode responder de novo para treinar, sem alterar o ranking.
               </p>
               <button
                 onClick={handleResponderQuiz}
-                className="
-                  inline-flex items-center justify-center
-                  px-6 py-3 rounded-lg
-                  bg-primary text-accent font-semibold
-                  hover:bg-primary-hover
-                  transition-colors
-                  focus:outline-none focus:ring-4 focus:ring-primary/30
-                "
-              >
-                Responder novamente
-              </button>
-            </div>
-            <div className="text-center mb-6">
-              <Link
-                href="#classificacao-geral"
                 className="
                   group relative inline-flex items-center gap-2.5
                   px-6 py-3 rounded-full
@@ -143,6 +127,7 @@ export default function HomePage() {
                   active:translate-y-0
                   transition-all duration-300
                   ring-1 ring-white/30
+                  focus:outline-none focus:ring-4 focus:ring-orange-400/30
                 "
               >
                 <span className="absolute inset-0 rounded-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.2s_ease-in-out] pointer-events-none" />
@@ -150,8 +135,8 @@ export default function HomePage() {
                   className="size-5 shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] group-hover:rotate-[-8deg] group-hover:scale-110 transition-transform"
                   aria-hidden
                 />
-                <span className="relative">Ver classificação geral</span>
-              </Link>
+                <span className="relative">Responder novamente</span>
+              </button>
             </div>
             {classificacao.length > 0 && (
               <div className="mt-8 bg-bg-card rounded-lg shadow-md p-6">
