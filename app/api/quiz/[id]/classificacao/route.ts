@@ -26,11 +26,15 @@ export async function GET(
     // Buscar parâmetro limit (padrão: 3)
     const url = new URL(request.url)
     const limit = parseInt(url.searchParams.get('limit') || '50', 10)
+    const userIdLogado = Number(session.user.id)
 
     // Buscar top N resultados ordenados por acertos (descendente)
     const resultados = await prisma.resultadoQuiz.findMany({
       where: {
         quizId,
+        user: {
+          OR: [{ role: { not: 'ADMIN' } }, { id: userIdLogado }],
+        },
       },
       include: {
         user: {

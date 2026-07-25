@@ -18,22 +18,16 @@ export function useRankingRealtime(quizId: number | null) {
     const channelQuiz = ably.channels.get(`quiz:${quizId}:classificacao`)
     const channelGeral = ably.channels.get('quiz:classificacao-geral')
 
-    const onQuizUpdate = (message: { data?: unknown }) => {
-      const data = message.data as { classificacao?: unknown[] } | undefined
-      if (data?.classificacao) {
-        queryClient.setQueryData(['quiz', quizId, 'classificacao'], () => ({
-          classificacao: data.classificacao,
-        }))
-      }
+    const onQuizUpdate = () => {
+      queryClient.invalidateQueries({
+        queryKey: ['quiz', quizId, 'classificacao'],
+      })
     }
 
-    const onGeralUpdate = (message: { data?: unknown }) => {
-      const data = message.data as { classificacao?: unknown[] } | undefined
-      if (data?.classificacao) {
-        queryClient.setQueryData(['quiz', 'classificacao-geral'], () => ({
-          classificacao: data.classificacao,
-        }))
-      }
+    const onGeralUpdate = () => {
+      queryClient.invalidateQueries({
+        queryKey: ['quiz', 'classificacao-geral'],
+      })
     }
 
     channelQuiz.subscribe('ranking_updated', onQuizUpdate)
@@ -56,13 +50,10 @@ export function useRankingGeralRealtime() {
     const ably = getAblyClient()
     const channelGeral = ably.channels.get('quiz:classificacao-geral')
 
-    const onGeralUpdate = (message: { data?: unknown }) => {
-      const data = message.data as { classificacao?: unknown[] } | undefined
-      if (data?.classificacao) {
-        queryClient.setQueryData(['quiz', 'classificacao-geral'], () => ({
-          classificacao: data.classificacao,
-        }))
-      }
+    const onGeralUpdate = () => {
+      queryClient.invalidateQueries({
+        queryKey: ['quiz', 'classificacao-geral'],
+      })
     }
 
     channelGeral.subscribe('ranking_updated', onGeralUpdate)

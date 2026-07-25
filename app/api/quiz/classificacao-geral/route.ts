@@ -12,8 +12,15 @@ export async function GET() {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const userIdLogado = Number(session.user.id)
+
     // Buscar todos os resultados de todos os quizzes
     const todosResultados = await prisma.resultadoQuiz.findMany({
+      where: {
+        user: {
+          OR: [{ role: { not: 'ADMIN' } }, { id: userIdLogado }],
+        },
+      },
       include: {
         user: {
           select: {
