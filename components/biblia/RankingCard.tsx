@@ -1,0 +1,186 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
+import type { ClassificacaoBibliaItem } from '@/hooks/useBiblia'
+import {
+  BIBLIAS_POR_NIVEL,
+  getBibliaNivelInfo,
+  getTotalBibliaNiveis,
+  isBibliaNivelMaximo,
+} from '@/lib/bibliaNiveis'
+
+function getFirstLetter(name: string): string {
+  if (!name || !name.trim()) return '?'
+  return name.trim()[0].toUpperCase()
+}
+
+interface RankingCardProps {
+  item: ClassificacaoBibliaItem
+  index: number
+  isMe: boolean
+}
+
+export function RankingCard({ item, index, isMe }: RankingCardProps) {
+  const [flipped, setFlipped] = useState(false)
+
+  const medalhas = ['🥇', '🥈', '🥉']
+  const podioClass =
+    index < 3 ? ['podio-gold', 'podio-silver', 'podio-bronze'][index] : null
+
+  const nivel = Math.min(item.nivel, getTotalBibliaNiveis())
+  const nivelMaximo = isBibliaNivelMaximo(nivel)
+  const acertosNoNivel = item.acertos - (nivel - 1) * BIBLIAS_POR_NIVEL
+  const progressoNivel = Math.min(
+    (acertosNoNivel / BIBLIAS_POR_NIVEL) * 100,
+    100
+  )
+  const nivelInfo = getBibliaNivelInfo(nivel)
+  const nomeExibido = (item.social_name?.trim() || item.nome).split(' ')[0]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      whileInView={{
+        opacity: 1,
+        scale: 1,
+        y: 0,
+      }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{
+        type: 'tween',
+        ease: 'easeOut',
+        duration: 0.4,
+        delay: index * 0.05,
+      }}
+      className="[perspective:1000px]"
+    >
+      <button
+        type="button"
+        onClick={() => setFlipped(f => !f)}
+        className="relative w-full text-left [transform-style:preserve-3d] transition-transform duration-700"
+        style={{ transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+        aria-label={flipped ? 'Voltar' : 'Ver conquistas'}
+      >
+        <div
+          className={`[backface-visibility:hidden] [-webkit-backface-visibility:hidden] relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-[1.02] ${
+            podioClass
+              ? podioClass
+              : isMe
+                ? 'bg-gradient-to-br from-primary/20 to-primary/30 border-primary ring-2 ring-primary ring-offset-2'
+                : 'bg-bg-card border-primary/30 hover:border-primary/60'
+          }`}
+        >
+          <div className="relative text-center">
+            <div
+              className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+            >
+              {index < 3 ? medalhas[index] : `${item.posicao}º`}
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              {item.image ? (
+                <Image
+                  src={item.image}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
+                  unoptimized
+                />
+              ) : (
+                <div
+                  className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
+                >
+                  {getFirstLetter(item.social_name?.trim() || item.nome)}
+                </div>
+              )}
+              <h3
+                className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
+              >
+                {nomeExibido}
+              </h3>
+            </div>
+            <div
+              className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+            >
+              <div
+                className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
+              >
+                <span
+                  className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                >
+                  {item.acertos} acertos
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-center">
+              <div
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r ${nivelInfo.gradient} text-white shadow-md ring-1 ring-white/30`}
+              >
+                <span className="text-base leading-none">
+                  {nivelInfo.emoji}
+                </span>
+                <span className="text-[11px] font-bold tracking-wide uppercase">
+                  Nível {nivel} · {nivelInfo.titulo}
+                </span>
+              </div>
+            </div>
+
+            <p
+              className={`mt-3 text-[10px] uppercase tracking-wider ${podioClass ? 'podio-label' : 'text-lavender/70'}`}
+            >
+              Toque para ver conquistas
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={`absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)] p-6 rounded-lg border-2 border-white/20 shadow-lg overflow-hidden bg-gradient-to-br ${nivelInfo.gradient} text-white`}
+        >
+          <div className="relative h-full flex flex-col items-center justify-center text-center gap-1">
+            <div className="text-5xl drop-shadow-lg leading-none">
+              {nivelInfo.emoji}
+            </div>
+            <div className="text-[10px] uppercase tracking-widest opacity-90 mt-1">
+              {nomeExibido}
+            </div>
+            <div className="text-3xl font-extrabold drop-shadow leading-tight">
+              Nível {nivel}
+            </div>
+            <div className="text-sm font-semibold opacity-95 mb-2">
+              {nivelInfo.titulo}
+            </div>
+
+            <div className="w-full mt-1">
+              <div className="flex justify-between text-[11px] font-semibold opacity-95 mb-1">
+                <span>{nivelMaximo ? 'Nível atual' : 'Próximo nível'}</span>
+                <span>
+                  {nivelMaximo
+                    ? 'Máximo'
+                    : `${acertosNoNivel}/${BIBLIAS_POR_NIVEL}`}
+                </span>
+              </div>
+              <div className="w-full h-2 bg-white/25 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-white rounded-full transition-all duration-500"
+                  style={{ width: `${progressoNivel}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="mt-3 text-xs opacity-95">
+              <span className="font-extrabold text-lg">{item.acertos}</span>{' '}
+              acertos no total
+            </div>
+
+            <p className="mt-2 text-[10px] uppercase tracking-wider opacity-80">
+              Toque para voltar
+            </p>
+          </div>
+        </div>
+      </button>
+    </motion.div>
+  )
+}

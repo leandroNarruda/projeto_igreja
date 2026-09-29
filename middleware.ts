@@ -21,7 +21,8 @@ export async function middleware(request: NextRequest) {
   // Rotas protegidas que requerem autenticação
   if (
     request.nextUrl.pathname.startsWith('/home') ||
-    request.nextUrl.pathname.startsWith('/versinhos')
+    request.nextUrl.pathname.startsWith('/versinhos') ||
+    request.nextUrl.pathname.startsWith('/biblia')
   ) {
     if (!sessionToken) {
       const loginUrl = new URL('/login', request.url)
@@ -34,7 +35,8 @@ export async function middleware(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith('/admin') ||
     (request.nextUrl.pathname.startsWith('/quiz') &&
-      !request.nextUrl.pathname.startsWith('/quiz/responder'))
+      !request.nextUrl.pathname.startsWith('/quiz/responder') &&
+      !request.nextUrl.pathname.startsWith('/quiz/trilha'))
   ) {
     if (!sessionToken) {
       const loginUrl = new URL('/login', request.url)
@@ -102,8 +104,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Proteger rota de responder quiz (requer autenticação)
-  if (request.nextUrl.pathname.startsWith('/quiz/responder')) {
+  // Proteger rotas de quiz do usuário (requer autenticação)
+  if (
+    request.nextUrl.pathname.startsWith('/quiz/responder') ||
+    request.nextUrl.pathname.startsWith('/quiz/trilha')
+  ) {
     if (!sessionToken) {
       const loginUrl = new URL('/login', request.url)
       loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname)
@@ -120,6 +125,7 @@ export const config = {
     '/admin/:path*',
     '/quiz/:path*',
     '/versinhos/:path*',
+    '/biblia/:path*',
     '/login',
     '/cadastro',
   ],

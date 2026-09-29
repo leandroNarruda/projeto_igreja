@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 const AUTH_ROUTES = ['/login', '/cadastro']
 import { motion } from 'framer-motion'
-import { Home, User, Settings, BookOpen } from 'lucide-react'
+import { Home, Settings, BookOpen, BookText } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useQuizUI } from '@/components/providers/QuizUIProvider'
 
@@ -41,9 +41,9 @@ export const Footer = () => {
       badge: 'Novo',
     },
     {
-      label: 'Perfil',
-      path: '/perfil',
-      icon: User,
+      label: 'Bíblia',
+      path: '/biblia',
+      icon: BookText,
     },
     ...(isAdmin && !isSessionLoading
       ? [

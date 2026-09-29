@@ -89,6 +89,10 @@ export default function HomePage() {
     router.push('/quiz/responder')
   }
 
+  const handleAbrirTrilhaQuiz = () => {
+    router.push('/quiz/trilha')
+  }
+
   if (isLoading) {
     return <Loading />
   }
@@ -513,7 +517,7 @@ export default function HomePage() {
         <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="flex flex-col items-center justify-center mb-8 p-4">
             <button
-              onClick={handleResponderQuiz}
+              onClick={handleAbrirTrilhaQuiz}
               className="
                 relative overflow-hidden
                 px-8 py-4

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { BookOpen, ClipboardList, Users } from 'lucide-react'
+import { BookOpen, BookText, ClipboardList, Users } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { PageTransition } from '@/components/layout/PageTransition'
 
@@ -34,6 +34,19 @@ export default function AdminPage() {
                   </h2>
                   <p className="text-sm text-lavender">
                     Importar versinhos bíblicos para o quiz
+                  </p>
+                </div>
+              </Card>
+            </Link>
+            <Link href="/admin/biblia" className="block">
+              <Card className="cursor-pointer hover:shadow-md transition-shadow h-full">
+                <div className="flex flex-col items-center text-center p-6">
+                  <BookText className="w-12 h-12 text-primary mb-3" />
+                  <h2 className="text-xl font-semibold text-accent mb-1">
+                    Bíblia
+                  </h2>
+                  <p className="text-sm text-lavender">
+                    Importar perguntas para o quiz da Bíblia
                   </p>
                 </div>
               </Card>

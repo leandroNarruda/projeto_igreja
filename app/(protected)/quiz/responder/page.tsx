@@ -372,6 +372,7 @@ export default function ResponderQuizPage() {
           else if (ariaLabel === 'Eventos') path = '/eventos'
           else if (ariaLabel === 'Quiz') path = '/quiz'
           else if (ariaLabel === 'Perfil') path = '/perfil'
+          else if (ariaLabel === 'Bíblia') path = '/biblia'
 
           if (path) {
             interceptarNavegacao(path)

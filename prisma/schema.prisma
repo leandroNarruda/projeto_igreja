@@ -34,6 +34,7 @@ model User {
   resultados    ResultadoQuiz[]
   pushSubscriptions WebPushSubscription[]
   versinhoProgresso VersinhoProgresso?
+  bibliaProgresso BibliaProgresso?
 }
 
 model Account {
@@ -161,6 +162,30 @@ model VersinhoProgresso {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Biblia {
+  id              Int      @id @default(autoincrement())
+  enunciado       String
+  alternativaA    String
+  alternativaB    String
+  alternativaC    String
+  alternativaD    String
+  alternativaE    String
+  respostaCorreta String   // "A" | "B" | "C" | "D" | "E"
+  ranking         Int      @default(0) @db.Integer
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model BibliaProgresso {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  acertos   Int      @default(0)
+  nivel     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model WebPushSubscription {
   id        Int      @id @default(autoincrement())
   userId    Int
@@ -175,4 +200,3 @@ model WebPushSubscription {
 
   @@index([userId])
 }
-

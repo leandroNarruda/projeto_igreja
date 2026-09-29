@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Versinho" ADD COLUMN "ranking" INTEGER NOT NULL DEFAULT 0;
