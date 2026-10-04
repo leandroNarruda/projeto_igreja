@@ -19,6 +19,7 @@ import {
 interface Quiz {
   id: number
   tema: string
+  nivel: 'FACIL' | 'DIFICIL'
   ativo: boolean
   createdAt: string
   _count: {

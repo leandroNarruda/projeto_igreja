@@ -4,7 +4,11 @@ import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+function getNivelFromTrilha(trilha: string | null) {
+  return trilha === 'dificil' ? 'DIFICIL' : 'FACIL'
+}
+
+export async function GET(request: Request) {
   try {
     const session = await getServerSession()
 
@@ -12,9 +16,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    // Buscar quiz ativo
+    const url = new URL(request.url)
+    const nivel = getNivelFromTrilha(url.searchParams.get('trilha'))
+
+    // Buscar quiz ativo da trilha escolhida
     const quizAtivo = await prisma.quiz.findFirst({
-      where: { ativo: true },
+      where: { ativo: true, nivel },
       include: {
         perguntas: true,
       },
@@ -55,6 +62,7 @@ export async function GET() {
       quiz: {
         id: quizAtivo.id,
         tema: quizAtivo.tema,
+        nivel: quizAtivo.nivel,
         ativo: quizAtivo.ativo,
         totalPerguntas,
       },

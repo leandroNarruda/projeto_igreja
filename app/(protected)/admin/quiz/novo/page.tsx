@@ -12,6 +12,7 @@ export default function AdminQuizNovoPage() {
 
   const handleCriarQuiz = async (data: {
     tema: string
+    nivel: 'FACIL' | 'DIFICIL'
     perguntas: Array<Record<string, unknown>>
   }) => {
     try {

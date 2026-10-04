@@ -75,6 +75,7 @@ model VerificationToken {
 model Quiz {
   id        Int             @id @default(autoincrement())
   tema      String
+  nivel     String          @default("FACIL")
   ativo     Boolean         @default(false)
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
@@ -83,6 +84,7 @@ model Quiz {
   resultados ResultadoQuiz[]
 
   @@index([ativo])
+  @@index([ativo, nivel])
 }
 
 model Pergunta {

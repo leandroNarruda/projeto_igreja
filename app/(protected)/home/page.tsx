@@ -51,20 +51,68 @@ function getFirstLetter(name: string): string {
   return name.trim()[0].toUpperCase()
 }
 
+function ClassificacaoTabs({
+  activeTab,
+  onChange,
+}: {
+  activeTab: 'facil' | 'dificil'
+  onChange: (tab: 'facil' | 'dificil') => void
+}) {
+  return (
+    <div className="mb-6 flex rounded-lg border border-primary/25 bg-bg-deep p-1">
+      {[
+        { value: 'facil', label: 'Fácil' },
+        { value: 'dificil', label: 'Difícil' },
+      ].map(tab => {
+        const isActive = activeTab === tab.value
+
+        return (
+          <button
+            key={tab.value}
+            type="button"
+            onClick={() => onChange(tab.value as 'facil' | 'dificil')}
+            className={`flex-1 rounded-md px-4 py-2 text-sm font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+              isActive
+                ? 'bg-primary text-accent shadow'
+                : 'text-lavender hover:bg-primary/10 hover:text-accent'
+            }`}
+          >
+            {tab.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function HomePage() {
   const router = useRouter()
   const { data: session } = useSession()
-  const { data: quizData, isLoading } = useQuizAtivo()
+  const [classificacaoTab, setClassificacaoTab] = useState<'facil' | 'dificil'>(
+    'facil'
+  )
+  const { data: quizData, isLoading } = useQuizAtivo('facil')
+  const { data: quizDificilData, isLoading: isLoadingQuizDificil } =
+    useQuizAtivo('dificil')
   const quizId = quizData?.quiz?.id
-  const { data: classificacaoData } = useClassificacaoQuiz(quizId || null)
+  const quizDificilId = quizDificilData?.quiz?.id
+  const { data: classificacaoFacilData } = useClassificacaoQuiz(quizId || null)
+  const { data: classificacaoDificilData } = useClassificacaoQuiz(
+    quizDificilId || null
+  )
   const { data: classificacaoGeralData } = useClassificacaoGeral()
   useRankingRealtime(quizId ?? null)
+  useRankingRealtime(quizDificilId ?? null)
   useRankingGeralRealtime()
 
-  const quizAtivo = quizData?.quiz
+  const quizAtivo = quizData?.quiz || quizDificilData?.quiz
   const jaRespondeu = quizData?.jaRespondeu || false
   const resultado = quizData?.resultado || null
-  const classificacao = classificacaoData?.classificacao || []
+  const classificacaoFacil = classificacaoFacilData?.classificacao || []
+  const classificacaoDificil = classificacaoDificilData?.classificacao || []
+  const classificacao =
+    classificacaoTab === 'dificil' ? classificacaoDificil : classificacaoFacil
+  const temClassificacaoSemanal = !!quizId || !!quizDificilId
   const classificacaoGeral = classificacaoGeralData?.classificacao || []
 
   // Estado para controlar o modal de boas-vindas
@@ -86,14 +134,14 @@ export default function HomePage() {
   }
 
   const handleResponderQuiz = () => {
-    router.push('/quiz/responder')
+    router.push('/quiz/trilha')
   }
 
   const handleAbrirTrilhaQuiz = () => {
     router.push('/quiz/trilha')
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingQuizDificil) {
     return <Loading />
   }
 
@@ -142,113 +190,129 @@ export default function HomePage() {
                 <span className="relative">Responder novamente</span>
               </button>
             </div>
-            {classificacao.length > 0 && (
+            {temClassificacaoSemanal && (
               <div className="mt-8 bg-bg-card rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold text-accent mb-6 text-center">
                   Classificação
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                  {classificacao.map(
-                    (item: ClassificacaoItem, index: number) => {
-                      const medalhas = ['🥇', '🥈', '🥉']
-                      const podioClass =
-                        index < 3
-                          ? ['podio-gold', 'podio-silver', 'podio-bronze'][
-                              index
-                            ]
-                          : null
-                      return (
-                        <motion.div
-                          key={item.userId}
-                          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                          whileInView={{
-                            opacity: 1,
-                            scale: 1,
-                            y: 0,
-                          }}
-                          viewport={{ once: true, margin: '-50px' }}
-                          transition={{
-                            type: 'tween',
-                            ease: 'easeOut',
-                            duration: 0.4,
-                            delay: index * 0.05,
-                          }}
-                          className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
-                            podioClass
-                              ? podioClass
-                              : item.userId === Number(session?.user?.id)
-                                ? 'bg-gradient-to-br from-primary/20 to-primary/30 border-primary ring-2 ring-primary ring-offset-2'
-                                : 'bg-bg-card border-primary/30 hover:border-primary/60'
-                          }`}
-                        >
-                          <div className="relative text-center">
-                            <div
-                              className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
-                            >
-                              {index < 3 ? medalhas[index] : `${item.posicao}º`}
-                            </div>
-                            <div className="flex items-center justify-center gap-2 mb-3">
-                              {item.image ? (
-                                <Image
-                                  src={item.image}
-                                  alt=""
-                                  width={40}
-                                  height={40}
-                                  className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
-                                  unoptimized
-                                />
-                              ) : (
-                                <div
-                                  className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
-                                >
-                                  {getFirstLetter(
-                                    item.social_name?.trim() || item.nome
-                                  )}
-                                </div>
-                              )}
-                              <h3
-                                className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
-                              >
-                                {
-                                  (item.social_name?.trim() || item.nome).split(
-                                    ' '
-                                  )[0]
-                                }
-                              </h3>
-                            </div>
-                            <div
-                              className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
-                            >
-                              <div>
-                                <span className="font-semibold">Acertos:</span>{' '}
-                                {item.acertos}
-                              </div>
-                              <div>
-                                <span className="font-semibold">Erros:</span>{' '}
-                                {item.erros}
-                              </div>
-                              {item.nulos > 0 && (
-                                <div>
-                                  <span className="font-semibold">Nulos:</span>{' '}
-                                  {item.nulos}
-                                </div>
-                              )}
+                <ClassificacaoTabs
+                  activeTab={classificacaoTab}
+                  onChange={setClassificacaoTab}
+                />
+                {classificacao.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                    {classificacao.map(
+                      (item: ClassificacaoItem, index: number) => {
+                        const medalhas = ['🥇', '🥈', '🥉']
+                        const podioClass =
+                          index < 3
+                            ? ['podio-gold', 'podio-silver', 'podio-bronze'][
+                                index
+                              ]
+                            : null
+                        return (
+                          <motion.div
+                            key={item.userId}
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            whileInView={{
+                              opacity: 1,
+                              scale: 1,
+                              y: 0,
+                            }}
+                            viewport={{ once: true, margin: '-50px' }}
+                            transition={{
+                              type: 'tween',
+                              ease: 'easeOut',
+                              duration: 0.4,
+                              delay: index * 0.05,
+                            }}
+                            className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                              podioClass
+                                ? podioClass
+                                : item.userId === Number(session?.user?.id)
+                                  ? 'bg-gradient-to-br from-primary/20 to-primary/30 border-primary ring-2 ring-primary ring-offset-2'
+                                  : 'bg-bg-card border-primary/30 hover:border-primary/60'
+                            }`}
+                          >
+                            <div className="relative text-center">
                               <div
-                                className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
+                                className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
                               >
-                                <span
-                                  className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                {index < 3
+                                  ? medalhas[index]
+                                  : `${item.posicao}º`}
+                              </div>
+                              <div className="flex items-center justify-center gap-2 mb-3">
+                                {item.image ? (
+                                  <Image
+                                    src={item.image}
+                                    alt=""
+                                    width={40}
+                                    height={40}
+                                    className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
+                                    unoptimized
+                                  />
+                                ) : (
+                                  <div
+                                    className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
+                                  >
+                                    {getFirstLetter(
+                                      item.social_name?.trim() || item.nome
+                                    )}
+                                  </div>
+                                )}
+                                <h3
+                                  className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
                                 >
-                                  {item.porcentagem}%
-                                </span>
+                                  {
+                                    (
+                                      item.social_name?.trim() || item.nome
+                                    ).split(' ')[0]
+                                  }
+                                </h3>
+                              </div>
+                              <div
+                                className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
+                              >
+                                <div>
+                                  <span className="font-semibold">
+                                    Acertos:
+                                  </span>{' '}
+                                  {item.acertos}
+                                </div>
+                                <div>
+                                  <span className="font-semibold">Erros:</span>{' '}
+                                  {item.erros}
+                                </div>
+                                {item.nulos > 0 && (
+                                  <div>
+                                    <span className="font-semibold">
+                                      Nulos:
+                                    </span>{' '}
+                                    {item.nulos}
+                                  </div>
+                                )}
+                                <div
+                                  className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
+                                >
+                                  <span
+                                    className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                  >
+                                    {item.porcentagem}%
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      )
-                    }
-                  )}
-                </div>
+                          </motion.div>
+                        )
+                      }
+                    )}
+                  </div>
+                ) : (
+                  <p className="py-8 text-center text-lavender">
+                    Ainda não há respostas nesta trilha.
+                  </p>
+                )}
               </div>
             )}
             {classificacaoGeral.length > 0 && (
@@ -565,106 +629,120 @@ export default function HomePage() {
               </Link>
             </p>
           </div>
-          {classificacao.length > 0 && (
+          {temClassificacaoSemanal && (
             <div className="mt-8 bg-bg-card rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold text-accent mb-6 text-center">
                 Classificação Semanal
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                {classificacao.map((item: ClassificacaoItem, index: number) => {
-                  const medalhas = ['🥇', '🥈', '🥉']
-                  const podioClass =
-                    index < 3
-                      ? ['podio-gold', 'podio-silver', 'podio-bronze'][index]
-                      : null
-                  return (
-                    <motion.div
-                      key={item.userId}
-                      initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                      whileInView={{
-                        opacity: 1,
-                        scale: 1,
-                        y: 0,
-                      }}
-                      viewport={{ once: true, margin: '-50px' }}
-                      transition={{
-                        type: 'tween',
-                        ease: 'easeOut',
-                        duration: 0.4,
-                        delay: index * 0.05,
-                      }}
-                      className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
-                        podioClass ??
-                        'bg-bg-card border-primary/30 hover:border-primary/60'
-                      }`}
-                    >
-                      <div className="relative text-center">
-                        <div
-                          className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
+              <ClassificacaoTabs
+                activeTab={classificacaoTab}
+                onChange={setClassificacaoTab}
+              />
+              {classificacao.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                  {classificacao.map(
+                    (item: ClassificacaoItem, index: number) => {
+                      const medalhas = ['🥇', '🥈', '🥉']
+                      const podioClass =
+                        index < 3
+                          ? ['podio-gold', 'podio-silver', 'podio-bronze'][
+                              index
+                            ]
+                          : null
+                      return (
+                        <motion.div
+                          key={item.userId}
+                          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                          whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            y: 0,
+                          }}
+                          viewport={{ once: true, margin: '-50px' }}
+                          transition={{
+                            type: 'tween',
+                            ease: 'easeOut',
+                            duration: 0.4,
+                            delay: index * 0.05,
+                          }}
+                          className={`relative overflow-hidden p-6 rounded-lg border-2 shadow-lg transition-transform hover:scale-105 ${
+                            podioClass ??
+                            'bg-bg-card border-primary/30 hover:border-primary/60'
+                          }`}
                         >
-                          {index < 3 ? medalhas[index] : `${item.posicao}º`}
-                        </div>
-                        <div className="flex items-center justify-center gap-2 mb-3">
-                          {item.image ? (
-                            <Image
-                              src={item.image}
-                              alt=""
-                              width={40}
-                              height={40}
-                              className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
-                              unoptimized
-                            />
-                          ) : (
+                          <div className="relative text-center">
                             <div
-                              className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
+                              className={`text-4xl mb-3 ${!podioClass ? 'text-accent' : 'drop-shadow-md'}`}
                             >
-                              {getFirstLetter(
-                                item.social_name?.trim() || item.nome
+                              {index < 3 ? medalhas[index] : `${item.posicao}º`}
+                            </div>
+                            <div className="flex items-center justify-center gap-2 mb-3">
+                              {item.image ? (
+                                <Image
+                                  src={item.image}
+                                  alt=""
+                                  width={40}
+                                  height={40}
+                                  className={`h-10 w-10 rounded-full object-cover border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'border-primary/30'}`}
+                                  unoptimized
+                                />
+                              ) : (
+                                <div
+                                  className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-semibold border-2 shrink-0 ${podioClass ? 'podio-avatar' : 'bg-primary/20 text-lavender border-primary/30'}`}
+                                >
+                                  {getFirstLetter(
+                                    item.social_name?.trim() || item.nome
+                                  )}
+                                </div>
                               )}
+                              <h3
+                                className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
+                              >
+                                {
+                                  (item.social_name?.trim() || item.nome).split(
+                                    ' '
+                                  )[0]
+                                }
+                              </h3>
                             </div>
-                          )}
-                          <h3
-                            className={`text-xl font-bold truncate min-w-0 ${podioClass ? 'podio-name' : 'text-accent'}`}
-                          >
-                            {
-                              (item.social_name?.trim() || item.nome).split(
-                                ' '
-                              )[0]
-                            }
-                          </h3>
-                        </div>
-                        <div
-                          className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
-                        >
-                          <div>
-                            <span className="font-semibold">Acertos:</span>{' '}
-                            {item.acertos}
-                          </div>
-                          <div>
-                            <span className="font-semibold">Erros:</span>{' '}
-                            {item.erros}
-                          </div>
-                          {item.nulos > 0 && (
-                            <div>
-                              <span className="font-semibold">Nulos:</span>{' '}
-                              {item.nulos}
-                            </div>
-                          )}
-                          <div
-                            className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
-                          >
-                            <span
-                              className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                            <div
+                              className={`space-y-1 text-sm ${podioClass ? 'podio-label' : 'text-lavender'}`}
                             >
-                              {item.porcentagem}%
-                            </span>
+                              <div>
+                                <span className="font-semibold">Acertos:</span>{' '}
+                                {item.acertos}
+                              </div>
+                              <div>
+                                <span className="font-semibold">Erros:</span>{' '}
+                                {item.erros}
+                              </div>
+                              {item.nulos > 0 && (
+                                <div>
+                                  <span className="font-semibold">Nulos:</span>{' '}
+                                  {item.nulos}
+                                </div>
+                              )}
+                              <div
+                                className={`pt-2 border-t ${podioClass ? 'podio-divider' : 'border-primary/30'}`}
+                              >
+                                <span
+                                  className={`font-semibold text-lg ${podioClass ? 'podio-name' : 'text-accent'}`}
+                                >
+                                  {item.porcentagem}%
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </div>
+                        </motion.div>
+                      )
+                    }
+                  )}
+                </div>
+              ) : (
+                <p className="py-8 text-center text-lavender">
+                  Ainda não há respostas nesta trilha.
+                </p>
+              )}
             </div>
           )}
           {classificacaoGeral.length > 0 && (

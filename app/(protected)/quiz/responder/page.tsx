@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { QuizInstructions } from '@/components/quiz/QuizInstructions'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import { QuizResult } from '@/components/quiz/QuizResult'
@@ -32,7 +32,12 @@ interface Pergunta {
 
 export default function ResponderQuizPage() {
   const router = useRouter()
-  const { data: quizData, isLoading } = useQuizAtivo()
+  const searchParams = useSearchParams()
+  const trilhaSelecionada = searchParams.get('trilha')
+  const trilhaQuiz = trilhaSelecionada === 'dificil' ? 'dificil' : 'facil'
+  const trilhaLabel =
+    trilhaQuiz === 'dificil' ? 'Trilha difícil' : 'Trilha fácil'
+  const { data: quizData, isLoading } = useQuizAtivo(trilhaQuiz)
   const enviarRespostasMutation = useEnviarRespostas()
 
   const [mostrarInstrucoes, setMostrarInstrucoes] = useState(true)
@@ -87,7 +92,10 @@ export default function ResponderQuizPage() {
     if (!quizAtivo) return
 
     try {
-      const response = await fetch(`/api/quiz/${quizAtivo.id}/perguntas`)
+      const response = await fetch(
+        `/api/quiz/${quizAtivo.id}/perguntas?trilha=${trilhaQuiz}`,
+        { cache: 'no-store' }
+      )
       const data = await response.json()
 
       if (data.error) {
@@ -440,6 +448,7 @@ export default function ResponderQuizPage() {
           <div className="w-full px-4">
             <QuizInstructions
               tema={quizAtivo.tema}
+              trilha={trilhaLabel}
               totalPerguntas={quizAtivo.totalPerguntas}
               onStart={iniciarQuiz}
             />
@@ -478,6 +487,9 @@ export default function ResponderQuizPage() {
         <div className="min-h-[calc(100vh-8rem)] bg-bg-base py-8">
           <div className="w-full px-4">
             <div className="max-w-3xl mx-auto mb-4">
+              <div className="mb-3 inline-flex rounded-full border border-primary/30 bg-bg-card px-3 py-1 text-xs font-bold uppercase tracking-wide text-lavender">
+                {trilhaLabel}
+              </div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-lavender">
                   Pergunta {indicePerguntaAtual + 1} de {todasPerguntas.length}

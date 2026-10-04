@@ -6,6 +6,14 @@ import { notifyNewQuizAvailable } from '@/lib/push/notifications'
 
 export const dynamic = 'force-dynamic'
 
+const NIVEIS_QUIZ = ['FACIL', 'DIFICIL'] as const
+type NivelQuiz = (typeof NIVEIS_QUIZ)[number]
+
+function normalizarNivelQuiz(nivel: unknown): NivelQuiz | null {
+  if (nivel === undefined) return null
+  return nivel === 'DIFICIL' ? 'DIFICIL' : 'FACIL'
+}
+
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
@@ -38,12 +46,28 @@ export async function PUT(
 
     const body = await request.json()
     const { tema, ativo } = body
+    const nivel = normalizarNivelQuiz(body.nivel)
 
-    // Se estiver ativando este quiz, desativar todos os outros
+    const quizAtual = await prisma.quiz.findUnique({
+      where: { id: quizId },
+      select: { nivel: true },
+    })
+
+    if (!quizAtual) {
+      return NextResponse.json(
+        { error: 'Quiz não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    const nivelAlvo = nivel ?? quizAtual.nivel
+
+    // Se estiver ativando este quiz, desativar os outros do mesmo nível
     if (ativo === true) {
       await prisma.quiz.updateMany({
         where: {
           ativo: true,
+          nivel: nivelAlvo,
           id: { not: quizId },
         },
         data: {
@@ -52,9 +76,12 @@ export async function PUT(
       })
     }
 
-    const updateData: { tema?: string; ativo?: boolean } = {}
+    const updateData: { tema?: string; ativo?: boolean; nivel?: NivelQuiz } = {}
     if (tema !== undefined) {
       updateData.tema = tema.trim()
+    }
+    if (nivel !== null) {
+      updateData.nivel = nivel
     }
     if (ativo !== undefined) {
       updateData.ativo = ativo

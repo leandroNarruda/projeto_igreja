@@ -22,6 +22,12 @@ interface ValidacaoResultado {
   erros: string[]
 }
 
+function getNivelFromTrilha(trilha: string | null) {
+  if (trilha === 'dificil') return 'DIFICIL'
+  if (trilha === 'facil') return 'FACIL'
+  return null
+}
+
 // Função auxiliar para validar uma única pergunta
 function validarPergunta(
   pergunta: PerguntaData,
@@ -219,6 +225,22 @@ export async function GET(
       })
 
       return NextResponse.json({ perguntas })
+    }
+
+    const nivelEsperado = getNivelFromTrilha(url.searchParams.get('trilha'))
+
+    if (nivelEsperado) {
+      const quiz = await prisma.quiz.findUnique({
+        where: { id: quizId },
+        select: { nivel: true },
+      })
+
+      if (!quiz || quiz.nivel !== nivelEsperado) {
+        return NextResponse.json(
+          { error: 'Quiz não pertence à trilha escolhida' },
+          { status: 400 }
+        )
+      }
     }
 
     // Buscar todas as perguntas do quiz

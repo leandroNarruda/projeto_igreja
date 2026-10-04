@@ -5,6 +5,13 @@ import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
+const NIVEIS_QUIZ = ['FACIL', 'DIFICIL'] as const
+type NivelQuiz = (typeof NIVEIS_QUIZ)[number]
+
+function normalizarNivelQuiz(nivel: unknown): NivelQuiz {
+  return nivel === 'DIFICIL' ? 'DIFICIL' : 'FACIL'
+}
+
 interface PerguntaData {
   enunciado: string
   alternativaA: string
@@ -82,6 +89,7 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     const { tema, perguntas } = body
+    const nivel = normalizarNivelQuiz(body.nivel)
 
     if (!tema || tema.trim() === '') {
       return NextResponse.json({ error: 'Tema é obrigatório' }, { status: 400 })
@@ -120,6 +128,7 @@ export async function POST(request: Request) {
       const quiz = await tx.quiz.create({
         data: {
           tema: tema.trim(),
+          nivel,
           ativo: false,
         },
       })

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 interface QuizInstructionsProps {
   tema?: string
   titulo?: string
+  trilha?: string
   totalPerguntas: number
   onStart: () => void
 }
@@ -14,6 +15,7 @@ interface QuizInstructionsProps {
 export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
   tema,
   titulo,
+  trilha,
   totalPerguntas,
   onStart,
 }) => {
@@ -26,6 +28,11 @@ export const QuizInstructions: React.FC<QuizInstructionsProps> = ({
         <p className="text-lavender">
           {totalPerguntas} {totalPerguntas === 1 ? 'pergunta' : 'perguntas'}
         </p>
+        {trilha && (
+          <p className="mt-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-accent">
+            {trilha}
+          </p>
+        )}
       </div>
 
       <div className="mb-8">

@@ -7,11 +7,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Hook para buscar quiz ativo
  */
-export function useQuizAtivo() {
+export function useQuizAtivo(trilha?: 'facil' | 'dificil' | null) {
   return useQuery({
-    queryKey: ['quiz', 'ativo'],
+    queryKey: ['quiz', 'ativo', trilha ?? 'facil'],
     queryFn: async () => {
-      const response = await fetch('/api/quiz/ativo')
+      const params = new URLSearchParams()
+      if (trilha) params.set('trilha', trilha)
+      const queryString = params.toString()
+      const response = await fetch(
+        `/api/quiz/ativo${queryString ? `?${queryString}` : ''}`,
+        { cache: 'no-store' }
+      )
       if (!response.ok) {
         throw new Error('Erro ao buscar quiz ativo')
       }
@@ -108,6 +114,7 @@ export function useCriarQuiz() {
   return useMutation({
     mutationFn: async (data: {
       tema: string
+      nivel?: 'FACIL' | 'DIFICIL'
       perguntas?: Array<Record<string, unknown>>
     }) => {
       const response = await fetch('/api/quiz', {
@@ -115,6 +122,7 @@ export function useCriarQuiz() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tema: data.tema,
+          nivel: data.nivel ?? 'FACIL',
           perguntas: data.perguntas ?? [],
         }),
       })
@@ -143,7 +151,7 @@ export function useAtualizarQuiz() {
       data,
     }: {
       id: number
-      data: { tema?: string; ativo?: boolean }
+      data: { tema?: string; ativo?: boolean; nivel?: 'FACIL' | 'DIFICIL' }
     }) => {
       const response = await fetch(`/api/quiz/${id}`, {
         method: 'PUT',

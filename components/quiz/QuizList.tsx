@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 interface Quiz {
   id: number
   tema: string
+  nivel: 'FACIL' | 'DIFICIL'
   ativo: boolean
   createdAt: string
   _count: {
@@ -41,11 +42,16 @@ export const QuizList: React.FC<QuizListProps> = ({
         quizzes.map((quiz, index) => (
           <Card key={quiz.id} index={index}>
             <div className="flex  flex-col gap-4">
-              {quiz.ativo && (
-                <div className="flex-1 w-full text-right">
-                  <span className="px-2 py-1 text-xs font-semibold text-success bg-success/10 rounded">
-                    ATIVO
+              {(quiz.ativo || quiz.nivel) && (
+                <div className="flex flex-1 w-full justify-end gap-2">
+                  <span className="px-2 py-1 text-xs font-semibold text-lavender bg-primary/10 rounded">
+                    {quiz.nivel === 'DIFICIL' ? 'DIFÍCIL' : 'FÁCIL'}
                   </span>
+                  {quiz.ativo && (
+                    <span className="px-2 py-1 text-xs font-semibold text-success bg-success/10 rounded">
+                      ATIVO
+                    </span>
+                  )}
                 </div>
               )}
               <h3 className="text-xl font-bold text-accent">{quiz.tema}</h3>

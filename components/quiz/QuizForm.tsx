@@ -4,10 +4,12 @@ import React, { useState } from 'react'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { Select } from '@/components/ui/Select'
 
 interface QuizFormProps {
   onSubmit: (data: {
     tema: string
+    nivel: 'FACIL' | 'DIFICIL'
     perguntas: Array<Record<string, unknown>>
   }) => Promise<void>
   onCancel?: () => void
@@ -15,6 +17,7 @@ interface QuizFormProps {
 
 export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
   const [tema, setTema] = useState('')
+  const [nivel, setNivel] = useState<'FACIL' | 'DIFICIL'>('FACIL')
   const [perguntasJson, setPerguntasJson] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -46,8 +49,9 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
 
     setLoading(true)
     try {
-      await onSubmit({ tema: tema.trim(), perguntas })
+      await onSubmit({ tema: tema.trim(), nivel, perguntas })
       setTema('')
+      setNivel('FACIL')
       setPerguntasJson('')
     } catch (err) {
       setError('Erro ao criar quiz')
@@ -71,6 +75,18 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
           />
         </div>
         <div className="mb-4">
+          <Select
+            label="Nível do Quiz"
+            value={nivel}
+            onChange={e => setNivel(e.target.value as 'FACIL' | 'DIFICIL')}
+            options={[
+              { value: 'FACIL', label: 'Fácil' },
+              { value: 'DIFICIL', label: 'Difícil' },
+            ]}
+            disabled={loading}
+          />
+        </div>
+        <div className="mb-4">
           <label
             htmlFor="perguntas-json"
             className="block text-sm font-medium text-lavender mb-1"
@@ -84,7 +100,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({ onSubmit, onCancel }) => {
             placeholder='Cole aqui um array JSON de perguntas: [{"enunciado":"...","alternativaA":"...","alternativaB":"...","alternativaC":"...","alternativaD":"...","alternativaE":"...","respostaCorreta":"A","justificativa":"...","tempoSegundos":30}]'
             disabled={loading}
             rows={10}
-            className="w-full rounded-md border border-primary/35 px-3 py-2 text-sm text-accent placeholder:text-lavender/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-primary/10 disabled:cursor-not-allowed"
+            className="w-full rounded-md border border-primary/35 bg-primary/10 px-3 py-2 text-sm text-accent placeholder:text-lavender/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-60"
           />
         </div>
         <div className="flex gap-2">
