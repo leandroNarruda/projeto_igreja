@@ -1,6 +1,13 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import {
+  Suspense,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+} from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { QuizInstructions } from '@/components/quiz/QuizInstructions'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
@@ -30,7 +37,7 @@ interface Pergunta {
   justificativa?: string
 }
 
-export default function ResponderQuizPage() {
+function ResponderQuizContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const trilhaSelecionada = searchParams.get('trilha')
@@ -514,5 +521,13 @@ export default function ResponderQuizPage() {
         </div>
       </PageTransition>
     </>
+  )
+}
+
+export default function ResponderQuizPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ResponderQuizContent />
+    </Suspense>
   )
 }
